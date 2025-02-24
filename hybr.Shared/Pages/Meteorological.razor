@@ -1,22 +1,24 @@
 ﻿@page "/Meteorological"
 
 @using hybr.Shared.Services
-@inject IFormFactor FormFactor
 <style type="text/css">
-    #parent{
-    display: grid;
-    height:75vh;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 50% 50%; 
+    #parent {
+        display: grid;
+        height: 75vh;
+        grid-template-columns: 33% 33% 33%;
+        grid-template-rows: 50% 50%;
     }
-    #grid11{
+
+    #grid11 {
         grid-column: 1;
         grid-row: 1;
-    } 
+    }
+
     #grid21 {
         grid-column: 2;
         grid-row: 1;
-    } 
+    }
+
     #grid31 {
         grid-column: 3;
         grid-row: 1;
@@ -37,182 +39,119 @@
         grid-row: 2;
     }
 
-    .gridContent{
-    flex: 1 1 auto;
-    height:100%;
-    width:100%;
-    min-width:300px;
-    min-width: 300px;
+    .gridContent {
+        flex: 1 1 auto;
+        height: 100%;
+        width: 100%;
+        min-width: 300px;
+        min-width: 300px;
     }
-    .compassDiv{
-    display: grid;
+
+    .compassDiv {
+        display: grid;
         align-items: center;
-    min-width: 300px;
-    min-width: 300px;
+        min-width: 300px;
+        min-width: 300px;
     }
-    #compass{
-    grid-column: 1;
-    grid-row: 1;
+
+    #compass {
+        grid-column: 1;
+        grid-row: 1;
     }
-    .textDiv{
-    align-self:center;
-    text-align: center;
-    font: bold 150px TimesNewRoman, sans-serif;
+
+    .textDiv {
+        align-self: center;
+        text-align: center;
+        font: bold 150px TimesNewRoman, sans-serif;
     }
 </style>
 <PageTitle>Meteorological</PageTitle>
 <div id="parent">
-        <div id="grid11" class="gridContent">
+    <div id="grid11" class="gridContent">
         <LineChart @ref="tempChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-        </div>
-        <div id="grid21" class="gridContent">
+    </div>
+    <div id="grid21" class="gridContent">
         <LineChart @ref="humChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-        </div>
-        <div id="grid31" class="gridContent">
+    </div>
+    <div id="grid31" class="gridContent">
         <LineChart @ref="presChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-        </div>
-        <div id="grid12" class="gridContent">
+    </div>
+    <div id="grid12" class="gridContent">
         <LineChart @ref="solChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    </div>
+    <div id="grid22" class="gridContent compassDiv">
+        <Grid @ref="sensorGrid2" TItem="Sensor"
+              Class="table table-hover table-bordered table-striped mt-3 "
+              DataProvider="DataProvider">
+            <GridColumns>
+                <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
+            </GridColumns>
+        </Grid>
+        <div id="compass">
+            <Compass />
         </div>
-        <div id="grid22" class="gridContent compassDiv">
-            <Grid @ref="sensorGrid2" TItem="Sensor"
-                  Class="table table-hover table-bordered table-striped mt-3 "
-                  DataProvider="DataProvider">
-                <GridColumns>
-                    <div id="compass" class="textDiv">@speed</div>
-                </GridColumns>
-            </Grid>
-            <div id="compass">
-                <Compass />
-            </div>
-            <Grid @ref="sensorGrid" TItem="Sensor"
-            Class="table table-hover table-bordered table-striped mt-3 "
-            DataProvider="DataProvider">
-                <GridColumns>
-                    <div style="    justify-self:center;
+        <Grid @ref="sensorGrid" TItem="Sensor"
+              Class="table table-hover table-bordered table-striped mt-3 "
+              DataProvider="DataProvider">
+            <GridColumns>
+                <div style="    justify-self:center;
                                     width:20%;
-                                    height:80%;    
-                                    transform: rotate(@(angle)deg);
+                                    height:80%;
+                                    transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
                                     transition: transform 0.5s ease-in-out;
                                     grid-column: 1;
                                     grid-row: 1;">
-                        <div>
-                            <CompassArrow />
-                        </div>
+                    <div>
+                        <CompassArrow />
                     </div>
-                </GridColumns>
-            </Grid>
-        </div>
-        <div id="grid32" class="gridContent">
-            <Grid @ref="sensorGrid1" TItem="Sensor"
-            Class="table table-hover table-bordered table-striped mt-3"
-            DataProvider="DataProvider">
-                <GridColumns>
-                    <Alert Color="@sensor103.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик температуры воздуха @sensor103.Value_of_m, °C</Alert>
-                    <Alert Color="@sensor104.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик влажности воздуха @sensor104.Value_of_m, %</Alert>
-                    <Alert Color="@sensor105.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик давления @sensor105.Value_of_m, мм.рт.ст.</Alert>
-                    <Alert Color="@sensor106.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик направления ветра @sensor106.Value_of_m, °</Alert>
-                    <Alert Color="@sensor107.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик скорости ветра @sensor107.Value_of_m, м/с</Alert>
-                    <Alert Color="@sensor108.Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик солнечной радиации @sensor108.Value_of_m, Вт/м2</Alert>
-                </GridColumns>
-            </Grid>
-        </div>
+                </div>
+            </GridColumns>
+        </Grid>
+    </div>
+    <div id="grid32" class="gridContent">
+        <Grid @ref="sensorGrid1" TItem="Sensor"
+              Class="table table-hover table-bordered table-striped mt-3"
+              DataProvider="DataProvider">
+            <GridColumns>
+                <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
+            </GridColumns>
+        </Grid>
+    </div>
 </div>
 
 @code {
     private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
     {
-        List<Sensor> _sensor = new();
-        _sensor.Add(new Sensor{});
-        return await Task.FromResult(request.ApplyTo(_sensor));
+        return await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
     }
 }
 
 @code {
-    private Grid<Sensor> sensorGrid = default!;
-    private Grid<Sensor> sensorGrid1 = default!;
-    private Grid<Sensor> sensorGrid2 = default!;
+    private Grid<Sensor> sensorGrid = default!, sensorGrid1 = default!, sensorGrid2 = default!;
     private List<Order> fakeData = new();
-    private List<Sensor> sensorData = new List<Sensor>(new Sensor[110]);
-    private static List<SensorRange> sensorRange = GlobalData.GetSensorData();
-
-    private Sensor sensor103 = new Sensor();
-    private Sensor sensor104 = new Sensor();
-    private Sensor sensor105 = new Sensor();
-    private Sensor sensor106 = new Sensor();
-    private Sensor sensor107 = new Sensor();
-    private Sensor sensor108 = new Sensor();
-    private double angle;
-    private double speed;
     private string scale = "0.2";
 
-    private LineChart tempChart = default!;
-    private LiveChartOptions tempLineChartOptions = new();
-    private ChartData tempChartData = default!;
-
-    private LineChart humChart = default!;
-    private LiveChartOptions humLineChartOptions = new();
-    private ChartData humChartData = default!;
-
-    private LineChart presChart = default!;
-    private LiveChartOptions presLineChartOptions = new();
-    private ChartData presChartData = default!;
-
-    private LineChart solChart = default!;
-    private LiveChartOptions solLineChartOptions = new();
-    private ChartData solChartData = default!;
+    private LineChart tempChart = default!, humChart = default!, presChart = default!, solChart = default!;
 
     private int maxLabelXasixCount = 5;
 
-    private List<IChartDataset> humDataSets = new();
-    private List<IChartDataset> tempDataSets = new();
-    private List<IChartDataset> presDataSets = new();
-    private List<IChartDataset> solDataSets = new();
     protected override void OnInitialized()
     {
-        prepSensor();
         AddDataCycleAsync();
-        tempDataSets.Add(new DefaultChartOption
-            {
-                Label = $"Температура, °C",
-                Data = new(),
-                BackgroundColor = "rgba(255, 0, 0, 0.7)",
-                BorderColor = "rgba(255, 0, 0, 0.7)",
-            });
-        humDataSets.Add(new DefaultChartOption
-            {
-                Label = $"Влажность, %",
-                Data = new(),
-                BackgroundColor = "rgba(255, 255, 0, 0.7)",
-                BorderColor = "rgba(255, 255, 0, 0.7)",
-            });
-        presDataSets.Add(new DefaultChartOption
-            {
-                Label = $"Давление, мм.рт.ст.",
-                Data = new(),
-                BackgroundColor = "rgba(0, 255, 0, 0.7)",
-                BorderColor = "rgba(0, 255, 0, 0.7)",
-            });
-        solDataSets.Add(new DefaultChartOption
-            {
-                Label = $"Солнечная радиация, Вт/м2",
-                Data = new(),
-                BackgroundColor = "rgba(0, 0, 255, 0.7)",
-                BorderColor = "rgba(0, 0, 255, 0.7)",
-            });
-        tempChartData = new ChartData { Labels = new List<string>(), Datasets = tempDataSets };
-        humChartData = new ChartData { Labels = new List<string>(), Datasets = humDataSets };
-        presChartData = new ChartData { Labels = new List<string>(), Datasets = presDataSets };
-        solChartData = new ChartData { Labels = new List<string>(), Datasets = solDataSets };
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await humChart.InitializeAsync(humChartData, humLineChartOptions);
-            await tempChart.InitializeAsync(tempChartData, tempLineChartOptions);
-            await presChart.InitializeAsync(presChartData, presLineChartOptions);
-            await solChart.InitializeAsync(solChartData, solLineChartOptions);
+            await tempChart.InitializeAsync(GlobalChartData.MeteorologicalChartTemperature, new LiveChartOptions());
+            await humChart.InitializeAsync(GlobalChartData.MeteorologicalChartHumidity, new LiveChartOptions());
+            await presChart.InitializeAsync(GlobalChartData.MeteorologicalChartPressure, new LiveChartOptions());
+            await solChart.InitializeAsync(GlobalChartData.MeteorologicalChartSolarRadiation, new LiveChartOptions());
         }
         await base.OnAfterRenderAsync(firstRender);
     }
@@ -221,18 +160,17 @@
         while (true)
         {
             await Task.Delay(1000);
-            fakeData = FakeData();
-            prepSensor();
-            AddDataAsync(tempChart, tempChartData, 103);
-            AddDataAsync(humChart, humChartData, 104);
-            AddDataAsync(presChart, presChartData, 105);
-            AddDataAsync(solChart, solChartData, 108);
+            fakeData = GlobalData.FakeData();
+            AddDataAsync(tempChart, GlobalChartData.MeteorologicalChartTemperature, 103);
+            AddDataAsync(humChart, GlobalChartData.MeteorologicalChartHumidity, 104);
+            AddDataAsync(presChart, GlobalChartData.MeteorologicalChartPressure, 105);
+            AddDataAsync(solChart, GlobalChartData.MeteorologicalChartSolarRadiation, 108);
             sensorGrid.RefreshDataAsync();
             sensorGrid1.RefreshDataAsync();
             sensorGrid2.RefreshDataAsync();
         }
     }
-    private async Task AddDataAsync(LineChart _lineChart,ChartData _chartData, int _id)
+    private async Task AddDataAsync(LineChart _lineChart, ChartData _chartData, int _id)
     {
         if (_chartData is null || _chartData.Datasets is null)
             return;
@@ -240,106 +178,20 @@
         if (_chartData.Datasets[0] is LineChartDataset _lineChartDataset)
         {
 
-            if (_lineChartDataset.Data.Count > maxLabelXasixCount){
+            if (_lineChartDataset.Data.Count > maxLabelXasixCount)
+            {
                 _lineChartDataset.Data.RemoveAt(0);
                 _chartData.Labels.RemoveAt(0);
             }
             foreach (var _data in fakeData)
             {
-                if (_data.Sensor_id == _id){
+                if (_data.Sensor_id == _id)
+                {
                     _lineChartDataset.Data.Add(_data.Value_of_m);
                     _chartData.Labels.Add(_data.Time_of_m);
                 }
             }
         }
         await _lineChart.UpdateValuesAsync(_chartData);
-    }
-    public void prepSensor()
-    {
-        List<Sensor> _sensorValue = new();
-        while (_sensorValue.Count < 110)
-        {
-            _sensorValue.Add(new Sensor());
-        }
-        foreach (var _data in fakeData)
-        {
-            if (sensorRange[_data.Sensor_id].Value_min < _data.Value_of_m || _data.Value_of_m < sensorRange[_data.Sensor_id].Value_max)
-            {
-                _sensorValue[_data.Sensor_id] = new Sensor
-                    {
-                        Alert = AlertColor.Success,
-                        Value_of_m = _data.Value_of_m,
-                    };
-            }
-            else
-            {
-                _sensorValue[_data.Sensor_id] = new Sensor
-                    {
-                        Alert = AlertColor.Warning,
-                        Value_of_m = _data.Value_of_m,
-                    };
-            }
-        }
-        sensor103 = _sensorValue[103];
-        sensor104 = _sensorValue[104];
-        sensor105 = _sensorValue[105];
-        sensor106 = _sensorValue[106];
-        angle = _sensorValue[106].Value_of_m;
-        sensor107 = _sensorValue[107];
-        speed = _sensorValue[107].Value_of_m;
-        sensor108 = _sensorValue[108];
-
-    }
-    private List<Order> FakeData(){
-        fakeData = new();
-        fakeData.Add(new Order
-            {
-                Sensor_id = 103,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-        fakeData.Add(new Order
-            {
-                Sensor_id = 104,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100),
-            });
-        fakeData.Add(new Order
-            {
-                Sensor_id = 105,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(200) + 700,
-            });
-        fakeData.Add(new Order
-            {
-                Sensor_id = 106,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(360),
-            });
-        fakeData.Add(new Order
-            {
-                Sensor_id = 107,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(15),
-            });
-        fakeData.Add(new Order
-            {
-                Sensor_id = 108,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(600),
-            });
-            return fakeData;
     }
 }
