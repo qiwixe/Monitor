@@ -3,86 +3,86 @@
 @using hybr.Shared.Services
 <style type="text/css">
     #parent {
-        display: grid;
-        height: 75vh;
-        grid-template-columns: 33% 33% 33%;
-        grid-template-rows: 50% 50%;
+    display: grid;
+    height: 75vh;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 50% 50%;
     }
 
     #grid11 {
-        grid-column: 1;
-        grid-row: 1;
+    grid-column: 1;
+    grid-row: 1;
     }
 
     #grid21 {
-        grid-column: 2;
-        grid-row: 1;
+    grid-column: 2;
+    grid-row: 1;
     }
 
     #grid31 {
-        grid-column: 3;
-        grid-row: 1;
+    grid-column: 3;
+    grid-row: 1;
     }
 
     #grid12 {
-        grid-column: 1;
-        grid-row: 2;
+    grid-column: 1;
+    grid-row: 2;
     }
 
     #grid22 {
-        grid-column: 2;
-        grid-row: 2;
+    grid-column: 2;
+    grid-row: 2;
     }
 
     #grid32 {
-        grid-column: 3;
-        grid-row: 2;
+    grid-column: 3;
+    grid-row: 2;
     }
 
     .gridContent {
-        flex: 1 1 auto;
-        height: 100%;
-        width: 100%;
-        min-width: 300px;
-        min-width: 300px;
+    flex: 1 1 auto;
+    height: 100%;
+    width: 100%;
+    min-width: 300px;
+    min-width: 300px;
     }
 
     .compassDiv {
-        display: grid;
-        align-items: center;
-        min-width: 300px;
-        min-width: 300px;
+    display: grid;
+    align-items: center;
+    min-width: 300px;
+    min-width: 300px;
     }
 
     #compass {
-        grid-column: 1;
-        grid-row: 1;
+    grid-column: 1;
+    grid-row: 1;
     }
 
     .textDiv {
-        align-self: center;
-        text-align: center;
-        font: bold 150px TimesNewRoman, sans-serif;
+    align-self: center;
+    text-align: center;
+    font: bold 150px TimesNewRoman, sans-serif;
     }
 </style>
 <PageTitle>Meteorological</PageTitle>
 <div id="parent">
     <div id="grid11" class="gridContent">
-        <LineChart @ref="tempChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalLineChart.MeteorologicalChartTemperature Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid21" class="gridContent">
-        <LineChart @ref="humChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalLineChart.MeteorologicalChartHumidity Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid31" class="gridContent">
-        <LineChart @ref="presChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalLineChart.MeteorologicalChartPressure Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid12" class="gridContent">
-        <LineChart @ref="solChart" Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalLineChart.MeteorologicalChartSolarRadiation Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent compassDiv">
-        <Grid @ref="sensorGrid2" TItem="Sensor"
-              Class="table table-hover table-bordered table-striped mt-3 "
-              DataProvider="DataProvider">
+        <Grid @ref=SensorGrid.SensorGrid0 TItem="Sensor"
+        Class="table table-hover table-bordered table-striped mt-3 "
+        DataProvider="DataProvider">
             <GridColumns>
                 <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
             </GridColumns>
@@ -90,9 +90,9 @@
         <div id="compass">
             <Compass />
         </div>
-        <Grid @ref="sensorGrid" TItem="Sensor"
-              Class="table table-hover table-bordered table-striped mt-3 "
-              DataProvider="DataProvider">
+        <Grid @ref=SensorGrid.SensorGrid1 TItem="Sensor"
+        Class="table table-hover table-bordered table-striped mt-3 "
+        DataProvider="DataProvider">
             <GridColumns>
                 <div style="    justify-self:center;
                                     width:20%;
@@ -109,9 +109,9 @@
         </Grid>
     </div>
     <div id="grid32" class="gridContent">
-        <Grid @ref="sensorGrid1" TItem="Sensor"
-              Class="table table-hover table-bordered table-striped mt-3"
-              DataProvider="DataProvider">
+        <Grid @ref=SensorGrid.SensorGrid2 TItem="Sensor"
+        Class="table table-hover table-bordered table-striped mt-3"
+        DataProvider="DataProvider">
             <GridColumns>
                 <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
                 <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
@@ -125,73 +125,17 @@
 </div>
 
 @code {
+    private string scale = "0.2";
     private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
     {
         return await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
-    }
-}
-
-@code {
-    private Grid<Sensor> sensorGrid = default!, sensorGrid1 = default!, sensorGrid2 = default!;
-    private List<Order> fakeData = new();
-    private string scale = "0.2";
-
-    private LineChart tempChart = default!, humChart = default!, presChart = default!, solChart = default!;
-
-    private int maxLabelXasixCount = 5;
-
-    protected override void OnInitialized()
-    {
-        AddDataCycleAsync();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await tempChart.InitializeAsync(GlobalChartData.MeteorologicalChartTemperature, new LiveChartOptions());
-            await humChart.InitializeAsync(GlobalChartData.MeteorologicalChartHumidity, new LiveChartOptions());
-            await presChart.InitializeAsync(GlobalChartData.MeteorologicalChartPressure, new LiveChartOptions());
-            await solChart.InitializeAsync(GlobalChartData.MeteorologicalChartSolarRadiation, new LiveChartOptions());
+            await GlobalLineChart.InitializeAsync();
         }
         await base.OnAfterRenderAsync(firstRender);
-    }
-    protected async Task AddDataCycleAsync()
-    {
-        while (true)
-        {
-            await Task.Delay(1000);
-            fakeData = GlobalData.FakeData();
-            AddDataAsync(tempChart, GlobalChartData.MeteorologicalChartTemperature, 103);
-            AddDataAsync(humChart, GlobalChartData.MeteorologicalChartHumidity, 104);
-            AddDataAsync(presChart, GlobalChartData.MeteorologicalChartPressure, 105);
-            AddDataAsync(solChart, GlobalChartData.MeteorologicalChartSolarRadiation, 108);
-            sensorGrid.RefreshDataAsync();
-            sensorGrid1.RefreshDataAsync();
-            sensorGrid2.RefreshDataAsync();
-        }
-    }
-    private async Task AddDataAsync(LineChart _lineChart, ChartData _chartData, int _id)
-    {
-        if (_chartData is null || _chartData.Datasets is null)
-            return;
-
-        if (_chartData.Datasets[0] is LineChartDataset _lineChartDataset)
-        {
-
-            if (_lineChartDataset.Data.Count > maxLabelXasixCount)
-            {
-                _lineChartDataset.Data.RemoveAt(0);
-                _chartData.Labels.RemoveAt(0);
-            }
-            foreach (var _data in fakeData)
-            {
-                if (_data.Sensor_id == _id)
-                {
-                    _lineChartDataset.Data.Add(_data.Value_of_m);
-                    _chartData.Labels.Add(_data.Time_of_m);
-                }
-            }
-        }
-        await _lineChart.UpdateValuesAsync(_chartData);
     }
 }

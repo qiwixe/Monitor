@@ -1,6 +1,5 @@
 ﻿using BlazorBootstrap;
-using hybr.Shared.Services;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace hybr.Shared.Services
@@ -39,32 +38,49 @@ namespace hybr.Shared.Services
         public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
         #endregion SQL строки для ДБ
     }
+    public class SensorGrid
+    {
+        public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
+
+        public static async void UpdateGrid()
+        {
+            SensorGrid0.RefreshDataAsync();
+            SensorGrid1.RefreshDataAsync();
+            SensorGrid2.RefreshDataAsync();
+        }
+    }
     public class ChartDataSet()
     {
         #region Настройки данных для графиков
-        public static List<IChartDataset> MeteorologicalChartDataTemperature { get; } = new List<IChartDataset> {new DefaultChartOption
-        {
+        public static List<IChartDataset> MeteorologicalChartDataSetTemperature { get; } = new List<IChartDataset> {new DefaultChartOption
+        {   
+            SensorId = 103,
             Label = $"Температура, °C",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         } };
-        public static List<IChartDataset> MeteorologicalChartDataHumidity { get; } = new List<IChartDataset>{new DefaultChartOption
+        public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset>{new DefaultChartOption
         {
+            SensorId = 104,
             Label = $"Влажность, %",
             Data = new(),
             BackgroundColor = "rgba(255, 255, 0, 0.7)",
             BorderColor = "rgba(255, 255, 0, 0.7)",
         } };
-        public static List<IChartDataset> MeteorologicalChartDataPressure { get; } = new List<IChartDataset>{new DefaultChartOption
+        public static List<IChartDataset> MeteorologicalChartDataSetPressure { get; } = new List<IChartDataset>{new DefaultChartOption
         {
+            SensorId = 105,
             Label = $"Давление, мм.рт.ст.",
             Data = new(),
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
         } };
-        public static List<IChartDataset> MeteorologicalChartDataSolarRadiation { get; } = new List<IChartDataset>{new DefaultChartOption
+        public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset>{new DefaultChartOption
         {
+            SensorId = 108,
             Label = $"Солнечная радиация, Вт/м2",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
@@ -75,11 +91,63 @@ namespace hybr.Shared.Services
     public class GlobalChartData()
     {
         #region Настройки графиков
-        public static ChartData MeteorologicalChartTemperature { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataTemperature };
-        public static ChartData MeteorologicalChartHumidity { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataHumidity };
-        public static ChartData MeteorologicalChartPressure { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataPressure };
-        public static ChartData MeteorologicalChartSolarRadiation { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSolarRadiation };
+        public static ChartData MeteorologicalChartDataTemperature { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperature };
+        public static ChartData MeteorologicalChartDataHumidity { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetHumidity };
+        public static ChartData MeteorologicalChartDataPressure { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetPressure };
+        public static ChartData MeteorologicalChartDataSolarRadiation { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetSolarRadiation };
         #endregion Настройки графиков
+    }
+    public class GlobalLineChart()
+    {
+        public static LineChart MeteorologicalChartTemperature { get; set; } = default!;
+        public static LineChart MeteorologicalChartHumidity { get; set; } = default!;
+        public static LineChart MeteorologicalChartPressure { get; set; } = default!;
+        public static LineChart MeteorologicalChartSolarRadiation { get; set;} = default!;
+
+        public static int maxLabelXasixCount = 5;
+
+        //костыль для UpdateDataAsync()
+        public static Dictionary<LineChart, ChartData> GetAllChart()
+        {
+            Dictionary<LineChart, ChartData> _allChart = new();
+            _allChart[MeteorologicalChartTemperature] = (GlobalChartData.MeteorologicalChartDataTemperature);
+            _allChart[MeteorologicalChartHumidity] = (GlobalChartData.MeteorologicalChartDataHumidity);
+            _allChart[MeteorologicalChartPressure] = (GlobalChartData.MeteorologicalChartDataPressure);
+            _allChart[MeteorologicalChartSolarRadiation] = (GlobalChartData.MeteorologicalChartDataSolarRadiation);
+            return _allChart;
+        }
+
+        public static async Task InitializeAsync()
+        {
+            await MeteorologicalChartTemperature.InitializeAsync(GlobalChartData.MeteorologicalChartDataTemperature, new LiveChartOptions());
+            await MeteorologicalChartHumidity.InitializeAsync(GlobalChartData.MeteorologicalChartDataHumidity, new LiveChartOptions());
+            await MeteorologicalChartPressure.InitializeAsync(GlobalChartData.MeteorologicalChartDataPressure, new LiveChartOptions());
+            await MeteorologicalChartSolarRadiation.InitializeAsync(GlobalChartData.MeteorologicalChartDataSolarRadiation, new LiveChartOptions());
+        }
+        public static async Task UpdateDataAsync(List<Order> _lastData)
+        {
+            foreach (var (_lineChart, _chartData) in GlobalLineChart.GetAllChart())
+            {
+                foreach (DefaultChartOption _lineChartDataset in _chartData.Datasets)
+                {
+                    if (_lineChartDataset.Data.Count > GlobalLineChart.maxLabelXasixCount)
+                    {
+                        _lineChartDataset.Data.RemoveAt(0);
+                        _chartData.Labels.RemoveAt(0);
+                    }
+                    foreach (var _data in _lastData)
+                    {
+                        if (_data.Sensor_id == _lineChartDataset.SensorId)
+                        {
+                            _lineChartDataset.Data.Add(_data.Value_of_m);
+                            _chartData.Labels.Add(_data.Time_of_m);
+                        }
+                    }
+                }
+
+                await _lineChart.UpdateValuesAsync(_chartData);
+            }
+        }
     }
     public class GlobalSensorData()
     {
@@ -219,7 +287,7 @@ namespace hybr.Shared.Services
             DataPhotovoltaic = await Db.Data(SQLstring.Photovoltaic);
             DataWindPower = await Db.Data(SQLstring.WindPower);
         }
-        public static List<Order> FakeData()
+        public static async Task<List<Order>> FakeData()
         {
             List<Order> _fakeData = new();
             #region Данные для ФЭУ(1)
@@ -362,13 +430,14 @@ namespace hybr.Shared.Services
             });
             #endregion Данные для метеостанции(7)
 
-
+            await GlobalLineChart.UpdateDataAsync(_fakeData);
             PreparationSensorData(_fakeData);
+            SensorGrid.UpdateGrid();
             return _fakeData;
         }
-        public static void PreparationSensorData(List<Order> _lastFakeData)
+        public static void PreparationSensorData(List<Order> _lastData)
         {
-            foreach (var _data in _lastFakeData)
+            foreach (var _data in _lastData)
             {
                 if (GlobalSensorData.AllSensors[_data.Sensor_id].Value_min < _data.Value_of_m &&
                 _data.Value_of_m < GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
@@ -380,6 +449,23 @@ namespace hybr.Shared.Services
                 {
                     GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Warning;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
+                }
+            }
+        }
+    }
+    public class TimerUpdate()
+    {
+        // Костыль???
+        private static bool _firstRender = true;
+        public static async void StartTimer()
+        {
+            if (_firstRender)
+            {
+                _firstRender = false;
+                while (true)
+                {
+                    await Task.Delay(1000);
+                    GlobalData.FakeData();
                 }
             }
         }

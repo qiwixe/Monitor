@@ -11,10 +11,10 @@ Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
     <LineChart @ref="lineChart" Width="800" />
 </div>
 <Grid   TItem="Order"
-        Class="table table-hover table-bordered table-striped"
-        DataProvider="DataProvider"
-        AllowPaging="true"
-        PageSize="10">
+Class="table table-hover table-bordered table-striped"
+DataProvider="DataProvider"
+AllowPaging="true"
+PageSize="10">
 
     <GridColumns>
         <GridColumn TItem="Order" HeaderText="Id">
@@ -44,12 +44,12 @@ Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
 
 
 @code {
-        private string factor => FormFactor.GetFormFactor();
-        private string platform => FormFactor.GetPlatform();
+    private string factor => FormFactor.GetFormFactor();
+    private string platform => FormFactor.GetPlatform();
 
-        private async Task<GridDataProviderResult<Order>> DataProvider(GridDataProviderRequest<Order> request){
+    private async Task<GridDataProviderResult<Order>> DataProvider(GridDataProviderRequest<Order> request){
         return await Task.FromResult(request.ApplyTo(GlobalData.DataAll));
-        }
+    }
 }
 
 @code {
@@ -80,6 +80,8 @@ Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
             await lineChart.InitializeAsync(chartData, lineChartOptions);
         }
         await base.OnAfterRenderAsync(firstRender);
+
+        TimerUpdate.StartTimer();
     }
 
     private async Task RandomizeAsync()
