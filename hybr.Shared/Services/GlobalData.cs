@@ -1,10 +1,11 @@
 ﻿using BlazorBootstrap;
+using hybr.Shared.Pages;
 using System;
 using System.ComponentModel.DataAnnotations;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace hybr.Shared.Services
 {
-
     public class Order()
     {
         [Key]
@@ -20,6 +21,7 @@ namespace hybr.Shared.Services
     {
         public int Id { get; set; }
         public AlertColor Alert { get; set; } = AlertColor.Info;
+        public IconName Icon { get; set; } = IconName.InfoCircleFill;
         public double Value_of_m { get; set; } = 0;
         public int Value_min { get; set; }
         public int Value_max { get; set; }
@@ -38,114 +40,367 @@ namespace hybr.Shared.Services
         public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
         #endregion SQL строки для ДБ
     }
-    public class SensorGrid
+    public class Chart()
     {
-        public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
-        public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
-        public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
-
-        public static async void UpdateGrid()
-        {
-            SensorGrid0.RefreshDataAsync();
-            SensorGrid1.RefreshDataAsync();
-            SensorGrid2.RefreshDataAsync();
-        }
+        public bool DActive { get; set; } = false;
+        public required int maxLabelXasixCount = 1;
+        public required ChartData DChartData { get; set; }
+        public required List<IChartDataset> DChartDataset { get; set; }
+        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions();
     }
-    public class ChartDataSet()
+    public class ChartSettings()
     {
-        #region Настройки данных для графиков
-        public static List<IChartDataset> MeteorologicalChartDataSetTemperature { get; } = new List<IChartDataset> {new DefaultChartOption
-        {   
+        public static IChartDataset WindPowerChartDataSetSensor1 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 1,
+            Label = $"Напряжение 1, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)"
+        };
+        public static IChartDataset WindPowerChartDataSetSensor2 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 2,
+            Label = $"Напряжение 2, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor3 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 3,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor4 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 4,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor5 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 5,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor6 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 6,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor7 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 7,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor8 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 8,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor9 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 9,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor10 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 10,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor11 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 11,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor12 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 12,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+
+        public static IChartDataset MeteorologicalChartDataSetSensor103 { get; } = new DefaultChartOption
+        {
             SensorId = 103,
             Label = $"Температура, °C",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
-        } };
-        public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset>{new DefaultChartOption
+        };
+        public static IChartDataset MeteorologicalChartDataSetSensor104 { get; } = new DefaultChartOption
         {
             SensorId = 104,
             Label = $"Влажность, %",
             Data = new(),
             BackgroundColor = "rgba(255, 255, 0, 0.7)",
             BorderColor = "rgba(255, 255, 0, 0.7)",
-        } };
-        public static List<IChartDataset> MeteorologicalChartDataSetPressure { get; } = new List<IChartDataset>{new DefaultChartOption
+        };
+        public static IChartDataset MeteorologicalChartDataSetSensor105 { get; } = new DefaultChartOption
         {
             SensorId = 105,
             Label = $"Давление, мм.рт.ст.",
             Data = new(),
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
-        } };
-        public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset>{new DefaultChartOption
+        };
+        public static IChartDataset MeteorologicalChartDataSetSensor108 { get; } = new DefaultChartOption
         {
             SensorId = 108,
             Label = $"Солнечная радиация, Вт/м2",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
-        } };
-        #endregion Настройки данных для графиков
+        };
+    }
+    public class SensorGrid
+    {
+        public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
+    }
+    public class ChartDataSet()
+    {
+        public static List<IChartDataset> WindPowerChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor1, ChartSettings.WindPowerChartDataSetSensor3, ChartSettings.WindPowerChartDataSetSensor5 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor2, ChartSettings.WindPowerChartDataSetSensor4, ChartSettings.WindPowerChartDataSetSensor6 };
+        public static List<IChartDataset> WindPowerChartDataSetVoltage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor7, ChartSettings.WindPowerChartDataSetSensor9 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor8, ChartSettings.WindPowerChartDataSetSensor10 };
+        public static List<IChartDataset> WindPowerChartDataSetVoltage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor11 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor12 };
+        
+        public static List<IChartDataset> MeteorologicalChartDataSetTemperature { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor103 };
+        public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor104 };
+        public static List<IChartDataset> MeteorologicalChartDataSetPressure { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor105 };
+        public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor108 };
+
     }
     public class GlobalChartData()
     {
-        #region Настройки графиков
-        public static ChartData MeteorologicalChartDataTemperature { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperature };
-        public static ChartData MeteorologicalChartDataHumidity { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetHumidity };
-        public static ChartData MeteorologicalChartDataPressure { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetPressure };
-        public static ChartData MeteorologicalChartDataSolarRadiation { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetSolarRadiation };
-        #endregion Настройки графиков
+        #region Инициализация графиков метеостанции
+        //public static ChartData WindPowerChartDataVoltage1  { get; } = new ChartData { Labels = new List<string>(), Datasets = new List<IChartDataset> {ChartSettings.WindPowerChartDataSetSensor1, ChartSettings.WindPowerChartDataSetSensor2, ChartSettings.WindPowerChartDataSetSensor3 } };
+        //public static ChartData WindPowerChartDataAmperage1 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage1 };
+        //public static ChartData WindPowerChartDataVoltage2 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage2 };
+        //public static ChartData WindPowerChartDataAmperage2 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage2 };
+        //public static ChartData WindPowerChartDataVoltage3 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage3 };
+        //public static ChartData WindPowerChartDataAmperage3 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage3 };
+        #endregion Инициализация графиков метеостанции
+
+        #region Инициализация графиков метеостанции
+        //public static ChartData MeteorologicalChartDataTemperature { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperature };
+        //public static ChartData MeteorologicalChartDataHumidity { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetHumidity };
+        //public static ChartData MeteorologicalChartDataPressure { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetPressure };
+        //public static ChartData MeteorologicalChartDataSolarRadiation { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetSolarRadiation };
+        #endregion Инициализация графиков метеостанции
     }
     public class GlobalLineChart()
     {
+        public static Dictionary<string, Dictionary<LineChart, Chart>> AllCharts { get; set; } = new();
+
+        public static LineChart WindPowerChartVoltage1 { get; set; } = default!;
+        public static LineChart WindPowerChartAmperage1 { get; set; } = default!;
+        public static LineChart WindPowerChartVoltage2 { get; set; } = default!;
+        public static LineChart WindPowerChartAmperage2 { get; set; } = default!;
+        public static LineChart WindPowerChartVoltage3 { get; set; } = default!;
+        public static LineChart WindPowerChartAmperage3 { get; set; } = default!;
+
         public static LineChart MeteorologicalChartTemperature { get; set; } = default!;
         public static LineChart MeteorologicalChartHumidity { get; set; } = default!;
         public static LineChart MeteorologicalChartPressure { get; set; } = default!;
         public static LineChart MeteorologicalChartSolarRadiation { get; set;} = default!;
 
-        public static int maxLabelXasixCount = 5;
+        public static List<Grid<Sensor>> allGrid = new();
 
-        //костыль для UpdateDataAsync()
-        public static Dictionary<LineChart, ChartData> GetAllChart()
+        public static void ChartInitialize(string _page)
         {
-            Dictionary<LineChart, ChartData> _allChart = new();
-            _allChart[MeteorologicalChartTemperature] = (GlobalChartData.MeteorologicalChartDataTemperature);
-            _allChart[MeteorologicalChartHumidity] = (GlobalChartData.MeteorologicalChartDataHumidity);
-            _allChart[MeteorologicalChartPressure] = (GlobalChartData.MeteorologicalChartDataPressure);
-            _allChart[MeteorologicalChartSolarRadiation] = (GlobalChartData.MeteorologicalChartDataSolarRadiation);
-            return _allChart;
-        }
 
-        public static async Task InitializeAsync()
-        {
-            await MeteorologicalChartTemperature.InitializeAsync(GlobalChartData.MeteorologicalChartDataTemperature, new LiveChartOptions());
-            await MeteorologicalChartHumidity.InitializeAsync(GlobalChartData.MeteorologicalChartDataHumidity, new LiveChartOptions());
-            await MeteorologicalChartPressure.InitializeAsync(GlobalChartData.MeteorologicalChartDataPressure, new LiveChartOptions());
-            await MeteorologicalChartSolarRadiation.InitializeAsync(GlobalChartData.MeteorologicalChartDataSolarRadiation, new LiveChartOptions());
+            //await WindPowerChartVoltage1.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage1, new LiveChartOptions());
+            //WindPowerChartAmperage1.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage1, new LiveChartOptions());
+            //await WindPowerChartVoltage2.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage2, new LiveChartOptions());
+            //await WindPowerChartAmperage2.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage2, new LiveChartOptions());
+            //await WindPowerChartVoltage3.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage3, new LiveChartOptions());
+            //await WindPowerChartAmperage3.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage3, new LiveChartOptions());
+
+            //if (!GlobalData.RepeatRender.TryGetValue("WindPower", out var _bool))
+            //{
+            //    GlobalData.RepeatRender["WindPower"] = true;
+
+            //    allChart[WindPowerChartVoltage1] = (GlobalChartData.WindPowerChartDataVoltage1);
+            //    allChart[WindPowerChartAmperage1] = (GlobalChartData.WindPowerChartDataAmperage1);
+            //    allChart[WindPowerChartVoltage2] = (GlobalChartData.WindPowerChartDataVoltage2);
+            //    allChart[WindPowerChartAmperage2] = (GlobalChartData.WindPowerChartDataAmperage2);
+            //    allChart[WindPowerChartVoltage3] = (GlobalChartData.WindPowerChartDataVoltage3);
+            //    allChart[WindPowerChartAmperage3] = (GlobalChartData.WindPowerChartDataAmperage3);
+            //}
         }
-        public static async Task UpdateDataAsync(List<Order> _lastData)
+        public static void AllPageProperty(string _PageName)
         {
-            foreach (var (_lineChart, _chartData) in GlobalLineChart.GetAllChart())
+            switch (_PageName)
             {
-                foreach (DefaultChartOption _lineChartDataset in _chartData.Datasets)
+                case ("WindPower"):
+                    AllCharts["WindPower"] = new Dictionary<LineChart, Chart>()
+                    {
+                        [WindPowerChartVoltage1] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage1 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage1
+                        },
+                        [WindPowerChartAmperage1] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage1 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage1
+                        },
+                        [WindPowerChartVoltage2] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage2 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage2
+                        },
+                        [WindPowerChartAmperage2] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage2 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage2
+                        },
+                        [WindPowerChartVoltage3] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage3 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage3
+                        },
+                        [WindPowerChartAmperage3] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage3 },
+                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage3
+                        },
+                    };
+                    break;
+                case ("Meteorological"):
+                    AllCharts["Meteorological"] = new Dictionary<LineChart, Chart>()
+                    {
+                        [MeteorologicalChartTemperature] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperature },
+                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetTemperature
+                        },
+                        [MeteorologicalChartHumidity] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetHumidity },
+                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetHumidity
+                        },
+                        [MeteorologicalChartPressure] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetPressure },
+                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetPressure
+                        },
+                        [MeteorologicalChartSolarRadiation] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetSolarRadiation },
+                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetSolarRadiation
+                        }
+                    };
+                    allGrid.Add(SensorGrid.SensorGrid0);
+                    allGrid.Add(SensorGrid.SensorGrid1);
+                    allGrid.Add(SensorGrid.SensorGrid2);
+                    break;
+
+
+            }
+            foreach (var (_key, _a) in AllCharts)
+            {
+                if (_key == _PageName)
                 {
-                    if (_lineChartDataset.Data.Count > GlobalLineChart.maxLabelXasixCount)
+                    foreach (var (_b, _chart) in AllCharts[_key])
+                    _chart.DActive = true;
+                }
+                else
+                {
+                    foreach (var (_b, _chart) in AllCharts[_key])
+                    _chart.DActive = false;
+                }
+            }
+        }
+        public static async Task UpdateDataAsync2(List<Order> _lastData)
+        {
+            foreach (var (_key,_a) in AllCharts) 
+            foreach (var (_PageChart, _chart) in AllCharts[_key])
+            {
+                if (_chart.DActive == true)
+                {
+                    //_chart.DActive = false;
+                    await _PageChart.InitializeAsync(_chart.DChartData, _chart.DChartOptions);
+                
+                foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
+                {
+                    if (_lineChartDataset.Data.Count > _chart.maxLabelXasixCount)
                     {
                         _lineChartDataset.Data.RemoveAt(0);
-                        _chartData.Labels.RemoveAt(0);
                     }
                     foreach (var _data in _lastData)
                     {
                         if (_data.Sensor_id == _lineChartDataset.SensorId)
                         {
                             _lineChartDataset.Data.Add(_data.Value_of_m);
-                            _chartData.Labels.Add(_data.Time_of_m);
-                        }
-                    }
-                }
 
-                await _lineChart.UpdateValuesAsync(_chartData);
+                        }
+                    }    
+                }
+                if (_chart.DChartData.Labels.Count > _chart.maxLabelXasixCount)
+                {
+                    _chart.DChartData.Labels.RemoveAt(0);
+                }
+                _chart.DChartData.Labels.Add(_lastData[0].Time_of_m);
+                await _PageChart.UpdateValuesAsync(_chart.DChartData);
+                }
+            }
+            foreach (Grid<Sensor> _grid in allGrid)
+            {
+                _grid.RefreshDataAsync();
             }
         }
     }
@@ -276,6 +531,7 @@ namespace hybr.Shared.Services
         public static List<Order> DataWindPower { get; set; } = new();
         #endregion Переменные с данными ДБ
 
+        public static Dictionary<string, bool>  RepeatRender { get; set; } = new();
         public static async void GetAllData()
         {
             DataMeteorological = await Db.Data(SQLstring.Meteorological);
@@ -430,9 +686,8 @@ namespace hybr.Shared.Services
             });
             #endregion Данные для метеостанции(7)
 
-            await GlobalLineChart.UpdateDataAsync(_fakeData);
+            await GlobalLineChart.UpdateDataAsync2(_fakeData);
             PreparationSensorData(_fakeData);
-            SensorGrid.UpdateGrid();
             return _fakeData;
         }
         public static void PreparationSensorData(List<Order> _lastData)
@@ -443,11 +698,13 @@ namespace hybr.Shared.Services
                 _data.Value_of_m < GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
                 {
                     GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Success;
+                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.CheckCircleFill;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
                 }
                 else
                 {
                     GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Warning;
+                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.ExclamationCircleFill;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
                 }
             }
@@ -455,15 +712,14 @@ namespace hybr.Shared.Services
     }
     public class TimerUpdate()
     {
-        // Костыль???
-        private static bool _firstRender = true;
         public static async void StartTimer()
         {
-            if (_firstRender)
+            if (!GlobalData.RepeatRender.TryGetValue("Timer",out var _bool))
             {
-                _firstRender = false;
+                GlobalData.RepeatRender["Timer"] = true;
                 while (true)
                 {
+                    Console.WriteLine("timer");
                     await Task.Delay(1000);
                     GlobalData.FakeData();
                 }

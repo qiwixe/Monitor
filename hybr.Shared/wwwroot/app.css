@@ -49,3 +49,66 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+#parent {
+    display: grid;
+    height: 75vh;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 50% 50%;
+}
+
+#grid11 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#grid21 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#grid31 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+#grid12 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#grid22 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#grid32 {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.gridContent {
+    flex: 1 1 auto;
+    height: 100%;
+    width: 100%;
+    min-width: 300px;
+    min-width: 300px;
+}
+
+.compassDiv {
+    display: grid;
+    align-items: center;
+    min-width: 300px;
+    min-width: 300px;
+}
+
+#compass {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.textDiv {
+    align-self: center;
+    text-align: center;
+    font: bold 150px TimesNewRoman, sans-serif;
+}

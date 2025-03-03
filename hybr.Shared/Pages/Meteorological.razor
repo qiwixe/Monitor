@@ -1,70 +1,6 @@
 ﻿@page "/Meteorological"
 
 @using hybr.Shared.Services
-<style type="text/css">
-    #parent {
-    display: grid;
-    height: 75vh;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 50% 50%;
-    }
-
-    #grid11 {
-    grid-column: 1;
-    grid-row: 1;
-    }
-
-    #grid21 {
-    grid-column: 2;
-    grid-row: 1;
-    }
-
-    #grid31 {
-    grid-column: 3;
-    grid-row: 1;
-    }
-
-    #grid12 {
-    grid-column: 1;
-    grid-row: 2;
-    }
-
-    #grid22 {
-    grid-column: 2;
-    grid-row: 2;
-    }
-
-    #grid32 {
-    grid-column: 3;
-    grid-row: 2;
-    }
-
-    .gridContent {
-    flex: 1 1 auto;
-    height: 100%;
-    width: 100%;
-    min-width: 300px;
-    min-width: 300px;
-    }
-
-    .compassDiv {
-    display: grid;
-    align-items: center;
-    min-width: 300px;
-    min-width: 300px;
-    }
-
-    #compass {
-    grid-column: 1;
-    grid-row: 1;
-    }
-
-    .textDiv {
-    align-self: center;
-    text-align: center;
-    font: bold 150px TimesNewRoman, sans-serif;
-    }
-</style>
 <PageTitle>Meteorological</PageTitle>
 <div id="parent">
     <div id="grid11" class="gridContent">
@@ -80,46 +16,32 @@
         <LineChart @ref=GlobalLineChart.MeteorologicalChartSolarRadiation Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent compassDiv">
-        <Grid @ref=SensorGrid.SensorGrid0 TItem="Sensor"
-        Class="table table-hover table-bordered table-striped mt-3 "
-        DataProvider="DataProvider">
-            <GridColumns>
+        <Grid @ref=SensorGrid.SensorGrid0 TItem="Sensor" DataProvider="DataProvider">
                 <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
-            </GridColumns>
         </Grid>
-        <div id="compass">
-            <Compass />
-        </div>
-        <Grid @ref=SensorGrid.SensorGrid1 TItem="Sensor"
-        Class="table table-hover table-bordered table-striped mt-3 "
-        DataProvider="DataProvider">
-            <GridColumns>
-                <div style="    justify-self:center;
-                                    width:20%;
-                                    height:80%;
-                                    transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
-                                    transition: transform 0.5s ease-in-out;
-                                    grid-column: 1;
-                                    grid-row: 1;">
-                    <div>
-                        <CompassArrow />
-                    </div>
-                </div>
-            </GridColumns>
+            <div id="compass">
+                <Compass />
+            </div>
+        <Grid @ref=SensorGrid.SensorGrid1 TItem="Sensor" DataProvider="DataProvider">
+            <div style="justify-self:center;
+                        width:20%;
+                        height:80%;
+                        transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
+                        transition: transform 0.5s ease-in-out;
+                        grid-column: 1;
+                        grid-row: 1;">
+            <CompassArrow />
+            </div>
         </Grid>
     </div>
     <div id="grid32" class="gridContent">
-        <Grid @ref=SensorGrid.SensorGrid2 TItem="Sensor"
-        Class="table table-hover table-bordered table-striped mt-3"
-        DataProvider="DataProvider">
-            <GridColumns>
-                <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="IconName.CheckCircleFill" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
-            </GridColumns>
+        <Grid @ref=SensorGrid.SensorGrid2 TItem="Sensor" DataProvider="DataProvider">
+                <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
+                <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
         </Grid>
     </div>
 </div>
@@ -134,7 +56,8 @@
     {
         if (firstRender)
         {
-            await GlobalLineChart.InitializeAsync();
+            // await GlobalLineChart.MeteorologicalInitializeAsync();
+            GlobalLineChart.AllPageProperty("Meteorological");
         }
         await base.OnAfterRenderAsync(firstRender);
     }
