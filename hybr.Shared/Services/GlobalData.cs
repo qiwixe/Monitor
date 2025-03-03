@@ -1,8 +1,5 @@
 ﻿using BlazorBootstrap;
-using hybr.Shared.Pages;
-using System;
 using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace hybr.Shared.Services
 {
@@ -28,7 +25,6 @@ namespace hybr.Shared.Services
     }
     public class SQLstring()
     {
-        #region SQL строки для ДБ
         public static string Connection { get; } = "Host=localhost;Username=postgres;Password=postgres;Database=station_archive";
         public static string All { get; } = "SELECT * FROM backup_201311_3 order by id";
         public static string WindPower { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 1 order by id";
@@ -38,7 +34,6 @@ namespace hybr.Shared.Services
         public static string HeatPump { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 5 order by id";
         public static string Bioplant { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 6 order by id";
         public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
-        #endregion SQL строки для ДБ
     }
     public class Chart()
     {
@@ -63,7 +58,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 2,
-            Label = $"Напряжение 2, В",
+            Label = $"Ток 2, A",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -81,7 +76,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 4,
-            Label = $"Напряжение 3, В",
+            Label = $"Ток 4, A",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -90,7 +85,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 5,
-            Label = $"Напряжение 3, В",
+            Label = $"Напряжение 5, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -99,7 +94,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 6,
-            Label = $"Напряжение 3, В",
+            Label = $"Ток 6, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -108,7 +103,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 7,
-            Label = $"Напряжение 3, В",
+            Label = $"Напряжение 7, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -117,7 +112,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 8,
-            Label = $"Напряжение 3, В",
+            Label = $"Ток 8, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -126,7 +121,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 9,
-            Label = $"Напряжение 3, В",
+            Label = $"Напряжение 9, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -135,7 +130,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 10,
-            Label = $"Напряжение 3, В",
+            Label = $"Ток 10, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -144,7 +139,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 11,
-            Label = $"Напряжение 3, В",
+            Label = $"Напряжение 11, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -153,13 +148,14 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 12,
-            Label = $"Напряжение 3, В",
+            Label = $"Ток 12, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
 
-        public static IChartDataset MeteorologicalChartDataSetSensor103 { get; } = new DefaultChartOption
+        public static IChartDataset MeteorologicalChartDataSetSensor103 { get; } = 
+        new DefaultChartOption
         {
             SensorId = 103,
             Label = $"Температура, °C",
@@ -167,7 +163,8 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset MeteorologicalChartDataSetSensor104 { get; } = new DefaultChartOption
+        public static IChartDataset MeteorologicalChartDataSetSensor104 { get; } = 
+        new DefaultChartOption
         {
             SensorId = 104,
             Label = $"Влажность, %",
@@ -175,7 +172,8 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 255, 0, 0.7)",
             BorderColor = "rgba(255, 255, 0, 0.7)",
         };
-        public static IChartDataset MeteorologicalChartDataSetSensor105 { get; } = new DefaultChartOption
+        public static IChartDataset MeteorologicalChartDataSetSensor105 { get; } = 
+        new DefaultChartOption
         {
             SensorId = 105,
             Label = $"Давление, мм.рт.ст.",
@@ -183,7 +181,8 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
         };
-        public static IChartDataset MeteorologicalChartDataSetSensor108 { get; } = new DefaultChartOption
+        public static IChartDataset MeteorologicalChartDataSetSensor108 { get; } = 
+        new DefaultChartOption
         {
             SensorId = 108,
             Label = $"Солнечная радиация, Вт/м2",
@@ -197,6 +196,7 @@ namespace hybr.Shared.Services
         public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
         public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
         public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid3 { get; set; } = default!;
     }
     public class ChartDataSet()
     {
@@ -213,27 +213,10 @@ namespace hybr.Shared.Services
         public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor108 };
 
     }
-    public class GlobalChartData()
-    {
-        #region Инициализация графиков метеостанции
-        //public static ChartData WindPowerChartDataVoltage1  { get; } = new ChartData { Labels = new List<string>(), Datasets = new List<IChartDataset> {ChartSettings.WindPowerChartDataSetSensor1, ChartSettings.WindPowerChartDataSetSensor2, ChartSettings.WindPowerChartDataSetSensor3 } };
-        //public static ChartData WindPowerChartDataAmperage1 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage1 };
-        //public static ChartData WindPowerChartDataVoltage2 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage2 };
-        //public static ChartData WindPowerChartDataAmperage2 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage2 };
-        //public static ChartData WindPowerChartDataVoltage3 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage3 };
-        //public static ChartData WindPowerChartDataAmperage3 { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage3 };
-        #endregion Инициализация графиков метеостанции
-
-        #region Инициализация графиков метеостанции
-        //public static ChartData MeteorologicalChartDataTemperature { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperature };
-        //public static ChartData MeteorologicalChartDataHumidity { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetHumidity };
-        //public static ChartData MeteorologicalChartDataPressure { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetPressure };
-        //public static ChartData MeteorologicalChartDataSolarRadiation { get; } = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetSolarRadiation };
-        #endregion Инициализация графиков метеостанции
-    }
-    public class GlobalLineChart()
+    public class GlobalPageProperty()
     {
         public static Dictionary<string, Dictionary<LineChart, Chart>> AllCharts { get; set; } = new();
+        public static List<Grid<Sensor>> allGrid = new();
 
         public static LineChart WindPowerChartVoltage1 { get; set; } = default!;
         public static LineChart WindPowerChartAmperage1 { get; set; } = default!;
@@ -247,34 +230,13 @@ namespace hybr.Shared.Services
         public static LineChart MeteorologicalChartPressure { get; set; } = default!;
         public static LineChart MeteorologicalChartSolarRadiation { get; set;} = default!;
 
-        public static List<Grid<Sensor>> allGrid = new();
-
-        public static void ChartInitialize(string _page)
-        {
-
-            //await WindPowerChartVoltage1.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage1, new LiveChartOptions());
-            //WindPowerChartAmperage1.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage1, new LiveChartOptions());
-            //await WindPowerChartVoltage2.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage2, new LiveChartOptions());
-            //await WindPowerChartAmperage2.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage2, new LiveChartOptions());
-            //await WindPowerChartVoltage3.InitializeAsync(GlobalChartData.WindPowerChartDataVoltage3, new LiveChartOptions());
-            //await WindPowerChartAmperage3.InitializeAsync(GlobalChartData.WindPowerChartDataAmperage3, new LiveChartOptions());
-
-            //if (!GlobalData.RepeatRender.TryGetValue("WindPower", out var _bool))
-            //{
-            //    GlobalData.RepeatRender["WindPower"] = true;
-
-            //    allChart[WindPowerChartVoltage1] = (GlobalChartData.WindPowerChartDataVoltage1);
-            //    allChart[WindPowerChartAmperage1] = (GlobalChartData.WindPowerChartDataAmperage1);
-            //    allChart[WindPowerChartVoltage2] = (GlobalChartData.WindPowerChartDataVoltage2);
-            //    allChart[WindPowerChartAmperage2] = (GlobalChartData.WindPowerChartDataAmperage2);
-            //    allChart[WindPowerChartVoltage3] = (GlobalChartData.WindPowerChartDataVoltage3);
-            //    allChart[WindPowerChartAmperage3] = (GlobalChartData.WindPowerChartDataAmperage3);
-            //}
-        }
         public static void AllPageProperty(string _PageName)
         {
             switch (_PageName)
             {
+                case ("Home"):
+                    allGrid.Add(SensorGrid.SensorGrid3);
+                    break;
                 case ("WindPower"):
                     AllCharts["WindPower"] = new Dictionary<LineChart, Chart>()
                     {
@@ -531,6 +493,7 @@ namespace hybr.Shared.Services
         public static List<Order> DataWindPower { get; set; } = new();
         #endregion Переменные с данными ДБ
 
+
         public static Dictionary<string, bool>  RepeatRender { get; set; } = new();
         public static async void GetAllData()
         {
@@ -686,7 +649,7 @@ namespace hybr.Shared.Services
             });
             #endregion Данные для метеостанции(7)
 
-            await GlobalLineChart.UpdateDataAsync2(_fakeData);
+            await GlobalPageProperty.UpdateDataAsync2(_fakeData);
             PreparationSensorData(_fakeData);
             return _fakeData;
         }

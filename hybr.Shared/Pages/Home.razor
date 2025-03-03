@@ -1,18 +1,35 @@
 ﻿@page "/"
 
 @using hybr.Shared.Services
-@inject IFormFactor FormFactor
 <PageTitle>Home</PageTitle>
-<script src="{/Meteorological}" autostart="true"></script>
-<h1>Hello, world!</h1>
-
-Welcome to your new app running on <em>@factor</em> using <em>@platform</em>.
+<Preload />
 <div class="container-fluid overflow-x-auto">
     <LineChart @ref="lineChart" Width="800" />
 </div>
+<Grid @ref=SensorGrid.SensorGrid3 TItem="Sensor" DataProvider="DataProvider">
+    <Alert Color="@GlobalSensorData.AllSensors[1].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[1].Icon" class="me-2"></Icon>Датчик 1 @GlobalSensorData.AllSensors[1].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[2].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[2].Icon" class="me-2"></Icon>Датчик 2 @GlobalSensorData.AllSensors[2].Value_of_m, B</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[3].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[3].Icon" class="me-2"></Icon>Датчик 3 @GlobalSensorData.AllSensors[3].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[4].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[4].Icon" class="me-2"></Icon>Датчик 4 @GlobalSensorData.AllSensors[4].Value_of_m, B</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[5].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[5].Icon" class="me-2"></Icon>Датчик 5 @GlobalSensorData.AllSensors[5].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[6].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[6].Icon" class="me-2"></Icon>Датчик 6 @GlobalSensorData.AllSensors[6].Value_of_m, B</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[7].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[7].Icon" class="me-2"></Icon>Датчик 7 @GlobalSensorData.AllSensors[7].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[8].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[8].Icon" class="me-2"></Icon>Датчик 8 @GlobalSensorData.AllSensors[8].Value_of_m, B</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[9].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[9].Icon" class="me-2"></Icon>Датчик 9 @GlobalSensorData.AllSensors[9].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[10].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[10].Icon" class="me-2"></Icon>Датчик 10 @GlobalSensorData.AllSensors[10].Value_of_m, B</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[11].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[11].Icon" class="me-2"></Icon>Датчик 11 @GlobalSensorData.AllSensors[11].Value_of_m, A</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[12].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[12].Icon" class="me-2"></Icon>Датчик 12 @GlobalSensorData.AllSensors[12].Value_of_m, B</Alert>
+
+    <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
+    <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
+</Grid>
 <Grid   TItem="Order"
 Class="table table-hover table-bordered table-striped"
-DataProvider="DataProvider"
+DataProvider="DataProviderSQL"
 AllowPaging="true"
 PageSize="10">
 
@@ -42,11 +59,13 @@ PageSize="10">
 
 </Grid>
 @code {
-    private string factor => FormFactor.GetFormFactor();
-    private string platform => FormFactor.GetPlatform();
-
-    private async Task<GridDataProviderResult<Order>> DataProvider(GridDataProviderRequest<Order> request){
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
+    private async Task<GridDataProviderResult<Order>> DataProviderSQL(GridDataProviderRequest<Order> request){
         return await Task.FromResult(request.ApplyTo(GlobalData.DataAll));
+    }
+    private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
+    {
+        return await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
     }
 }
 
@@ -73,12 +92,15 @@ PageSize="10">
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
+        await Task.Delay(1300);
+        PreloadService.Hide();
         if (firstRender)
         {
             await lineChart.InitializeAsync(chartData, lineChartOptions);
-            await Task.Delay(1000);
         }
         await base.OnAfterRenderAsync(firstRender);
+        GlobalPageProperty.AllPageProperty("Home");
         TimerUpdate.StartTimer();
     }
 

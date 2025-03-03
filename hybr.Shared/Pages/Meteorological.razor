@@ -2,26 +2,27 @@
 
 @using hybr.Shared.Services
 <PageTitle>Meteorological</PageTitle>
+<Preload />
 <div id="parent">
     <div id="grid11" class="gridContent">
-        <LineChart @ref=GlobalLineChart.MeteorologicalChartTemperature Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.MeteorologicalChartTemperature Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid21" class="gridContent">
-        <LineChart @ref=GlobalLineChart.MeteorologicalChartHumidity Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.MeteorologicalChartHumidity Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid31" class="gridContent">
-        <LineChart @ref=GlobalLineChart.MeteorologicalChartPressure Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.MeteorologicalChartPressure Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid12" class="gridContent">
-        <LineChart @ref=GlobalLineChart.MeteorologicalChartSolarRadiation Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.MeteorologicalChartSolarRadiation Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent compassDiv">
         <Grid @ref=SensorGrid.SensorGrid0 TItem="Sensor" DataProvider="DataProvider">
-                <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
+            <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
         </Grid>
-            <div id="compass">
-                <Compass />
-            </div>
+        <div id="compass">
+            <Compass />
+        </div>
         <Grid @ref=SensorGrid.SensorGrid1 TItem="Sensor" DataProvider="DataProvider">
             <div style="justify-self:center;
                         width:20%;
@@ -30,24 +31,25 @@
                         transition: transform 0.5s ease-in-out;
                         grid-column: 1;
                         grid-row: 1;">
-            <CompassArrow />
+                <CompassArrow />
             </div>
         </Grid>
     </div>
     <div id="grid32" class="gridContent">
         <Grid @ref=SensorGrid.SensorGrid2 TItem="Sensor" DataProvider="DataProvider">
-                <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
-                <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
+            <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
         </Grid>
     </div>
 </div>
 
 @code {
     private string scale = "0.2";
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
     private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
     {
         return await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
@@ -56,8 +58,10 @@
     {
         if (firstRender)
         {
-            // await GlobalLineChart.MeteorologicalInitializeAsync();
-            GlobalLineChart.AllPageProperty("Meteorological");
+            GlobalPageProperty.AllPageProperty("Meteorological");
+            PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
+            await Task.Delay(1300);
+            PreloadService.Hide();
         }
         await base.OnAfterRenderAsync(firstRender);
     }

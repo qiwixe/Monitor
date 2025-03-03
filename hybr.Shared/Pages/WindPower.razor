@@ -2,33 +2,38 @@
 
 @using hybr.Shared.Services
 <PageTitle>WindPower</PageTitle>
+<Preload />
 <div id="parent">
     <div id="grid11" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartVoltage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid21" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartAmperage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid31" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartVoltage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid12" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartAmperage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartVoltage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid32" class="gridContent">
-        <LineChart @ref=GlobalLineChart.WindPowerChartAmperage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
 </div>
 
 @code {
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            GlobalLineChart.AllPageProperty("WindPower");
+            GlobalPageProperty.AllPageProperty("WindPower");
+            PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
+            await Task.Delay(1300);
+            PreloadService.Hide();
         }
         await base.OnAfterRenderAsync(firstRender);
     }
