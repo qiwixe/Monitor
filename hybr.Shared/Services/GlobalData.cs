@@ -1,4 +1,5 @@
 ﻿using BlazorBootstrap;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace hybr.Shared.Services
@@ -42,6 +43,13 @@ namespace hybr.Shared.Services
         public required ChartData DChartData { get; set; }
         public required List<IChartDataset> DChartDataset { get; set; }
         public IChartOptions DChartOptions { get; set; } = new LiveChartOptions();
+    }
+    public class SensorGrid
+    {
+        public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
+        public static Grid<Sensor> SensorGrid3 { get; set; } = default!;
     }
     public class ChartSettings()
     {
@@ -191,13 +199,6 @@ namespace hybr.Shared.Services
             BorderColor = "rgba(0, 0, 255, 0.7)",
         };
     }
-    public class SensorGrid
-    {
-        public static Grid<Sensor> SensorGrid0 { get; set; } = default!;
-        public static Grid<Sensor> SensorGrid1 { get; set; } = default!;
-        public static Grid<Sensor> SensorGrid2 { get; set; } = default!;
-        public static Grid<Sensor> SensorGrid3 { get; set; } = default!;
-    }
     public class ChartDataSet()
     {
         public static List<IChartDataset> WindPowerChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor1, ChartSettings.WindPowerChartDataSetSensor3, ChartSettings.WindPowerChartDataSetSensor5 };
@@ -327,16 +328,14 @@ namespace hybr.Shared.Services
                 }
             }
         }
-        public static async Task UpdateDataAsync2(List<Order> _lastData)
+        public static async Task UpdateDataAsync(List<Order> _lastData)
         {
             foreach (var (_key,_a) in AllCharts) 
             foreach (var (_PageChart, _chart) in AllCharts[_key])
             {
                 if (_chart.DActive == true)
                 {
-                    //_chart.DActive = false;
                     await _PageChart.InitializeAsync(_chart.DChartData, _chart.DChartOptions);
-                
                 foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
                 {
                     if (_lineChartDataset.Data.Count > _chart.maxLabelXasixCount)
@@ -348,7 +347,6 @@ namespace hybr.Shared.Services
                         if (_data.Sensor_id == _lineChartDataset.SensorId)
                         {
                             _lineChartDataset.Data.Add(_data.Value_of_m);
-
                         }
                     }    
                 }
@@ -508,6 +506,7 @@ namespace hybr.Shared.Services
         }
         public static async Task<List<Order>> FakeData()
         {
+            List<Order> _listMeteoSensor = await HTTPClientSensor.Main();
             List<Order> _fakeData = new();
             #region Данные для ФЭУ(1)
             _fakeData.Add(new Order
@@ -599,30 +598,33 @@ namespace hybr.Shared.Services
             });
             #endregion ФЭУ(1)
             #region Данные для метеостанции(7)
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 103,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 104,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100),
-            });
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 105,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(200) + 700,
-            });
+            //_fakeData.Add(new Order
+            //{
+            //    Sensor_id = 103,
+            //    Station_id = 7,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //});
+            //_fakeData.Add(new Order
+            //{
+            //    Sensor_id = 104,
+            //    Station_id = 7,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100),
+            //});
+            //_fakeData.Add(new Order
+            //{
+            //    Sensor_id = 105,
+            //    Station_id = 7,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(200) + 700,
+            //});
+            _fakeData.Add(_listMeteoSensor[0]);
+            _fakeData.Add(_listMeteoSensor[1]);
+            _fakeData.Add(_listMeteoSensor[2]);
             _fakeData.Add(new Order
             {
                 Sensor_id = 106,
@@ -649,7 +651,7 @@ namespace hybr.Shared.Services
             });
             #endregion Данные для метеостанции(7)
 
-            await GlobalPageProperty.UpdateDataAsync2(_fakeData);
+            await GlobalPageProperty.UpdateDataAsync(_fakeData);
             PreparationSensorData(_fakeData);
             return _fakeData;
         }
@@ -682,7 +684,6 @@ namespace hybr.Shared.Services
                 GlobalData.RepeatRender["Timer"] = true;
                 while (true)
                 {
-                    Console.WriteLine("timer");
                     await Task.Delay(1000);
                     GlobalData.FakeData();
                 }
