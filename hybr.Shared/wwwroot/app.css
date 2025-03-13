@@ -100,9 +100,13 @@ h1:focus {
     align-items: center;
     min-width: 300px;
     min-width: 300px;
+    height: 100%;
+    width: 100%;
 }
 
 #compass {
+    height: 100%;
+    width: 100%;
     grid-column: 1;
     grid-row: 1;
 }

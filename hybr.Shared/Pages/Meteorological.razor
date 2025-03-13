@@ -4,8 +4,13 @@
 <PageTitle>Meteorological</PageTitle>
 <Preload />
 <div id="parent">
-    <div id="grid11" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid11" class="gridContent compassDiv">
+        <div id="compass" class="d-flex justify-content-center ">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Size="SpinnerSize.ExtraLarge" />
+        </div>
+        <div id="compass">
+            <LineChart @ref=GlobalPageProperty.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" />
+        </div>
     </div>
     <div id="grid21" class="gridContent">
         <LineChart @ref=GlobalPageProperty.MeteorologicalChartHumidity Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />

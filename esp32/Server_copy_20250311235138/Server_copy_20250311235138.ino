@@ -24,8 +24,8 @@ float temperature;
 float humidity;
 float pressure;
 
-StaticJsonDocument<350> jsonDocument;
-char buffer[350];
+StaticJsonDocument<400> jsonDocument;
+char buffer[400];
 
 WebServer server(80);
 void add_json_object(int Sensor, float value) {
@@ -35,7 +35,7 @@ void add_json_object(int Sensor, float value) {
   obj["Date_of_m"] = dayStamp; 
   obj["Time_of_m"] = timeStamp; 
   obj["Value_of_m"] = value; 
-  obj["Unit_of_m"] = 1; 
+  obj["Unit_of_m"] = "1"; 
 }
 void read_sensor_data() {
      temperature = bme.readTemperature();

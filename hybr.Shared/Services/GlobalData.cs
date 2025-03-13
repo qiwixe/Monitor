@@ -1,6 +1,7 @@
 ﻿using BlazorBootstrap;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace hybr.Shared.Services
 {
@@ -490,7 +491,8 @@ namespace hybr.Shared.Services
         public static List<Order> DataPhotovoltaic { get; set; } = new();
         public static List<Order> DataWindPower { get; set; } = new();
         #endregion Переменные с данными ДБ
-
+        //перенести в отдельный файл
+        public static bool MeteoTempSpinVisible = true;
 
         public static Dictionary<string, bool>  RepeatRender { get; set; } = new();
         public static async void GetAllData()
@@ -506,6 +508,7 @@ namespace hybr.Shared.Services
         }
         public static async Task<List<Order>> FakeData()
         {
+            
             List<Order> _listMeteoSensor = await HTTPClientSensor.Main();
             List<Order> _fakeData = new();
             #region Данные для ФЭУ(1)
@@ -622,9 +625,12 @@ namespace hybr.Shared.Services
             //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
             //    Value_of_m = new Random().Next(200) + 700,
             //});
-            _fakeData.Add(_listMeteoSensor[0]);
-            _fakeData.Add(_listMeteoSensor[1]);
-            _fakeData.Add(_listMeteoSensor[2]);
+            if (_listMeteoSensor != null)
+            {
+                _fakeData.Add(_listMeteoSensor[0]);
+                _fakeData.Add(_listMeteoSensor[1]);
+                _fakeData.Add(_listMeteoSensor[2]);
+            }
             _fakeData.Add(new Order
             {
                 Sensor_id = 106,
@@ -657,6 +663,10 @@ namespace hybr.Shared.Services
         }
         public static void PreparationSensorData(List<Order> _lastData)
         {
+            //foreach (var _sensor in GlobalSensorData.AllSensors)
+            //{
+            //    if (_sensor)
+            //}
             foreach (var _data in _lastData)
             {
                 if (GlobalSensorData.AllSensors[_data.Sensor_id].Value_min < _data.Value_of_m &&
@@ -666,11 +676,17 @@ namespace hybr.Shared.Services
                     GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.CheckCircleFill;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
                 }
-                else
+                else if(GlobalSensorData.AllSensors[_data.Sensor_id].Value_min == _data.Value_of_m &&
+                _data.Value_of_m == GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
                 {
                     GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Warning;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.ExclamationCircleFill;
                     GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
+                } else
+                {
+                    GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Danger;
+                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.XCircleFill;
+                    GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = 0;
                 }
             }
         }
