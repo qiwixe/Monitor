@@ -24,6 +24,7 @@ namespace hybr.Shared.Services
         public double Value_of_m { get; set; } = 0;
         public int Value_min { get; set; }
         public int Value_max { get; set; }
+        public bool Disconnected { get; set; }
     }
     public class SQLstring()
     {
@@ -329,7 +330,7 @@ namespace hybr.Shared.Services
                 }
             }
         }
-        public static async Task UpdateDataAsync(List<Order> _lastData)
+        public static async Task UpdateDataAsync(Dictionary<int, Order> _lastData)
         {
             foreach (var (_key,_a) in AllCharts) 
             foreach (var (_PageChart, _chart) in AllCharts[_key])
@@ -343,19 +344,16 @@ namespace hybr.Shared.Services
                     {
                         _lineChartDataset.Data.RemoveAt(0);
                     }
-                    foreach (var _data in _lastData)
-                    {
-                        if (_data.Sensor_id == _lineChartDataset.SensorId)
-                        {
-                            _lineChartDataset.Data.Add(_data.Value_of_m);
-                        }
-                    }    
+                    if (_lastData.TryGetValue(_lineChartDataset.SensorId, out var _bool)) 
+                    { 
+                        _lineChartDataset.Data.Add(_lastData[_lineChartDataset.SensorId].Value_of_m);
+                    }
                 }
                 if (_chart.DChartData.Labels.Count > _chart.maxLabelXasixCount)
                 {
                     _chart.DChartData.Labels.RemoveAt(0);
                 }
-                _chart.DChartData.Labels.Add(_lastData[0].Time_of_m);
+                _chart.DChartData.Labels.Add(_lastData[106].Time_of_m);
                 await _PageChart.UpdateValuesAsync(_chart.DChartData);
                 }
             }
@@ -367,7 +365,8 @@ namespace hybr.Shared.Services
     }
     public class GlobalSensorData()
     {
-        public static Dictionary<int, Sensor> AllSensors { get; } = new Dictionary<int, Sensor>
+        public static Dictionary<int, Sensor> AllSensors { get; } = 
+        new Dictionary<int, Sensor>
         {
             [1] = (new Sensor
             {
@@ -491,9 +490,6 @@ namespace hybr.Shared.Services
         public static List<Order> DataPhotovoltaic { get; set; } = new();
         public static List<Order> DataWindPower { get; set; } = new();
         #endregion Переменные с данными ДБ
-        //перенести в отдельный файл
-        public static bool MeteoTempSpinVisible = true;
-
         public static Dictionary<string, bool>  RepeatRender { get; set; } = new();
         public static async void GetAllData()
         {
@@ -506,132 +502,107 @@ namespace hybr.Shared.Services
             DataPhotovoltaic = await Db.Data(SQLstring.Photovoltaic);
             DataWindPower = await Db.Data(SQLstring.WindPower);
         }
-        public static async Task<List<Order>> FakeData()
+        public static async Task<Dictionary<int, Order>> FakeData()
         {
-            
+
             List<Order> _listMeteoSensor = await HTTPClientSensor.Main();
-            List<Order> _fakeData = new();
+            Dictionary<int, Order> _fakeData = new();
+            if (_listMeteoSensor != null) 
+            foreach (var _value in _listMeteoSensor)
+                {
+                    _fakeData[_value.Sensor_id] = _value;
+                }
             #region Данные для ФЭУ(1)
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 1,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 2,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 3,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 4,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 5,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 6,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 7,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 8,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 9,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 10,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            }); _fakeData.Add(new Order
-            {
-                Sensor_id = 11,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData.Add(new Order
-            {
-                Sensor_id = 12,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            #endregion ФЭУ(1)
-            #region Данные для метеостанции(7)
             //_fakeData.Add(new Order
             //{
-            //    Sensor_id = 103,
-            //    Station_id = 7,
+            //    Sensor_id = 1,
+            //    Station_id = 1,
             //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
             //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
             //    Value_of_m = new Random().Next(100) - 50,
             //});
             //_fakeData.Add(new Order
             //{
-            //    Sensor_id = 104,
-            //    Station_id = 7,
+            //    Sensor_id = 2,
+            //    Station_id = 1,
             //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
             //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-            //    Value_of_m = new Random().Next(100),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 3,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 4,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 5,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 6,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 7,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 8,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 9,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 10,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
+            //}); _fakeData.Add(new Order
+            //{
+            //    Sensor_id = 11,
+            //    Station_id = 1,
+            //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
+            //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
+            //    Value_of_m = new Random().Next(100) - 50,
             //});
             //_fakeData.Add(new Order
             //{
-            //    Sensor_id = 105,
-            //    Station_id = 7,
+            //    Sensor_id = 12,
+            //    Station_id = 1,
             //    Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
             //    Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-            //    Value_of_m = new Random().Next(200) + 700,
+            //    Value_of_m = new Random().Next(100) - 50,
             //});
-            if (_listMeteoSensor != null)
-            {
-                _fakeData.Add(_listMeteoSensor[0]);
-                _fakeData.Add(_listMeteoSensor[1]);
-                _fakeData.Add(_listMeteoSensor[2]);
-            }
-            _fakeData.Add(new Order
+            #endregion ФЭУ(1)
+            #region Данные для метеостанции(7)
+            _fakeData[106]=(new Order
             {
                 Sensor_id = 106,
                 Station_id = 7,
@@ -639,7 +610,7 @@ namespace hybr.Shared.Services
                 Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(360),
             });
-            _fakeData.Add(new Order
+            _fakeData[107] =(new Order
             {
                 Sensor_id = 107,
                 Station_id = 7,
@@ -647,7 +618,7 @@ namespace hybr.Shared.Services
                 Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(15),
             });
-            _fakeData.Add(new Order
+            _fakeData[108]=(new Order
             {
                 Sensor_id = 108,
                 Station_id = 7,
@@ -661,34 +632,60 @@ namespace hybr.Shared.Services
             PreparationSensorData(_fakeData);
             return _fakeData;
         }
-        public static void PreparationSensorData(List<Order> _lastData)
+        public static void PreparationSensorData(Dictionary<int, Order> _lastData)
         {
-            //foreach (var _sensor in GlobalSensorData.AllSensors)
-            //{
-            //    if (_sensor)
-            //}
-            foreach (var _data in _lastData)
+            foreach (var (_key, _value) in GlobalSensorData.AllSensors)
             {
-                if (GlobalSensorData.AllSensors[_data.Sensor_id].Value_min < _data.Value_of_m &&
-                _data.Value_of_m < GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
+                if (_lastData.TryGetValue(_key, out var _bool))
                 {
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Success;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.CheckCircleFill;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
+                    if (_value.Value_min < _lastData[_key].Value_of_m && _lastData[_key].Value_of_m < _value.Value_max)
+                    {
+                        _value.Alert = AlertColor.Success;
+                        _value.Icon = IconName.CheckCircleFill;
+                    }
+                    else if (_value.Value_min == _lastData[_key].Value_of_m || _lastData[_key].Value_of_m == _value.Value_max)
+                    {
+                        _value.Alert = AlertColor.Warning;
+                        _value.Icon = IconName.ExclamationCircleFill;
+                    }
+                    else
+                    {
+                        _value.Alert = AlertColor.Danger;
+                        _value.Icon = IconName.XCircleFill;
+                    }
+                    _value.Value_of_m = _lastData[_key].Value_of_m;
+                    _value.Disconnected = false;
                 }
-                else if(GlobalSensorData.AllSensors[_data.Sensor_id].Value_min == _data.Value_of_m &&
-                _data.Value_of_m == GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
+                else
                 {
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Warning;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.ExclamationCircleFill;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
-                } else
-                {
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Danger;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.XCircleFill;
-                    GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = 0;
+                    _value.Alert = AlertColor.Danger;
+                    _value.Icon = IconName.XCircleFill;
+                    _value.Value_of_m = 0;
+                    _value.Disconnected = true;
                 }
             }
+            //foreach (var _data in _lastData)
+            //{
+            //    if (GlobalSensorData.AllSensors[_data.Sensor_id].Value_min < _data.Value_of_m &&
+            //    _data.Value_of_m < GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
+            //    {
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Success;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.CheckCircleFill;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
+            //    }
+            //    else if(GlobalSensorData.AllSensors[_data.Sensor_id].Value_min == _data.Value_of_m &&
+            //    _data.Value_of_m == GlobalSensorData.AllSensors[_data.Sensor_id].Value_max)
+            //    {
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Warning;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.ExclamationCircleFill;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = _data.Value_of_m;
+            //    } else
+            //    {
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Alert = AlertColor.Danger;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Icon = IconName.XCircleFill;
+            //        GlobalSensorData.AllSensors[_data.Sensor_id].Value_of_m = 0;
+            //    }
+            //}
         }
     }
     public class TimerUpdate()

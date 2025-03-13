@@ -27,6 +27,7 @@ namespace hybr.Shared
         public static async Task<List<Order>> Main()
         {
             List < Order > _httpData = new();
+            Dictionary<int, Order> _data = new();
             try
             {
                 var responseBody = await client.GetFromJsonAsync<List<Order>>(_meteoServer);

@@ -6,7 +6,7 @@
 <div id="parent">
     <div id="grid11" class="gridContent compassDiv">
         <div id="compass" class="d-flex justify-content-center ">
-            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
         <div id="compass">
             <LineChart @ref=GlobalPageProperty.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" />
