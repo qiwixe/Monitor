@@ -7,23 +7,23 @@
 <div id="parent">
     <div id="grid11" class="gridContent compassDiv">
         <div id="compass123" class="gridContent">
-            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
         <div id="compass1" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
         </div>
     </div>
-        <div id="grid21" class="gridContent compassDiv">
-        <div id="compass123" class="gridContent">
-            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
-        </div>
-        <div id="compass1" class="gridContent">
-                <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-        </div>
+    <div id="grid21" class="gridContent compassDiv">
+    <div id="compass123" class="gridContent">
+        <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
     </div>
-        <div id="grid31" class="gridContent compassDiv">
+    <div id="compass1" class="gridContent">
+            <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    </div>
+</div>
+    <div id="grid31" class="gridContent compassDiv">
         <div id="compass123" class="gridContent">
-            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
         <div id="compass1" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartPressure Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
@@ -33,14 +33,14 @@
             <LineChart @ref=LiveChartElement.MeteorologicalChartSolarRadiation Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent compassDiv">
-        <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
+        <div id="compass" class="textDiv">@SensorData.AllSensors[107].Value_of_m</div>
         <div id="compass">
             <Compass />
         </div>
         <div style="justify-self:center;
                     width:20%;
                     height:80%;
-                    transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
+                    transform: rotate(@(SensorData.AllSensors[106].Value_of_m)deg);
                     transition: transform 0.5s ease-in-out;
                     grid-column: 1;
                     grid-row: 1;">
@@ -48,12 +48,12 @@
         </div>
     </div>
     <div id="grid32" class="gridContent">
-            <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
-            <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
-            <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
-            <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
-            <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
-            <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
+            <Alert Color="@SensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @SensorData.AllSensors[103].Value_of_m, °C</Alert>
+            <Alert Color="@SensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @SensorData.AllSensors[104].Value_of_m, %</Alert>
+            <Alert Color="@SensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @SensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
+            <Alert Color="@SensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @SensorData.AllSensors[106].Value_of_m, °</Alert>
+            <Alert Color="@SensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @SensorData.AllSensors[107].Value_of_m, м/с</Alert>
+            <Alert Color="@SensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @SensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
     </div>
 </div>
 </Grid>

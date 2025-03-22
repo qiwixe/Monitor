@@ -1,5 +1,4 @@
-﻿using BlazorBootstrap;
-using Npgsql;
+﻿using Npgsql;
 
 namespace hybr.Shared.Services
 {
@@ -15,9 +14,31 @@ namespace hybr.Shared.Services
         public static string Bioplant { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 6 order by id";
         public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
     }
-
-    public class Db
+    public class DataBase
     {
+        #region Переменные с данными ДБ
+        public static List<Order> DataAll { get; set; } = new();
+        public static List<Order> DataMeteorological { get; set; } = new();
+        public static List<Order> DataBioplant { get; set; } = new();
+        public static List<Order> DataHeatPump { get; set; } = new();
+        public static List<Order> DataSolarСoncentrator { get; set; } = new();
+        public static List<Order> DataSolarCollector { get; set; } = new();
+        public static List<Order> DataPhotovoltaic { get; set; } = new();
+        public static List<Order> DataWindPower { get; set; } = new();
+        #endregion Переменные с данными ДБ
+
+        public static async void GetAllData()
+        {
+            DataMeteorological      = await Data(SQLstring.Meteorological);
+            DataAll                 = await Data(SQLstring.All);
+            DataBioplant            = await Data(SQLstring.Bioplant);
+            DataHeatPump            = await Data(SQLstring.HeatPump);
+            DataSolarСoncentrator   = await Data(SQLstring.SolarСoncentrator);
+            DataSolarCollector      = await Data(SQLstring.SolarCollector);
+            DataPhotovoltaic        = await Data(SQLstring.Photovoltaic);
+            DataWindPower           = await Data(SQLstring.WindPower);
+        }
+
         const string querySetData = "INSERT INTO table_test VALUES (1, 103, 7, '2013-11-21', '00:00:01', 0.944444, '6');";
 
         public static async void DBset()
@@ -121,5 +142,7 @@ namespace hybr.Shared.Services
             return _dbData;
 
         }
+
+
     }
 }

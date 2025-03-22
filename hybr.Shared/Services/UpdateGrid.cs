@@ -8,8 +8,12 @@ namespace hybr.Shared.Services
         new Dictionary<string, Grid<Sensor>>
         {
             ["Home"] = new(),
-            //["Photovoltaic"] = new(),
-            //["WindPower"] = new(),
+            ["Photovoltaic"] = new(),
+            ["WindPower"] = new(),
+            ["SolarCollector"] = new(),
+            ["SolarConcentrator"] = new(),
+            ["HeatPump"] = new(),
+            ["Bioplant"] = new(),
             ["Meteorological"] = new()
         };
     }

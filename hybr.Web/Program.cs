@@ -2,7 +2,7 @@ using hybr.Shared.Services;
 using hybr.Web.Components;
 using hybr.Web.Services;
 
-GlobalData.GetAllData();
+DataBase.GetAllData();
 
 var builder = WebApplication.CreateBuilder(args);
 

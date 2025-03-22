@@ -47,7 +47,7 @@
 
     private async Task<GridDataProviderResult<Order>> DataProvider(GridDataProviderRequest<Order> request)
     {
-        return await Task.FromResult(request.ApplyTo(GlobalData.DataSolarСoncentrator));
+        return await Task.FromResult(request.ApplyTo(DataBase.DataSolarСoncentrator));
     }
 }
 

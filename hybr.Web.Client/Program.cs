@@ -2,7 +2,7 @@ using hybr.Shared.Services;
 using hybr.Web.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-GlobalData.GetAllData();
+DataBase.GetAllData();
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddBlazorBootstrap();
