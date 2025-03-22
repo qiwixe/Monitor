@@ -6,7 +6,7 @@
 <div class="container-fluid overflow-x-auto">
     <LineChart @ref="lineChart" Width="800" />
 </div>
-<Grid @ref=SensorGrid.SensorGrid3 TItem="Sensor" DataProvider="DataProvider">
+<Grid @ref=@UpdateGrid.AllUpdateGrid["Home"] TItem="Sensor" DataProvider="DataProvider">
     <Alert Color="@GlobalSensorData.AllSensors[1].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[1].Icon" class="me-2"></Icon>Датчик 1 @GlobalSensorData.AllSensors[1].Value_of_m, A</Alert>
     <Alert Color="@GlobalSensorData.AllSensors[2].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[2].Icon" class="me-2"></Icon>Датчик 2 @GlobalSensorData.AllSensors[2].Value_of_m, B</Alert>
     <Alert Color="@GlobalSensorData.AllSensors[3].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[3].Icon" class="me-2"></Icon>Датчик 3 @GlobalSensorData.AllSensors[3].Value_of_m, A</Alert>
@@ -100,7 +100,7 @@ PageSize="10">
             await lineChart.InitializeAsync(chartData, lineChartOptions);
         }
         await base.OnAfterRenderAsync(firstRender);
-        GlobalPageProperty.AllPageProperty("Home");
+        LiveChartElement.PageProperty("Home");
         TimerUpdate.StartTimer();
     }
 

@@ -1,32 +1,20 @@
-﻿using hybr.Shared.Services;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace hybr.Shared
+
+namespace hybr.Shared.Services
 {
     internal class HTTPClientSensor
     {
         //создать меню с настройками
-        // что то сделать с исключением TaskCanceledException
+        // что то сделать с исключением TaskCanceledException?
         static string _meteoServer = "http://192.168.0.18/";
         static HttpMessageHandler handler = new HttpClientHandler();
-        static readonly HttpClient client = new HttpClient(handler)
-        {
-            Timeout = TimeSpan.FromSeconds(1)
-        };
+        static readonly HttpClient client = new HttpClient(handler){Timeout = TimeSpan.FromSeconds(1)};
 
-        //public static async Task<List<Order>> Main()
         public static async Task<List<Order>> Main()
         {
-            List < Order > _httpData = new();
+            List<Order> _httpData = new();
             Dictionary<int, Order> _data = new();
             try
             {
@@ -36,7 +24,7 @@ namespace hybr.Shared
             catch (OperationCanceledException ex) when (ex.InnerException is TimeoutException tex)
             {
                 Console.WriteLine($"Превышено время ожидания ответа от сервера: {_meteoServer}");
-                return null;            
+                return null;
             }
             catch (HttpRequestException ex) when (ex is { StatusCode: HttpStatusCode.NotFound })
             {

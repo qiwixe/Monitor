@@ -5,22 +5,22 @@
 <Preload />
 <div id="parent">
     <div id="grid11" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartVoltage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid21" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartAmperage1 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid31" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartVoltage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid12" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartAmperage2 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartVoltage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartVoltage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid32" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.WindPowerChartAmperage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <LineChart @ref=LiveChartElement.WindPowerChartAmperage3 Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
 </div>
 
@@ -30,7 +30,7 @@
     {
         if (firstRender)
         {
-            GlobalPageProperty.AllPageProperty("WindPower");
+            LiveChartElement.PageProperty("WindPower");
             PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
             await Task.Delay(1300);
             PreloadService.Hide();

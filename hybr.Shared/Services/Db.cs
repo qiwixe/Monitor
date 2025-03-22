@@ -3,6 +3,19 @@ using Npgsql;
 
 namespace hybr.Shared.Services
 {
+    public class SQLstring()
+    {
+        public static string Connection { get; } = "Host=localhost;Username=postgres;Password=postgres;Database=station_archive";
+        public static string All { get; } = "SELECT * FROM backup_201311_3 order by id";
+        public static string WindPower { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 1 order by id";
+        public static string Photovoltaic { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 2 order by id";
+        public static string SolarCollector { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 3 order by id";
+        public static string SolarСoncentrator { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 4 order by id";
+        public static string HeatPump { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 5 order by id";
+        public static string Bioplant { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 6 order by id";
+        public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
+    }
+
     public class Db
     {
         const string querySetData = "INSERT INTO table_test VALUES (1, 103, 7, '2013-11-21', '00:00:01', 0.944444, '6');";
@@ -86,7 +99,6 @@ namespace hybr.Shared.Services
                 await _conn.OpenAsync();
                 await using var cmd = new NpgsqlCommand(_queryGetData, _conn);
                 await using var _reader = await cmd.ExecuteReaderAsync();
-
                 while (await _reader.ReadAsync())
                 {
                     _dbData.Add(new Order
@@ -104,7 +116,7 @@ namespace hybr.Shared.Services
             }
             catch
             {
-                Console.WriteLine("Нет связи с базой");
+                Console.WriteLine("Нет связи с базой данных");
             }
             return _dbData;
 

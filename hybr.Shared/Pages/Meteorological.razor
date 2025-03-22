@@ -3,54 +3,60 @@
 @using hybr.Shared.Services
 <PageTitle>Meteorological</PageTitle>
 <Preload />
+<Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="DataProvider">
 <div id="parent">
     <div id="grid11" class="gridContent compassDiv">
-        <div id="compass" class="d-flex justify-content-center ">
+        <div id="compass123" class="gridContent">
             <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
-        <div id="compass">
-            <LineChart @ref=GlobalPageProperty.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" />
+        <div id="compass1" class="gridContent">
+                <LineChart @ref=LiveChartElement.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
         </div>
     </div>
-    <div id="grid21" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.MeteorologicalChartHumidity Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <div id="grid21" class="gridContent compassDiv">
+        <div id="compass123" class="gridContent">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+        </div>
+        <div id="compass1" class="gridContent">
+                <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid31" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.MeteorologicalChartPressure Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <div id="grid31" class="gridContent compassDiv">
+        <div id="compass123" class="gridContent">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@GlobalSensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+        </div>
+        <div id="compass1" class="gridContent">
+                <LineChart @ref=LiveChartElement.MeteorologicalChartPressure Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
     <div id="grid12" class="gridContent">
-        <LineChart @ref=GlobalPageProperty.MeteorologicalChartSolarRadiation Width="145" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+            <LineChart @ref=LiveChartElement.MeteorologicalChartSolarRadiation Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
     <div id="grid22" class="gridContent compassDiv">
-        <Grid @ref=SensorGrid.SensorGrid0 TItem="Sensor" DataProvider="DataProvider">
-            <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
-        </Grid>
+        <div id="compass" class="textDiv">@GlobalSensorData.AllSensors[107].Value_of_m</div>
         <div id="compass">
             <Compass />
         </div>
-        <Grid @ref=SensorGrid.SensorGrid1 TItem="Sensor" DataProvider="DataProvider">
-            <div style="justify-self:center;
-                        width:20%;
-                        height:80%;
-                        transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
-                        transition: transform 0.5s ease-in-out;
-                        grid-column: 1;
-                        grid-row: 1;">
-                <CompassArrow />
-            </div>
-        </Grid>
+        <div style="justify-self:center;
+                    width:20%;
+                    height:80%;
+                    transform: rotate(@(GlobalSensorData.AllSensors[106].Value_of_m)deg);
+                    transition: transform 0.5s ease-in-out;
+                    grid-column: 1;
+                    grid-row: 1;">
+            <CompassArrow />
+        </div>
     </div>
     <div id="grid32" class="gridContent">
-        <Grid @ref=SensorGrid.SensorGrid2 TItem="Sensor" DataProvider="DataProvider">
             <Alert Color="@GlobalSensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @GlobalSensorData.AllSensors[103].Value_of_m, °C</Alert>
             <Alert Color="@GlobalSensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @GlobalSensorData.AllSensors[104].Value_of_m, %</Alert>
             <Alert Color="@GlobalSensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @GlobalSensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
             <Alert Color="@GlobalSensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @GlobalSensorData.AllSensors[106].Value_of_m, °</Alert>
             <Alert Color="@GlobalSensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @GlobalSensorData.AllSensors[107].Value_of_m, м/с</Alert>
             <Alert Color="@GlobalSensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@GlobalSensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @GlobalSensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
-        </Grid>
     </div>
 </div>
+</Grid>
 
 @code {
     private string scale = "0.2";
@@ -63,7 +69,7 @@
     {
         if (firstRender)
         {
-            GlobalPageProperty.AllPageProperty("Meteorological");
+            LiveChartElement.PageProperty("Meteorological");
             PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
             await Task.Delay(1300);
             PreloadService.Hide();
