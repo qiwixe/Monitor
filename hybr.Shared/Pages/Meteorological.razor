@@ -6,26 +6,26 @@
 <Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="DataProvider">
 <div id="parent">
     <div id="grid11" class="gridContent compassDiv">
-        <div id="compass123" class="gridContent">
+            <div id="compass" class="textDiv">
             <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
-        <div id="compass1" class="gridContent">
-                <LineChart @ref=LiveChartElement.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
         </div>
     </div>
     <div id="grid21" class="gridContent compassDiv">
-    <div id="compass123" class="gridContent">
+        <div id="compass" class="textDiv">
         <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
     </div>
-    <div id="compass1" class="gridContent">
+    <div id="compass" class="gridContent">
             <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
     </div>
 </div>
     <div id="grid31" class="gridContent compassDiv">
-        <div id="compass123" class="gridContent">
+        <div id="compass" class="textDiv">
             <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
         </div>
-        <div id="compass1" class="gridContent">
+        <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartPressure Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
         </div>
     </div>

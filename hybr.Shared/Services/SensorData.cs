@@ -80,6 +80,128 @@ namespace hybr.Shared.Services
                 Value_max = 50,
             }),
 
+            [21] = (new Sensor
+            {
+                Id = 21,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [22] = (new Sensor
+            {
+                Id = 22,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [23] = (new Sensor
+            {
+                Id = 23,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [24] = (new Sensor
+            {
+                Id = 24,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [25] = (new Sensor
+            {
+                Id = 25,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [26] = (new Sensor
+            {
+                Id = 26,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [27] = (new Sensor
+            {
+                Id = 27,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [28] = (new Sensor
+            {
+                Id = 28,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [29] = (new Sensor
+            {
+                Id = 29,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [30] = (new Sensor
+            {
+                Id = 30,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [31] = (new Sensor
+            {
+                Id = 31,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [32] = (new Sensor
+            {
+                Id = 32,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [33] = (new Sensor
+            {
+                Id = 33,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+
+            [41] = (new Sensor
+            {
+                Id = 41,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [42] = (new Sensor
+            {
+                Id = 42,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [43] = (new Sensor
+            {
+                Id = 43,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [44] = (new Sensor
+            {
+                Id = 44,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [45] = (new Sensor
+            {
+                Id = 45,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [46] = (new Sensor
+            {
+                Id = 46,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+            [47] = (new Sensor
+            {
+                Id = 47,
+                Value_min = -50,
+                Value_max = 50,
+            }),
+
             [103] = (new Sensor
             {
                 Id = 103,

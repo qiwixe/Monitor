@@ -12,7 +12,7 @@ namespace hybr.Shared.Services
     }
     public class ChartSettings()
     {
-        public static IChartDataset WindPowerChartDataSetSensor1 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor1 { get; } =
         new DefaultChartOption
         {
             SensorId = 1,
@@ -21,7 +21,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)"
         };
-        public static IChartDataset WindPowerChartDataSetSensor2 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor2 { get; } =
         new DefaultChartOption
         {
             SensorId = 2,
@@ -30,7 +30,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor3 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor3 { get; } =
         new DefaultChartOption
         {
             SensorId = 3,
@@ -39,7 +39,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor4 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor4 { get; } =
         new DefaultChartOption
         {
             SensorId = 4,
@@ -48,7 +48,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor5 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor5 { get; } =
         new DefaultChartOption
         {
             SensorId = 5,
@@ -57,7 +57,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor6 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor6 { get; } =
         new DefaultChartOption
         {
             SensorId = 6,
@@ -66,7 +66,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor7 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor7 { get; } =
         new DefaultChartOption
         {
             SensorId = 7,
@@ -75,7 +75,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor8 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor8 { get; } =
         new DefaultChartOption
         {
             SensorId = 8,
@@ -84,7 +84,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor9 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor9 { get; } =
         new DefaultChartOption
         {
             SensorId = 9,
@@ -93,7 +93,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor10 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor10 { get; } =
         new DefaultChartOption
         {
             SensorId = 10,
@@ -102,7 +102,7 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor11 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor11 { get; } =
         new DefaultChartOption
         {
             SensorId = 11,
@@ -111,11 +111,193 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
         };
-        public static IChartDataset WindPowerChartDataSetSensor12 { get; } =
+        public static IChartDataset PhotovoltaicChartDataSetSensor12 { get; } =
         new DefaultChartOption
         {
             SensorId = 12,
             Label = $"Ток 12, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+
+        public static IChartDataset WindPowerChartDataSetSensor21 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 21,
+            Label = $"Напряжение 1, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)"
+        };
+        public static IChartDataset WindPowerChartDataSetSensor22 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 22,
+            Label = $"Ток 2, A",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor23 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 23,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor24 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 24,
+            Label = $"Ток 4, A",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor25 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 25,
+            Label = $"Напряжение 5, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor26 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 26,
+            Label = $"Ток 6, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor27 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 27,
+            Label = $"Напряжение 7, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor28 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 28,
+            Label = $"Ток 8, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor29 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 29,
+            Label = $"Напряжение 9, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor30 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 30,
+            Label = $"Ток 10, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor31 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 31,
+            Label = $"Напряжение 11, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor32 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 32,
+            Label = $"Ток 12, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor33 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 33,
+            Label = $"Ток 12, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+
+        public static IChartDataset WindPowerChartDataSetSensor41 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 41,
+            Label = $"Напряжение 1, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)"
+        };
+        public static IChartDataset WindPowerChartDataSetSensor42 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 42,
+            Label = $"Ток 2, A",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor43 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 43,
+            Label = $"Напряжение 3, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor44 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 44,
+            Label = $"Ток 4, A",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor45 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 45,
+            Label = $"Напряжение 5, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor46 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 46,
+            Label = $"Ток 6, В",
+            Data = new(),
+            BackgroundColor = "rgba(255, 0, 0, 0.7)",
+            BorderColor = "rgba(255, 0, 0, 0.7)",
+        };
+        public static IChartDataset WindPowerChartDataSetSensor47 { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 47,
+            Label = $"Напряжение 7, В",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -160,12 +342,12 @@ namespace hybr.Shared.Services
     }
     public class ChartDataSet()
     {
-        public static List<IChartDataset> WindPowerChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor1, ChartSettings.WindPowerChartDataSetSensor3, ChartSettings.WindPowerChartDataSetSensor5 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor2, ChartSettings.WindPowerChartDataSetSensor4, ChartSettings.WindPowerChartDataSetSensor6 };
-        public static List<IChartDataset> WindPowerChartDataSetVoltage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor7, ChartSettings.WindPowerChartDataSetSensor9 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor8, ChartSettings.WindPowerChartDataSetSensor10 };
-        public static List<IChartDataset> WindPowerChartDataSetVoltage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor11 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor12 };
+        public static List<IChartDataset> WindPowerChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor21, ChartSettings.WindPowerChartDataSetSensor23, ChartSettings.WindPowerChartDataSetSensor25 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor22, ChartSettings.WindPowerChartDataSetSensor24, ChartSettings.WindPowerChartDataSetSensor26 };
+        public static List<IChartDataset> WindPowerChartDataSetVoltage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor27, ChartSettings.WindPowerChartDataSetSensor29 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor28, ChartSettings.WindPowerChartDataSetSensor30 };
+        public static List<IChartDataset> WindPowerChartDataSetVoltage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor31 };
+        public static List<IChartDataset> WindPowerChartDataSetAmperage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor32 };
 
         public static List<IChartDataset> MeteorologicalChartDataSetTemperature { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor103 };
         public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor104 };
