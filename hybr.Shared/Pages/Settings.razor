@@ -1,0 +1,371 @@
+﻿@page "/Settings"
+@using System.ComponentModel.DataAnnotations
+
+<Accordion>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.HouseFill" Class="me-1" /> Установка №1, Ветроэнергетическая установка
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PersonFill" Class="me-1" /> Установка №2, Фотоэнергетическая установка
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PersonFill" Class="me-1" /> Установка №3, Солнечный коллектор
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PersonFill" Class="me-1" /> Установка №4, Солнечный концентратор
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PersonFill" Class="me-1" /> Установка №5, Тепловой насос
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PersonFill" Class="me-1" /> Установка №6, Биоустановка
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+    <AccordionItem>
+        <TitleTemplate>
+            <Icon Name="IconName.PhoneFill" Class="me-1" /> Установка №7, Метеостанция
+        </TitleTemplate>
+        <Content>
+            <div class="mb-3">
+                <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Адресс датчика: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите ID датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Уравнение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                            <ValidationMessage For="@(() => product.Description)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                        <div class="col-md-10">
+                            <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                            <ValidationMessage For="@(() => product.Name)" />
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </Content>
+    </AccordionItem>
+</Accordion>
+
+@code {
+    private Product product = new();
+    private EditContext? editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(product);
+        base.OnInitialized();
+    }
+
+    public void HandleOnValidSubmit()
+    {
+        // additional check
+        if (editContext.Validate())
+        {
+            // do something
+            // submit the form
+            Console.WriteLine("Form submitted successfully");
+        }
+    }
+
+    private void ResetForm()
+    {
+        product = new();
+        editContext = new EditContext(product);
+    }
+
+    public class Product
+    {
+        [Required(ErrorMessage = "Product name required.")]
+        public string? Name { get; set; }
+
+        [Required(ErrorMessage = "Product description required.")]
+        public string? Description { get; set; }
+    }
+}

@@ -235,22 +235,36 @@ namespace hybr.Shared.Services
             [108] = (new Sensor
             {
                 Id = 108,
+                GraduationString = "2424.24*x",
                 Value_min = 0,
                 Value_max = 600,
-            })
+            }),
         };
-        public static void PreparationSensorData(Dictionary<int, Order> _lastData)
+        public static Dictionary<int, Order> Graduation(Dictionary<int, Order> _lastData)
         {
-            foreach (var (_key, _value) in SensorData.AllSensors)
+            foreach (var (_key, _value) in _lastData)
             {
                 if (_lastData.TryGetValue(_key, out var _bool))
                 {
-                    if (_value.Value_min < _lastData[_key].Value_of_m && _lastData[_key].Value_of_m < _value.Value_max)
+                        var exp = new NCalc.Expression(AllSensors[_key].GraduationString);
+                        exp.Parameters["x"] = _lastData[_key].Value_of_m;
+                        _value.Value_of_m = (double)exp.Evaluate();
+                }
+            }
+            return _lastData;
+        }
+        public static void PreparationSensorData(Dictionary<int, Order> _lastData)
+        {
+            foreach (var (_key, _value) in AllSensors)
+            {
+                if (_lastData.TryGetValue(_key, out var _valueOrder))
+                {
+                    if (_value.Value_min < _valueOrder.Value_of_m && _valueOrder.Value_of_m < _value.Value_max)
                     {
                         _value.Alert = AlertColor.Success;
                         _value.Icon = IconName.CheckCircleFill;
                     }
-                    else if (_value.Value_min == _lastData[_key].Value_of_m || _lastData[_key].Value_of_m == _value.Value_max)
+                    else if (_value.Value_min == _valueOrder.Value_of_m || _valueOrder.Value_of_m == _value.Value_max)
                     {
                         _value.Alert = AlertColor.Warning;
                         _value.Icon = IconName.ExclamationCircleFill;
@@ -260,7 +274,7 @@ namespace hybr.Shared.Services
                         _value.Alert = AlertColor.Danger;
                         _value.Icon = IconName.XCircleFill;
                     }
-                    _value.Value_of_m = _lastData[_key].Value_of_m;
+                    _value.Value_of_m = _valueOrder.Value_of_m;
                     _value.Disconnected = false;
                 }
                 else

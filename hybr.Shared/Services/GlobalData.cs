@@ -20,6 +20,7 @@ namespace hybr.Shared.Services
         public AlertColor Alert { get; set; } = AlertColor.Info;
         public IconName Icon { get; set; } = IconName.InfoCircleFill;
         public double Value_of_m { get; set; } = 0;
+        public string GraduationString { get; set; } = "x";
         public int Value_min { get; set; }
         public int Value_max { get; set; }
         public bool Disconnected { get; set; }
@@ -328,7 +329,7 @@ namespace hybr.Shared.Services
             });
             #endregion Фейк Данные для Коллектора(3)
             #region Фейк Данные для метеостанции(7)
-            _fakeData[106]=(new Order
+            _fakeData[106] = (new Order
             {
                 Sensor_id = 106,
                 Station_id = 7,
@@ -336,7 +337,7 @@ namespace hybr.Shared.Services
                 Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(360),
             });
-            _fakeData[107] =(new Order
+            _fakeData[107] = (new Order
             {
                 Sensor_id = 107,
                 Station_id = 7,
@@ -344,17 +345,18 @@ namespace hybr.Shared.Services
                 Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(15),
             });
-            _fakeData[108]=(new Order
+            _fakeData[108] = (new Order
             {
                 Sensor_id = 108,
                 Station_id = 7,
                 Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
                 Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(600),
+                Value_of_m = (double)new Random().Next(10) / 30,
             });
             #endregion Фейк Данные для метеостанции(7)
-            await GlobalPageProperty.UpdateDataAsync(_fakeData);
-            SensorData.PreparationSensorData(_fakeData);
+            var _GData = SensorData.Graduation(_fakeData);
+            await GlobalPageProperty.UpdateDataAsync(_GData);
+            SensorData.PreparationSensorData(_GData);
             return _fakeData;
         }
     }
