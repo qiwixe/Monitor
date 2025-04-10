@@ -1,4 +1,5 @@
 ﻿using BlazorBootstrap;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace hybr.Shared.Services
@@ -17,6 +18,7 @@ namespace hybr.Shared.Services
     public class Sensor()
     {
         public int Id { get; set; }
+        public int Station_Id { get; set; }
         public AlertColor Alert { get; set; } = AlertColor.Info;
         public IconName Icon { get; set; } = IconName.InfoCircleFill;
         public double Value_of_m { get; set; } = 0;
@@ -25,9 +27,16 @@ namespace hybr.Shared.Services
         public int Value_max { get; set; }
         public bool Disconnected { get; set; }
     }
+    public class Station()
+    {
+        public IconColor Alert { get; set; } = IconColor.Info;
+        public IconName Icon { get; set; } = IconName.InfoCircleFill;
+        public bool Disconnected { get; set; }
+    }
+
     public class GlobalPageProperty()
     {
-        public static async Task UpdateDataAsync(Dictionary<int, Order> _lastData)
+        public static void UpdateData(Dictionary<int, Order> _lastData)
         {
             foreach (var (_key,_a) in LiveChartElement.AllCharts)   
                 foreach (var (_PageChart, _chart) in LiveChartElement.AllCharts[_key])
@@ -47,12 +56,43 @@ namespace hybr.Shared.Services
                     {
                         _chart.DChartData.Labels.RemoveAt(0);
                     }
-                    //peredelat
-                    _chart.DChartData.Labels.Add(_lastData[106].Time_of_m);
-                    await _PageChart.UpdateValuesAsync(_chart.DChartData);
+                    _chart.DChartData.Labels.Add(DateTime.Now.ToLongTimeString());
+                    _PageChart.UpdateValuesAsync(_chart.DChartData);
                 }
             foreach (var (_key,_a) in UpdateGrid.AllUpdateGrid)
                 UpdateGrid.AllUpdateGrid[_key].RefreshDataAsync();
+        }
+        public static void UpdateDataArchive(List<Order> _lastData)
+        {
+            int _index = 0;
+            int _index1 = 0;
+            foreach (var (_PageChart, _chart) in LiveChartElement.AllChartsArchive["Archive"])
+            {
+                foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
+                {
+                    
+                    foreach (var _data in _lastData)  
+                        if (_data.Sensor_id == 103) {
+                            _index++;
+                            if(_index == 40)
+                            {
+                                _index = 0;
+                                _lineChartDataset.Data.Add(_data.Value_of_m);
+                            }
+                        }
+                }
+                foreach (var _data in _lastData)
+                    if (_data.Sensor_id == 103)
+                    {
+                        _index1++;
+                        if (_index1 == 40)
+                        {
+                            _index1 = 0;
+                            _chart.DChartData.Labels.Add(_data.Date_of_m + _data.Time_of_m);
+                        }
+                    }
+                _PageChart.UpdateValuesAsync(_chart.DChartData);
+            }
         }
     }
     public class GlobalData()
@@ -355,7 +395,7 @@ namespace hybr.Shared.Services
             });
             #endregion Фейк Данные для метеостанции(7)
             var _GData = SensorData.Graduation(_fakeData);
-            await GlobalPageProperty.UpdateDataAsync(_GData);
+            GlobalPageProperty.UpdateData(_GData);
             SensorData.PreparationSensorData(_GData);
             return _fakeData;
         }

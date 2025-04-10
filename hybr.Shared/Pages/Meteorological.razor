@@ -59,7 +59,6 @@
 </Grid>
 
 @code {
-    private string scale = "0.2";
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
     private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
     {

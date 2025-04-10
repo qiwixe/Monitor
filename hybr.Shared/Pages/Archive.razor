@@ -1,0 +1,52 @@
+﻿@page "/Archive"
+@using hybr.Shared.Services
+<Preload />
+<LineChart @ref=LiveChartElement.MeteorologicalChartTemperatureArchive Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+<Grid TItem="Order"
+Class="table table-hover table-bordered table-striped"
+DataProvider="DataArchive"
+AllowPaging="true"
+PageSize="10">
+    <GridColumns>
+        <GridColumn TItem="Order" HeaderText="Id">
+            @context.Id
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="sensor_id">
+            @context.Sensor_id
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="station_id">
+            @context.Station_id
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="date_of_m">
+            @context.Date_of_m
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="time_of_m">
+            @context.Time_of_m
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="value_of_m">
+            @context.Value_of_m
+        </GridColumn>
+        <GridColumn TItem="Order" HeaderText="unit_of_m">
+            @context.Unit_of_m
+        </GridColumn>
+    </GridColumns>
+</Grid>
+
+@code {
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
+    private async Task<GridDataProviderResult<Order>> DataArchive(GridDataProviderRequest<Order> request){
+        return await Task.FromResult(request.ApplyTo(DataBase.DataMeteorological));
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LiveChartElement.PageProperty("Archive");
+            GlobalPageProperty.UpdateDataArchive(DataBase.DataMeteorological);
+            PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
+            await Task.Delay(1300);
+            PreloadService.Hide();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

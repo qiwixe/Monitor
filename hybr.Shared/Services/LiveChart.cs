@@ -339,6 +339,17 @@ namespace hybr.Shared.Services
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
         };
+
+        public static IChartDataset MeteorologicalChartDataSetSensor103Archive { get; } =
+        new DefaultChartOption
+        {
+            SensorId = 108,
+            Label = $"Солнечная радиация, Вт/м2",
+            Data = new(),
+            BackgroundColor = "rgba(0, 0, 255, 0.7)",
+            BorderColor = "rgba(0, 0, 255, 0.7)",
+            PointRadius = [1],
+        };
     }
     public class ChartDataSet()
     {
@@ -353,6 +364,8 @@ namespace hybr.Shared.Services
         public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor104 };
         public static List<IChartDataset> MeteorologicalChartDataSetPressure { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor105 };
         public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor108 };
+
+        public static List<IChartDataset> MeteorologicalChartDataSetTemperatureArchive { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor103Archive };
     }
     public class LiveChartElement()
     {
@@ -368,7 +381,10 @@ namespace hybr.Shared.Services
         public static LineChart MeteorologicalChartPressure { get; set; } = default!;
         public static LineChart MeteorologicalChartSolarRadiation { get; set; } = default!;
 
+        public static LineChart MeteorologicalChartTemperatureArchive { get; set; } = default!;
+
         public static Dictionary<string, Dictionary<LineChart, Chart>> AllCharts { get; set; } = new();
+        public static Dictionary<string, Dictionary<LineChart, Chart>> AllChartsArchive { get; set; } = new();
 
         public static void PageProperty(string _PageName)
         {
@@ -446,6 +462,18 @@ namespace hybr.Shared.Services
                         }
                     };
                     break;
+                case ("Archive"):
+                    AllChartsArchive["Archive"] = new Dictionary<LineChart, Chart>()
+                    {
+                        [MeteorologicalChartTemperatureArchive] = new Chart
+                        {
+                            maxLabelXasixCount = 5,
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperatureArchive },
+                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetTemperatureArchive
+                        },
+
+                    };
+                    break;
             }
             foreach (var (_key, _a) in AllCharts)
             {
@@ -453,6 +481,14 @@ namespace hybr.Shared.Services
                 {
                     foreach (var (_lineChart, _chart) in AllCharts[_key])
                     _lineChart.InitializeAsync(_chart.DChartData,_chart.DChartOptions);
+                }
+            }
+            foreach (var (_key, _a) in AllChartsArchive)
+            {
+                if (_key == _PageName)
+                {
+                    foreach (var (_lineChart, _chart) in AllChartsArchive[_key])
+                        _lineChart.InitializeAsync(_chart.DChartData, _chart.DChartOptions);
                 }
             }
         }
