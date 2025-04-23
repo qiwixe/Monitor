@@ -1,36 +1,95 @@
 ﻿@page "/Archive"
 @using hybr.Shared.Services
 <Preload />
+<Tabs>
+    @foreach (var (_key, _value) in ValueSettings.Stations){
+        <Tab Title=@_value.Title>
+        <Content>
+            <Tabs>
+                <Tab Title="Сутки"/>
+                <Tab Title="Месяц"/>
+                <Tab Title="Год"/>
+            </Tabs>
+        </Content>
+    </Tab>
+    }
+    <Tab Title="Свой фильтр" onclick="OnShowModalClick">
+        <Content>
+        </Content>
+    </Tab>
+</Tabs>
+<Offcanvas @ref="offcanvas" Title="Таблица данных" Size="OffcanvasSize.Large">
+    <BodyTemplate>
+        <Grid TItem="Order"
+        Class="table table-hover"
+        DataProvider="DataArchive"
+        AllowPaging="true"
+        PageSize="20">
+            <GridColumns>
+                <GridColumn TItem="Order" HeaderText="Id">
+                    @context.Id
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="sensor_id">
+                    @context.Sensor_id
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="station_id">
+                    @context.Station_id
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="date_of_m">
+                    @context.Date_of_m
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="time_of_m">
+                    @context.Time_of_m
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="value_of_m">
+                    @context.Value_of_m
+                </GridColumn>
+                <GridColumn TItem="Order" HeaderText="unit_of_m">
+                    @context.Unit_of_m
+                </GridColumn>
+            </GridColumns>
+        </Grid>    
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => offcanvas.HideAsync()">Закрыть</Button>
+        <Button Color="ButtonColor.Secondary">Сохранить таблицу</Button>
+    </FooterTemplate>
+</Offcanvas>
+<Modal @ref="modal" title="Modal title" IsVerticallyCentered="true">
+    <BodyTemplate>
+        This is a vertically centered modal.
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
+        <Button Color="ButtonColor.Primary">Save changes</Button>
+    </FooterTemplate>
+</Modal>
+<div class="btn-group">
+    <Button Color="ButtonColor.Light">«</Button>
+    <DateInput TValue="DateOnly" @bind-Value="@date1" Placeholder="Enter Date" />
+    <Button Color="ButtonColor.Light">»</Button>
+    <Button Color="ButtonColor.Primary" @onclick="OnShowOffcanvasClick">Таблица Данных</Button>
+    <Button Color="ButtonColor.Primary">Сохранить график</Button>
+</div>
 <LineChart @ref=LiveChartElement.MeteorologicalChartTemperatureArchive Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-<Grid TItem="Order"
-Class="table table-hover table-bordered table-striped"
-DataProvider="DataArchive"
-AllowPaging="true"
-PageSize="10">
-    <GridColumns>
-        <GridColumn TItem="Order" HeaderText="Id">
-            @context.Id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="sensor_id">
-            @context.Sensor_id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="station_id">
-            @context.Station_id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="date_of_m">
-            @context.Date_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="time_of_m">
-            @context.Time_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="value_of_m">
-            @context.Value_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="unit_of_m">
-            @context.Unit_of_m
-        </GridColumn>
-    </GridColumns>
-</Grid>
+
+@code {
+    private Modal modal = default!;
+    private Offcanvas offcanvas = default!;
+    private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
+
+    private async Task OnShowModalClick()
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
+}
+
+
 
 @code {
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
@@ -49,4 +108,5 @@ PageSize="10">
         }
         await base.OnAfterRenderAsync(firstRender);
     }
+    private DateOnly date1 = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
 }

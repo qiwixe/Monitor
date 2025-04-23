@@ -21,7 +21,9 @@ namespace hybr.Shared.Services
         public int Station_Id { get; set; }
         public AlertColor Alert { get; set; } = AlertColor.Info;
         public IconName Icon { get; set; } = IconName.InfoCircleFill;
+        public string? Title { get; set; } = "Датчик";
         public double Value_of_m { get; set; } = 0;
+        public string? Unit_of_m { get; set; } = "штук?";
         public string GraduationString { get; set; } = "x";
         public int Value_min { get; set; }
         public int Value_max { get; set; }
@@ -64,33 +66,32 @@ namespace hybr.Shared.Services
         }
         public static void UpdateDataArchive(List<Order> _lastData)
         {
-            int _index = 0;
-            int _index1 = 0;
+            List<Order> _renderValue = new();
             foreach (var (_PageChart, _chart) in LiveChartElement.AllChartsArchive["Archive"])
             {
                 foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
                 {
-                    
-                    foreach (var _data in _lastData)  
-                        if (_data.Sensor_id == 103) {
-                            _index++;
-                            if(_index == 40)
-                            {
-                                _index = 0;
+                    var lastValue = 0.0;
+                    var lastValue2 = 0.0;
+                    foreach (var _data in _lastData)
+                        if (_data.Sensor_id == 103)
+                            //if (lastValue != _data.Value_of_m && lastValue2 != _data.Value_of_m)
+                            if (lastValue != _data.Value_of_m)
+                                {
                                 _lineChartDataset.Data.Add(_data.Value_of_m);
+                                _renderValue.Add(_data);
+                                lastValue2 = lastValue;
+                                lastValue = _data.Value_of_m;
                             }
-                        }
                 }
-                foreach (var _data in _lastData)
+                
+                foreach (var _data in _renderValue) {
+                    Console.WriteLine(_data);
                     if (_data.Sensor_id == 103)
                     {
-                        _index1++;
-                        if (_index1 == 40)
-                        {
-                            _index1 = 0;
-                            _chart.DChartData.Labels.Add(_data.Date_of_m + _data.Time_of_m);
-                        }
+                     _chart.DChartData.Labels.Add(_data.Date_of_m + " " + _data.Time_of_m);                               
                     }
+                }
                 _PageChart.UpdateValuesAsync(_chart.DChartData);
             }
         }

@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using hybr.Shared.Services
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Мониторинг</a>
     </div>
@@ -8,47 +9,13 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="WindPower">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> ВЭУ
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Photovoltaic">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> ФЭУ
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="SolarCollector">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Коллектор
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="SolarСoncentrator">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Концентратор
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="HeatPump">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Тепловой насос
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Bioplant">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Биоустановка
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Meteorological">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Метеостанция
-            </NavLink>
-        </div>
+        @foreach (var (_key, _value) in ValueSettings.Stations){
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@_value.Href>
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"/> @_value.ShortTitle
+                </NavLink>
+            </div>
+        }
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="Archive">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Архив

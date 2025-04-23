@@ -8,7 +8,15 @@ namespace hybr.Shared.Services
         public required int maxLabelXasixCount = 1;
         public required ChartData DChartData { get; set; }
         public required List<IChartDataset> DChartDataset { get; set; }
-        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions();
+        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions ();
+    }
+    public class ArchiveChart()
+    {
+        public bool DActive { get; set; } = false;
+        public required int maxLabelXasixCount = 1;
+        public required ChartData DChartData { get; set; }
+        public required List<IChartDataset> DChartDataset { get; set; }
+        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions { Interaction = new Interaction { Mode = InteractionMode.Point, Intersect = false } };
     }
     public class ChartSettings()
     {
@@ -341,14 +349,17 @@ namespace hybr.Shared.Services
         };
 
         public static IChartDataset MeteorologicalChartDataSetSensor103Archive { get; } =
-        new DefaultChartOption
+        new DefaultChartOption()
         {
             SensorId = 108,
             Label = $"Солнечная радиация, Вт/м2",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
-            PointRadius = [1],
+            BorderWidth = 2 ,
+            HoverBorderWidth = 4,
+            PointRadius = [0], // hide points
+            PointHoverRadius = [4],
         };
     }
     public class ChartDataSet()
@@ -384,7 +395,7 @@ namespace hybr.Shared.Services
         public static LineChart MeteorologicalChartTemperatureArchive { get; set; } = default!;
 
         public static Dictionary<string, Dictionary<LineChart, Chart>> AllCharts { get; set; } = new();
-        public static Dictionary<string, Dictionary<LineChart, Chart>> AllChartsArchive { get; set; } = new();
+        public static Dictionary<string, Dictionary<LineChart, ArchiveChart>> AllChartsArchive { get; set; } = new();
 
         public static void PageProperty(string _PageName)
         {
@@ -463,9 +474,9 @@ namespace hybr.Shared.Services
                     };
                     break;
                 case ("Archive"):
-                    AllChartsArchive["Archive"] = new Dictionary<LineChart, Chart>()
+                    AllChartsArchive["Archive"] = new Dictionary<LineChart, ArchiveChart>()
                     {
-                        [MeteorologicalChartTemperatureArchive] = new Chart
+                        [MeteorologicalChartTemperatureArchive] = new ArchiveChart
                         {
                             maxLabelXasixCount = 5,
                             DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperatureArchive },

@@ -7,7 +7,7 @@ namespace hybr
         public App()
         {
             InitializeComponent();
-            GlobalData.GetAllData();
+            DataBase.GetAllData();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
