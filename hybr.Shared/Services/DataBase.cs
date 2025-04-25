@@ -12,7 +12,7 @@ namespace hybr.Shared.Services
         public static string SolarСoncentrator { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 4 order by id";
         public static string HeatPump { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 5 order by id";
         public static string Bioplant { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 6 order by id";
-        public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 order by id";
+        public static string Meteorological { get; } = "SELECT * FROM backup_201311_3 WHERE station_id = 7 and sensor_id = 103 order by id";
     }
     public class DataBase
     {
@@ -52,67 +52,6 @@ namespace hybr.Shared.Services
 
         public static async Task<List<Order>> Data(string _queryGetData)
         {
-            #region асинхронн данные старое
-            // if (dbData.Count == 0)
-            // {
-            //     NpgsqlConnection conn = new("Host=localhost;Username=postgres;Password=postgres;Database=station_archive");
-            //     conn.Open();
-            //     NpgsqlCommand cmd = new("SELECT * FROM backup_201311_3 order by id", conn);
-            //     NpgsqlDataAdapter dataAdapter = new(cmd);
-            //     DataTable dataTable = new();
-            //     dataAdapter.Fill(dataTable);
-            //     dbData = (from DataRow Data in dataTable.Rows
-            //               select new Order()
-            //                   {
-            //                       Id = Convert.ToInt32(Data["id"]),
-            //                       sensor_id = Convert.ToInt32(Data["sensor_id"]),
-            //                       station_id = Convert.ToInt32(Data["station_id"]),
-            //                       date_of_m = Data["date_of_m"].ToString(),
-            //                       time_of_m = Data["time_of_m"].ToString(),
-            //                       value_of_m = Convert.ToDouble(Data["value_of_m"]),
-            //                       unit_of_m = Data["station_id"].ToString(),
-
-            //                   }).ToList();
-            // }
-            // return await Task.FromResult(request.ApplyTo(dbData));
-
-            // using (NpgsqlConnection sqlConnection = new NpgsqlConnection("Host=localhost;Username=postgres;Password=postgres;Database=station_archive"))
-            // {
-
-            //     try
-            //     {
-            //         if (dbData.Count == 0)
-            //         {
-            //             await sqlConnection.OpenAsync();
-
-            //             using (NpgsqlCommand sqlCommand = new NpgsqlCommand("SELECT * FROM backup_201311_3  order by id", sqlConnection))
-            //             {
-
-            //                 using (NpgsqlDataReader DataReader = await sqlCommand.ExecuteReaderAsync())
-            //                 {
-            //                     while (await DataReader.ReadAsync())
-            //                     {
-            //                         dbData.Add(new Order()
-            //                             {
-            //                                 Id = Convert.ToInt32(DataReader["id"]),
-            //                                 sensor_id = Convert.ToInt32(DataReader["sensor_id"]),
-            //                                 station_id = Convert.ToInt32(DataReader["station_id"]),
-            //                                 date_of_m = DataReader["date_of_m"].ToString(),
-            //                                 time_of_m = DataReader["time_of_m"].ToString(),
-            //                                 value_of_m = Convert.ToDouble(DataReader["value_of_m"]),
-            //                                 unit_of_m = DataReader["station_id"].ToString(),
-            //                             });
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         throw new ApplicationException("Ошибка загрузки списка работ.", ex);
-            //     }
-            // return await Task.FromResult(request.ApplyTo(dbData));
-            #endregion асинхронн данные старое
                 List<Order> _dbData = new();
             try
             {

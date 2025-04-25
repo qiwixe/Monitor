@@ -72,25 +72,17 @@ namespace hybr.Shared.Services
                 foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
                 {
                     var lastValue = 0.0;
-                    var lastValue2 = 0.0;
+                    var maxPickValue = 0.5;
                     foreach (var _data in _lastData)
-                        if (_data.Sensor_id == 103)
-                            //if (lastValue != _data.Value_of_m && lastValue2 != _data.Value_of_m)
-                            if (lastValue != _data.Value_of_m)
-                                {
-                                _lineChartDataset.Data.Add(_data.Value_of_m);
-                                _renderValue.Add(_data);
-                                lastValue2 = lastValue;
-                                lastValue = _data.Value_of_m;
-                            }
+                        if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)<0.5)
+                            {
+                            _lineChartDataset.Data.Add(_data.Value_of_m);
+                            _renderValue.Add(_data);
+                            lastValue = _data.Value_of_m;
+                        }
                 }
-                
                 foreach (var _data in _renderValue) {
-                    Console.WriteLine(_data);
-                    if (_data.Sensor_id == 103)
-                    {
                      _chart.DChartData.Labels.Add(_data.Date_of_m + " " + _data.Time_of_m);                               
-                    }
                 }
                 _PageChart.UpdateValuesAsync(_chart.DChartData);
             }

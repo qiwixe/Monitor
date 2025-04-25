@@ -356,10 +356,11 @@ namespace hybr.Shared.Services
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
-            BorderWidth = 2 ,
+            BorderWidth = 1 ,
             HoverBorderWidth = 4,
-            PointRadius = [0], // hide points
-            PointHoverRadius = [4],
+            PointRadius = [0],
+            PointStyle = ["triangle"],
+            PointHoverRadius = [0.2],
         };
     }
     public class ChartDataSet()

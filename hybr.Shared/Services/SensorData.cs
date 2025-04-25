@@ -10,6 +10,8 @@ namespace hybr.Shared.Services
             [1] = (new Sensor
             {
                 Id = 1,
+                Title = "Датчик 1",
+                Unit_of_m = "Вольт",
                 Station_Id = 1,
                 Value_min = -50,
                 Value_max = 50,
@@ -237,6 +239,8 @@ namespace hybr.Shared.Services
             [103] = (new Sensor
             {
                 Id = 103,
+                Title = "Температура",
+                Unit_of_m = "℃",
                 Station_Id = 7,
                 Value_min = -50,
                 Value_max = 50,
@@ -244,6 +248,8 @@ namespace hybr.Shared.Services
             [104] = (new Sensor
             {
                 Id = 104,
+                Title = "Влажность воздуха",
+                Unit_of_m = "%",
                 Station_Id = 7,
                 Value_min = 0,
                 Value_max = 100,
@@ -251,6 +257,8 @@ namespace hybr.Shared.Services
             [105] = (new Sensor
             {
                 Id = 105,
+                Title = "Давление",
+                Unit_of_m = "мм.рт.ст.",
                 Station_Id = 7,
                 Value_min = 700,
                 Value_max = 900,
@@ -258,6 +266,8 @@ namespace hybr.Shared.Services
             [106] = (new Sensor
             {
                 Id = 106,
+                Title = "Направление ветра",
+                Unit_of_m = "°",
                 Station_Id = 7,
                 Value_min = 0,
                 Value_max = 360,
@@ -265,6 +275,8 @@ namespace hybr.Shared.Services
             [107] = (new Sensor
             {
                 Id = 107,
+                Title = "Скорость ветра",
+                Unit_of_m = "м/с",
                 Station_Id = 7,
                 Value_min = 0,
                 Value_max = 15,
@@ -272,6 +284,8 @@ namespace hybr.Shared.Services
             [108] = (new Sensor
             {
                 Id = 108,
+                Title = "Солнечная радиация",
+                Unit_of_m = "кВт/м²",
                 Station_Id = 7,
                 GraduationString = "2424.24*x",
                 Value_min = 0,

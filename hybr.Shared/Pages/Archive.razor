@@ -1,23 +1,60 @@
 ﻿@page "/Archive"
+@using ClosedXML.Excel
 @using hybr.Shared.Services
+@inject IJSRuntime JS
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+    const arrayBuffer = await contentStreamReference.arrayBuffer();
+    const blob = new Blob([arrayBuffer]);
+    const url = URL.createObjectURL(blob);
+    const anchorElement = document.createElement('a');
+    anchorElement.href = url;
+    anchorElement.download = fileName+".xlsx";
+    anchorElement.click();
+    anchorElement.remove();
+    URL.revokeObjectURL(url);
+    }
+</script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    function saveAsImage() {
+    var element = document.getElementById("graph");
+    html2canvas(element).then(function (canvas) {
+    var link = document.createElement("a");
+    document.body.appendChild(link);
+    link.download = "123.png";
+    link.href = canvas.toDataURL("image/png");
+    link.target = '_blank';
+    link.click();
+    });
+    }
+</script>
+
 <Preload />
-<Tabs>
+<Tabs OnShown="@(args => OnSensorTabShow(args))">
     @foreach (var (_key, _value) in ValueSettings.Stations){
         <Tab Title=@_value.Title>
-        <Content>
-            <Tabs>
-                <Tab Title="Сутки"/>
-                <Tab Title="Месяц"/>
-                <Tab Title="Год"/>
-            </Tabs>
-        </Content>
-    </Tab>
+            <Content>
+                <Tabs OnShown="@(args => OnDataTabShow(args))">
+                    <Tab Title="Сутки"/>
+                    <Tab Title="Месяц"/>
+                    <Tab Title="Год"/>
+                </Tabs>
+            </Content>
+        </Tab>
     }
     <Tab Title="Свой фильтр" onclick="OnShowModalClick">
         <Content>
         </Content>
     </Tab>
 </Tabs>
+<div class="btn-group">
+    <Button Color="ButtonColor.Light" @onclick="() => DecreaseData()">«</Button>
+    <input type="@InputType" value="@InputDataValue" />
+    <Button Color="ButtonColor.Light" @onclick="() => IncreaseData()">»</Button>
+    <Button Color="ButtonColor.Primary" @onclick="OnShowOffcanvasClick">Таблица Данных</Button>
+    <Button Color="ButtonColor.Primary" onclick="saveAsImage()">Сохранить график</Button>
+</div>
 <Offcanvas @ref="offcanvas" Title="Таблица данных" Size="OffcanvasSize.Large">
     <BodyTemplate>
         <Grid TItem="Order"
@@ -26,33 +63,21 @@
         AllowPaging="true"
         PageSize="20">
             <GridColumns>
-                <GridColumn TItem="Order" HeaderText="Id">
-                    @context.Id
-                </GridColumn>
-                <GridColumn TItem="Order" HeaderText="sensor_id">
-                    @context.Sensor_id
-                </GridColumn>
-                <GridColumn TItem="Order" HeaderText="station_id">
-                    @context.Station_id
-                </GridColumn>
-                <GridColumn TItem="Order" HeaderText="date_of_m">
+                <GridColumn TItem="Order" HeaderText="Дата">
                     @context.Date_of_m
                 </GridColumn>
-                <GridColumn TItem="Order" HeaderText="time_of_m">
+                <GridColumn TItem="Order" HeaderText="Время">
                     @context.Time_of_m
                 </GridColumn>
-                <GridColumn TItem="Order" HeaderText="value_of_m">
+                <GridColumn TItem="Order" HeaderText="Значение">
                     @context.Value_of_m
                 </GridColumn>
-                <GridColumn TItem="Order" HeaderText="unit_of_m">
-                    @context.Unit_of_m
-                </GridColumn>
             </GridColumns>
-        </Grid>    
+        </Grid>
     </BodyTemplate>
     <FooterTemplate>
         <Button Color="ButtonColor.Secondary" @onclick="() => offcanvas.HideAsync()">Закрыть</Button>
-        <Button Color="ButtonColor.Secondary">Сохранить таблицу</Button>
+        <Button Color="ButtonColor.Secondary" @onclick="SaveDataClick">Сохранить таблицу</Button>
     </FooterTemplate>
 </Offcanvas>
 <Modal @ref="modal" title="Modal title" IsVerticallyCentered="true">
@@ -64,38 +89,49 @@
         <Button Color="ButtonColor.Primary">Save changes</Button>
     </FooterTemplate>
 </Modal>
-<div class="btn-group">
-    <Button Color="ButtonColor.Light">«</Button>
-    <DateInput TValue="DateOnly" @bind-Value="@date1" Placeholder="Enter Date" />
-    <Button Color="ButtonColor.Light">»</Button>
-    <Button Color="ButtonColor.Primary" @onclick="OnShowOffcanvasClick">Таблица Данных</Button>
-    <Button Color="ButtonColor.Primary">Сохранить график</Button>
-</div>
-<LineChart @ref=LiveChartElement.MeteorologicalChartTemperatureArchive Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
-
+<LineChart id="graph" @ref=LiveChartElement.MeteorologicalChartTemperatureArchive Width="100" WidthUnit="Unit.Percentage" Height="50" HeightUnit="Unit.Percentage" />
 @code {
-    private Modal modal = default!;
-    private Offcanvas offcanvas = default!;
-    private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
-
-    private async Task OnShowModalClick()
-    {
-        await modal.ShowAsync();
-    }
-
-    private async Task OnHideModalClick()
-    {
-        await modal.HideAsync();
-    }
-}
-
-
-
-@code {
+    private string InputType = "date";
+    private string InputDataValue = DateTime.Now.ToString("yyyy-MM-dd");
+    private string fileName = "fileName";
+    private Modal modal;
+    private Offcanvas offcanvas;
+    private DateOnly date1;
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
-    private async Task<GridDataProviderResult<Order>> DataArchive(GridDataProviderRequest<Order> request){
-        return await Task.FromResult(request.ApplyTo(DataBase.DataMeteorological));
+    protected override void OnInitialized()
+    {
+        modal = default!;
+        offcanvas = default!;
+        date1 = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
     }
+    private async Task<GridDataProviderResult<Order>> DataArchive(GridDataProviderRequest<Order> request) => await Task.FromResult(request.ApplyTo(DataBase.DataMeteorological));
+    private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
+    private void ChangeData(DateOnly _date) => date1 = _date;
+    private async Task SaveDataClick() => await DownloadFileFromStream(DataBase.DataMeteorological);
+    private async Task OnShowModalClick() => await modal.ShowAsync();
+    private async Task OnHideModalClick() => await modal.HideAsync();
+
+    private async Task DownloadFileFromStream(List<Order> _lastData)
+    {
+        var workbook = new XLWorkbook();
+        workbook.AddWorksheet("Страница1");
+        var ws = workbook.Worksheet("Страница1");
+        ws.Cell("A1").Value = "Дата";
+        ws.Cell("B1").Value = "Время";
+        ws.Cell("C1").Value = SensorData.AllSensors[_lastData[0].Sensor_id].Title;
+        for (var i = 0; i < _lastData.Count; i++)
+        {
+            ws.Cell("A" + (i + 2).ToString()).Value = _lastData[i].Date_of_m;
+            ws.Cell("B" + (i + 2).ToString()).Value = _lastData[i].Time_of_m;
+            ws.Cell("C" + (i + 2).ToString()).Value = _lastData[i].Value_of_m;
+        }
+        Stream fs = new MemoryStream();
+        workbook.SaveAs(fs);
+        fs.Position = 0;
+        using var streamRef = new DotNetStreamReference(stream: fs);
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -108,5 +144,61 @@
         }
         await base.OnAfterRenderAsync(firstRender);
     }
-    private DateOnly date1 = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+
+    private int activeStationTab;
+    private string? activeDataTabTitle;
+    private void OnSensorTabShow(TabsEventArgs args)
+    {
+        foreach(var (_key,_value) in ValueSettings.Stations){
+            if(_value.Title == args.ActiveTabTitle){
+                activeStationTab = _key;
+            }
+        }
+    }
+    private void OnDataTabShow(TabsEventArgs args)
+    {
+        activeDataTabTitle = args.ActiveTabTitle;
+        if(activeDataTabTitle == "Сутки"){
+            InputType = "date";
+            InputDataValue = date1.ToString("yyyy-MM-dd");
+        }
+        if (activeDataTabTitle == "Месяц"){
+            InputType = "month";
+            InputDataValue = date1.ToString("yyyy-MM");
+        }
+        if(activeDataTabTitle == "Год"){
+            InputType = "number";
+            InputDataValue = date1.ToString("yyyy");
+        }
+    }
+    private void DecreaseData()
+    {
+        if(activeDataTabTitle == "Сутки"){
+            date1 = date1.AddDays(-1);
+            InputDataValue = date1.ToString("yyyy-MM-dd");
+        }
+        if (activeDataTabTitle == "Месяц"){
+            date1 = date1.AddMonths(-1);
+            InputDataValue = date1.ToString("yyyy-MM");
+        }
+        if(activeDataTabTitle == "Год"){
+            date1 = date1.AddYears(-1);
+            InputDataValue = date1.ToString("yyyy");
+        }
+    }
+    private void IncreaseData()
+    {
+        if(activeDataTabTitle == "Сутки"){
+            date1 = date1.AddDays(+1);
+            InputDataValue = date1.ToString("yyyy-MM-dd");
+        }
+        if (activeDataTabTitle == "Месяц"){
+            date1 = date1.AddMonths(+1);
+            InputDataValue = date1.ToString("yyyy-MM");
+        }
+        if(activeDataTabTitle == "Год"){
+            date1 = date1.AddYears(+1);
+            InputDataValue = date1.ToString("yyyy");
+        }
+    }
 }

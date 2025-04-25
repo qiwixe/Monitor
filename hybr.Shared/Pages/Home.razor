@@ -12,9 +12,9 @@
                 </TitleTemplate>
                 <Content>
                     @foreach (var id in _value.SensorsId)
-                        {
+                    {
                         <Alert Color="@SensorData.AllSensors[id].Alert"> <Icon Name="@SensorData.AllSensors[id].Icon" class="me-2"></Icon>@SensorData.AllSensors[id].Title @SensorData.AllSensors[id].Value_of_m, @SensorData.AllSensors[id].Unit_of_m</Alert>
-                        }
+                    }
                 </Content>
             </AccordionItem>
         }
@@ -53,17 +53,9 @@ PageSize="10">
 </Grid>
 @code {
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
-    private async Task<GridDataProviderResult<Order>> DataProviderSQL(GridDataProviderRequest<Order> request){
-        return await Task.FromResult(request.ApplyTo(DataBase.DataAll));
-    }
-    private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request)
-    {
-        return await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
-    }
-    protected override void OnInitialized()
-    {
-        //peredelat
-        TimerUpdate.StartTimer();
-    }
+    private async Task<GridDataProviderResult<Order>> DataProviderSQL(GridDataProviderRequest<Order> request) => await Task.FromResult(request.ApplyTo(DataBase.DataAll));
+    private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request) => await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
+    //peredelat
+    protected override void OnInitialized() => TimerUpdate.StartTimer();
 }
 

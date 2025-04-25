@@ -14,7 +14,8 @@ namespace hybr.Shared.Services
             ["SolarConcentrator"] = new(),
             ["HeatPump"] = new(),
             ["Bioplant"] = new(),
-            ["Meteorological"] = new()
+            ["Meteorological"] = new(),
+            //["Archive"] = new()
         };
     }
 }
