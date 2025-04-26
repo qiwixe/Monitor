@@ -13,7 +13,6 @@ namespace hybr.Shared.Services
     public class ArchiveChart()
     {
         public bool DActive { get; set; } = false;
-        public required int maxLabelXasixCount = 1;
         public required ChartData DChartData { get; set; }
         public required List<IChartDataset> DChartDataset { get; set; }
         public IChartOptions DChartOptions { get; set; } = new LiveChartOptions { Interaction = new Interaction { Mode = InteractionMode.Point, Intersect = false } };
@@ -348,11 +347,11 @@ namespace hybr.Shared.Services
             BorderColor = "rgba(0, 0, 255, 0.7)",
         };
 
-        public static IChartDataset MeteorologicalChartDataSetSensor103Archive { get; } =
+        public static IChartDataset ChartDataSetArchive { get; } =
         new DefaultChartOption()
         {
             SensorId = 108,
-            Label = $"Солнечная радиация, Вт/м2",
+            Label = $"ТЕСТЫ",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
@@ -377,7 +376,7 @@ namespace hybr.Shared.Services
         public static List<IChartDataset> MeteorologicalChartDataSetPressure { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor105 };
         public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor108 };
 
-        public static List<IChartDataset> MeteorologicalChartDataSetTemperatureArchive { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor103Archive };
+        public static List<IChartDataset> ChartDataSetArchive { get; } = new List<IChartDataset> { ChartSettings.ChartDataSetArchive };
     }
     public class LiveChartElement()
     {
@@ -479,11 +478,9 @@ namespace hybr.Shared.Services
                     {
                         [MeteorologicalChartTemperatureArchive] = new ArchiveChart
                         {
-                            maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.MeteorologicalChartDataSetTemperatureArchive },
-                            DChartDataset = ChartDataSet.MeteorologicalChartDataSetTemperatureArchive
-                        },
-
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.ChartDataSetArchive },
+                            DChartDataset = ChartDataSet.ChartDataSetArchive
+                        }
                     };
                     break;
             }

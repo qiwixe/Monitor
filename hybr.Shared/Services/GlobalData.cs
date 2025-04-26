@@ -69,12 +69,14 @@ namespace hybr.Shared.Services
             List<Order> _renderValue = new();
             foreach (var (_PageChart, _chart) in LiveChartElement.AllChartsArchive["Archive"])
             {
+                _chart.DChartData.Labels.Clear();
                 foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
                 {
+                _lineChartDataset.Data.Clear();
                     var lastValue = 0.0;
                     var maxPickValue = 0.5;
                     foreach (var _data in _lastData)
-                        if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)<0.5)
+                        //if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)< maxPickValue)
                             {
                             _lineChartDataset.Data.Add(_data.Value_of_m);
                             _renderValue.Add(_data);
@@ -86,6 +88,7 @@ namespace hybr.Shared.Services
                 }
                 _PageChart.UpdateValuesAsync(_chart.DChartData);
             }
+            
         }
     }
     public class GlobalData()

@@ -25,6 +25,7 @@ namespace hybr.Shared.Services
         public static List<Order> DataSolarCollector { get; set; } = new();
         public static List<Order> DataPhotovoltaic { get; set; } = new();
         public static List<Order> DataWindPower { get; set; } = new();
+        public static List<Order> DataArchive { get; set; } = new();
         #endregion Переменные с данными ДБ
 
         public static async void GetAllData()
@@ -49,10 +50,24 @@ namespace hybr.Shared.Services
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();
         }
-
+        public static string CreateSQLstring(int station_id){
+        return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} order by id";
+        }
+        public static string CreateSQLstring(int station_id, int sensor_id)
+        {
+            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} order by id";
+        }
+        public static string CreateSQLstring(int station_id, int sensor_id, string date)
+        {
+            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_of_m = '{date}' order by id";
+        }
+        public static string CreateSQLstring(int station_id, int sensor_id, string range_start_date, string range_stop_date)
+        {
+            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_of_m >= '{range_start_date}' and date_of_m <= '{range_stop_date}' order by id";
+        }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
-                List<Order> _dbData = new();
+            List<Order> _dbData = new();
             try
             {
                 await using var _conn = new NpgsqlConnection(SQLstring.Connection);
@@ -61,6 +76,7 @@ namespace hybr.Shared.Services
                 await using var _reader = await cmd.ExecuteReaderAsync();
                 while (await _reader.ReadAsync())
                 {
+                    
                     _dbData.Add(new Order
                     {
                         Id = _reader.GetInt32(0),
@@ -72,6 +88,7 @@ namespace hybr.Shared.Services
                         Unit_of_m = _reader.GetString(6),
                     });
                 }
+
                 _conn.CloseAsync();
             }
             catch

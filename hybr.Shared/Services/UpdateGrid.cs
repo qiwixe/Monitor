@@ -14,8 +14,12 @@ namespace hybr.Shared.Services
             ["SolarConcentrator"] = new(),
             ["HeatPump"] = new(),
             ["Bioplant"] = new(),
-            ["Meteorological"] = new(),
-            //["Archive"] = new()
+            ["Meteorological"] = new()
+        };
+        public static Dictionary<string, Grid<Order>> AllUpdateDataGrid { get; set; } =
+        new Dictionary<string, Grid<Order>>
+        {
+            ["Archive"] = new()
         };
     }
 }
