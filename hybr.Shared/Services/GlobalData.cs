@@ -19,19 +19,13 @@ namespace hybr.Shared.Services
     {
         public int Id { get; set; }
         public int Station_Id { get; set; }
-        public AlertColor Alert { get; set; } = AlertColor.Info;
-        public IconName Icon { get; set; } = IconName.InfoCircleFill;
         public string? Title { get; set; } = "Датчик";
-        public double Value_of_m { get; set; } = 0;
         public string? Unit_of_m { get; set; } = "штук?";
         public string GraduationString { get; set; } = "x";
         public int Value_min { get; set; }
         public int Value_max { get; set; }
-        public bool Disconnected { get; set; }
-    }
-    public class Station()
-    {
-        public IconColor Alert { get; set; } = IconColor.Info;
+        public double Value_of_m { get; set; } = 0;
+        public AlertColor Alert { get; set; } = AlertColor.Info;
         public IconName Icon { get; set; } = IconName.InfoCircleFill;
         public bool Disconnected { get; set; }
     }

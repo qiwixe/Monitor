@@ -15,7 +15,7 @@
     URL.revokeObjectURL(url);
     }
 </script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"/>
 <script>
     function saveAsImage() {
     var element = document.getElementById("graph");
@@ -31,92 +31,129 @@
 </script>
 
 <Preload />
-<Tabs OnShown="@(args => OnSensorTabShow(args))">
-    @foreach (var (_key, _value) in ValueSettings.Stations){
-        <Tab Title=@_value.Title>
-            <Content>
-                <Tabs OnShown="@(args => OnDataTabShow(args))">
-                    <Tab Title="Сутки" Disabled=@(dayTab[_key])/>
-                    <Tab Title="Месяц" Disabled=@(monthTab[_key])/>
-                    <Tab Title="Год" Disabled=@(yearTab[_key])/>
-                </Tabs>
-            </Content>
-        </Tab>
-    }
-    <Tab Title="Свой фильтр" onclick="OnShowModalClick">
-        <Content>
-        </Content>
-    </Tab>
-</Tabs>
-<div class="btn-group">
-    <Button Color="ButtonColor.Light" @onclick="() => DecreaseData()">«</Button>
-    <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => SectedData()" @bind-value:event="oninput"/>
-    <Button Color="ButtonColor.Light" @onclick="() => IncreaseData()">»</Button>
-    <Button Color="ButtonColor.Primary" @onclick="OnShowOffcanvasClick">Таблица Данных</Button>
-    <Button Color="ButtonColor.Primary" onclick="saveAsImage()">Сохранить график</Button>
-</div>
-<Offcanvas @ref="offcanvas" Title="Таблица данных" Size="OffcanvasSize.Large">
-    <BodyTemplate>
-        <Grid 
-        @ref=@UpdateGrid.AllUpdateDataGrid["Archive"]
-        TItem="Order"
-        Class="table table-hover"
-        DataProvider="DataArchive"
-        AllowPaging="true"
-
-        PageSize="20">
-            <GridColumns>
-                <GridColumn TItem="Order" HeaderText="Дата">
-                    @context.Date_of_m
-                </GridColumn>
-                <GridColumn TItem="Order" HeaderText="Время">
-                    @context.Time_of_m
-                </GridColumn>
-                <GridColumn TItem="Order" HeaderText="Значение">
-                    @context.Value_of_m
-                </GridColumn>
-            </GridColumns>
-        </Grid>
-    </BodyTemplate>
-    <FooterTemplate>
-        <Button Color="ButtonColor.Secondary" @onclick="() => offcanvas.HideAsync()">Закрыть</Button>
-        <Button Color="ButtonColor.Secondary" @onclick="SaveDataClick">Сохранить таблицу</Button>
-    </FooterTemplate>
-</Offcanvas>
-<Modal @ref="modal" title="Modal title" IsVerticallyCentered="true">
-    <BodyTemplate>
-        This is a vertically centered modal.
-    </BodyTemplate>
-    <FooterTemplate>
-        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Close</Button>
-        <Button Color="ButtonColor.Primary">Save changes</Button>
-    </FooterTemplate>
-</Modal>
-<LineChart id="graph" @ref=LiveChartElement.MeteorologicalChartTemperatureArchive Width="100" WidthUnit="Unit.Percentage" Height="50" HeightUnit="Unit.Percentage" />
+<Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Archive"] TItem="Sensor" DataProvider="UpdateGrid.DataProvider">
+    <Tabs @ref="stations" @onclick="Select" NavStyle="NavStyle.Underline" OnShown="@(args => OnStationTabShow(args))">
+        @foreach (var (_key, _value) in ValueSettings.Stations){
+            <Tab Name=@_key.ToString() Title=@_value.Title>
+                <Content>
+                    <Tabs @ref="sensors[_key]" @onclick="Select" NavStyle="NavStyle.Underline" OnShown="@(args => OnSensorTabShow(args))" >
+                        @foreach (var _id in ValueSettings.Stations[_key].SensorsId){
+                            <Tab Name=@_id.ToString() Title=@SensorData.AllSensors[_id].Title Disabled=sensorsPageState[_key]/>
+                        }
+                    </Tabs>            
+                </Content>
+            </Tab>
+        }
+        <Tab Name="0" Title="Свой фильтр" onclick="OnShowModalClick"/>
+    </Tabs>
+    <Tabs @onclick="Select" @ref="data" NavStyle="NavStyle.Underline" OnShown="@(args => OnDataTabShow(args))">
+        <Tab Title="Сутки" Disabled=sensorsPageState[0]/>
+        <Tab Title="Месяц" Disabled=sensorsPageState[0]/>
+        <Tab Title="Год" Disabled=sensorsPageState[0]/>
+    </Tabs>
+    <div class="btn-group">
+        <Button Color="ButtonColor.Light" @onclick="() => ChangeData(-1)">«</Button>
+        <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => Select()" @bind-value:event="oninput"/>
+        <Button Color="ButtonColor.Light" @onclick="() => ChangeData(+1)">»</Button>
+        <Button Color="ButtonColor.Primary" @onclick="OnShowOffcanvasClick">Таблица Данных</Button>
+        <Button Color="ButtonColor.Primary" onclick="saveAsImage()">Сохранить график</Button>
+    </div>
+    <Offcanvas @ref="offcanvas" Title="Таблица данных" Size="OffcanvasSize.Large">
+        <BodyTemplate>
+            <Grid 
+            @ref=@UpdateGrid.AllUpdateDataGrid["Archive"]
+            TItem="Order"
+            Class="table table-hover"
+            DataProvider="DataArchive"
+            AllowPaging="true"
+            PageSize="20">
+                <GridColumns>
+                    <GridColumn TItem="Order" HeaderText="Дата">
+                        @context.Date_of_m
+                    </GridColumn>
+                    <GridColumn TItem="Order" HeaderText="Время">
+                        @context.Time_of_m
+                    </GridColumn>
+                    <GridColumn TItem="Order" HeaderText="Значение">
+                        @context.Value_of_m
+                    </GridColumn>
+                </GridColumns>
+            </Grid>
+        </BodyTemplate>
+        <FooterTemplate>
+            <Button Color="ButtonColor.Secondary" @onclick="() => offcanvas.HideAsync()">Закрыть</Button>
+            <Button Color="ButtonColor.Secondary" @onclick="SaveDataClick">Сохранить таблицу</Button>
+        </FooterTemplate>
+    </Offcanvas>
+    <Modal @ref="modal" title="Свой фильтр" IsVerticallyCentered="true">
+        <BodyTemplate>
+            <Tabs @ref="stations" @onclick="Select" NavStyle="NavStyle.Underline" OnShown="@(args => OnStationTabShow(args))">
+                @foreach (var (_key, _value) in ValueSettings.Stations){
+                    <Tab Name=@_key.ToString() Title=@_value.Title>
+                        <Content>
+                            @foreach (var _id in ValueSettings.Stations[_key].SensorsId){
+                                <CheckboxInput Label=@SensorData.AllSensors[_id].Title @bind-Value="option1" />
+                            }         
+                        </Content>
+                    </Tab>
+                }
+            </Tabs>
+            С
+            <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => Select()" @bind-value:event="oninput"/>
+            До
+            <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => Select()" @bind-value:event="oninput"/>
+        </BodyTemplate>
+        <FooterTemplate>
+            <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Выйти</Button>
+            <Button Color="ButtonColor.Primary">Поиск</Button>
+        </FooterTemplate>
+    </Modal>
+    <LineChart id="graph" @ref=LiveChartElement.ChartArchive Width="100" WidthUnit="Unit.Percentage" Height="50" HeightUnit="Unit.Percentage" />
+</Grid>
 @code {
-    private static Dictionary<int, bool> dayTab = new() {[1] = false,[2] = true,[3] = true,[4] = true,[5] = true,[6] = true,[7] = true};
-    private static Dictionary<int, bool> monthTab = new() {[1] = false,[2] = true,[3] = true,[4] = true,[5] = true,[6] = true,[7] = true};
-    private static Dictionary<int, bool> yearTab = new() {[1] = false,[2] = true,[3] = true,[4] = true,[5] = true,[6] = true,[7] = true};
+    private bool option1;
     private string InputType = "date";
     private string InputDataValue = DateTime.Now.ToString("yyyy-MM-dd");
     private string fileName = "fileName";
-    private Modal modal;
-    private Offcanvas offcanvas;
-    private DateOnly date1;
-    private DateOnly date2;
-    [Inject] protected PreloadService PreloadService { get; set; } = default!;
-    protected override void OnInitialized()
+    private Tabs data  = default!,stations = default!;
+    private Dictionary<int, bool> sensorsPageState = new Dictionary<int, bool>
     {
-        modal = default!;
-        offcanvas = default!;
-        date1 = DateOnly.FromDateTime(DateTime.Now);
+        [0] = true,
+        [1] = true,
+        [2] = true,
+        [3] = true,
+        [4] = true,
+        [5] = true,
+        [6] = true,
+        [7] = true,
+    };
+    private Dictionary<int, Tabs> sensors = new Dictionary<int, Tabs>
+    {
+        [1] = default!,
+        [2] = default!,
+        [3] = default!,
+        [4] = default!,
+        [5] = default!,
+        [6] = default!,
+        [7] = default!,
+    }; 
+    private Modal modal = default!;
+    private Offcanvas offcanvas = default!;
+    private DateOnly date1 = DateOnly.FromDateTime(DateTime.Now);
+    [Inject] protected PreloadService PreloadService { get; set; } = default!;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LiveChartElement.PageProperty("Archive");
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
     private async Task<GridDataProviderResult<Order>> DataArchive(GridDataProviderRequest<Order> request) => await Task.FromResult(request.ApplyTo(DataBase.DataArchive));
     private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
     private async Task SaveDataClick() => await DownloadFileFromStream(DataBase.DataArchive);
     private async Task OnShowModalClick() => await modal.ShowAsync();
     private async Task OnHideModalClick() => await modal.HideAsync();
-
     private async Task DownloadFileFromStream(List<Order> _lastData)
     {
         var workbook = new XLWorkbook();
@@ -138,94 +175,77 @@
         await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            LiveChartElement.PageProperty("Archive");
-            PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
-            await Task.Delay(1300);
-            PreloadService.Hide();
-        }
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    private int activeStationTab;
+    private int activeStationTabId;
+    private int activeSensorTabId;
     private string? activeDataTabTitle;
-    private void OnSensorTabShow(TabsEventArgs args)
-    {
-        foreach(var (_key,_value) in ValueSettings.Stations){
-            if(_value.Title == args.ActiveTabTitle){
-                activeStationTab = _key;
-                dayTab[_key] = false;
-                monthTab[_key] = false;
-                yearTab[_key] = false;
-            }else{
-                dayTab[_key] = true;
-                monthTab[_key] = true;
-                yearTab[_key] = true;
+    private async void OnStationTabShow(TabsEventArgs args) {
+        activeStationTabId = Int32.Parse(args.ActiveTabName);
+        foreach(var (_key,_value) in sensorsPageState){
+            if (activeStationTabId == _key) sensorsPageState[activeStationTabId] = false; 
+            else { 
+                sensorsPageState[_key] = true; 
+                activeSensorTabId = 0; 
             }
         }
+        sensorsPageState[0] = true; 
+        activeDataTabTitle = null;
+        await UpdateGrid.AllUpdateGrid["Archive"].RefreshDataAsync();
     }
+    private async void OnSensorTabShow(TabsEventArgs args){
+        activeSensorTabId = Int32.Parse(args.ActiveTabName);
+        sensorsPageState[0] = false;
+        await UpdateGrid.AllUpdateGrid["Archive"].RefreshDataAsync();
+    } 
     private void OnDataTabShow(TabsEventArgs args)
     {
         activeDataTabTitle = args.ActiveTabTitle;
         if(activeDataTabTitle == "Сутки"){
             InputType = "date";
             InputDataValue = date1.ToString("yyyy-MM-dd");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab, ValueSettings.Stations[activeStationTab].SensorsId[0], InputDataValue));
         }
         if (activeDataTabTitle == "Месяц"){
             InputType = "month";
             InputDataValue = date1.ToString("yyyy-MM");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01",InputDataValue+"-31"));
         }
         if(activeDataTabTitle == "Год"){
             InputType = "number";
             InputDataValue = date1.ToString("yyyy");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"01-01",InputDataValue+"12-31"));
         }
     }
-    private async Task DecreaseData()
-    {
-        if(activeDataTabTitle == "Сутки"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddDays(-1).ToString("yyyy-MM-dd");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue));
+    private void ChangeData(int _type){
+        switch(activeDataTabTitle){
+            case("Сутки"):{
+                    InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddDays(_type).ToString("yyyy-MM-dd");
+                    break;
+                }
+            case("Месяц"):{
+                    InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM",System.Globalization.CultureInfo.InvariantCulture).AddMonths(_type).ToString("yyyy-MM");
+                    break;
+                }
+            case("Год"):{
+                    InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy",System.Globalization.CultureInfo.InvariantCulture).AddYears(_type).ToString("yyyy");
+                    break;
+                }
         }
-        if (activeDataTabTitle == "Месяц"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM",System.Globalization.CultureInfo.InvariantCulture).AddMonths(-1).ToString("yyyy-MM");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01",InputDataValue+"-31"));
-        }
-        if(activeDataTabTitle == "Год"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy",System.Globalization.CultureInfo.InvariantCulture).AddYears(-1).ToString("yyyy");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01-01",InputDataValue+"-12-31"));
-        }
+        Select();
     }
-    private async Task SectedData()
-    {
-        if(activeDataTabTitle == "Сутки"){
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue));
-        }
-        if (activeDataTabTitle == "Месяц"){
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01",InputDataValue+"-31"));
-        }
-        if(activeDataTabTitle == "Год"){
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01-01",InputDataValue+"-12-31"));
-        }
-    }
-    private async Task IncreaseData()
-    {
-        if(activeDataTabTitle == "Сутки"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddDays(+1).ToString("yyyy-MM-dd");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue));
-        }
-        if (activeDataTabTitle == "Месяц"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy-MM",System.Globalization.CultureInfo.InvariantCulture).AddMonths(+1).ToString("yyyy-MM");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01",InputDataValue+"-31"));
-        }
-        if(activeDataTabTitle == "Год"){
-            InputDataValue = DateTime.ParseExact(InputDataValue, "yyyy",System.Globalization.CultureInfo.InvariantCulture).AddYears(+1).ToString("yyyy");
-            ChartUpdate(DataBase.CreateSQLstring(activeStationTab,ValueSettings.Stations[activeStationTab].SensorsId[0],InputDataValue+"-01-01",InputDataValue+"-12-31"));
+    private async void Select(){
+        await Task.Delay(10);
+        if(activeStationTabId != 0 && activeSensorTabId != 0)
+            switch(activeDataTabTitle){
+                case("Сутки"):{
+                Console.WriteLine(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
+                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
+                break;
+            }
+            case("Месяц"):{
+                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31"));
+                break;
+            }
+            case("Год"):{
+                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31"));
+                break;
+            }
         }
     }
     private async Task ChartUpdate(string _data){

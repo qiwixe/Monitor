@@ -1,4 +1,8 @@
-﻿using Npgsql;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using Npgsql;
+using Parlot.Fluent;
+using Parlot;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace hybr.Shared.Services
 {
@@ -99,6 +103,26 @@ namespace hybr.Shared.Services
 
         }
 
+        //CREATE TABLE IF NOT EXISTS public."Sensors"
+        //(
+        //    "Id" integer NOT NULL,
+        //    "Title" character varying NOT NULL DEFAULT Датчик,
+        //    "Station_Id" integer NOT NULL DEFAULT 0,
+        //    "Value_min" double precision NOT NULL DEFAULT 0,
+        //    "Value_max" double precision NOT NULL DEFAULT 0,
+        //    "GraduationString" character varying NOT NULL DEFAULT x,
+        //    PRIMARY KEY("Id")
+        //);
 
+        //CREATE TABLE IF NOT EXISTS public."Stations"
+        //(
+        //    "Id" integer NOT NULL,
+        //    "Title" character varying NOT NULL DEFAULT Станция,
+        //    "ShortTitle" character varying NOT NULL DEFAULT Стц,
+        //    "FullTitle" character varying NOT NULL DEFAULT Установка №0 Станция,
+        //    "Href" character varying NOT NULL DEFAULT Home,
+        //    "Station_Ip" character varying NOT NULL DEFAULT http://192.168.0.0/,
+        //    PRIMARY KEY("Id")
+        //);
     }
 }

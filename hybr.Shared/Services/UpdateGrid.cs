@@ -14,12 +14,15 @@ namespace hybr.Shared.Services
             ["SolarConcentrator"] = new(),
             ["HeatPump"] = new(),
             ["Bioplant"] = new(),
-            ["Meteorological"] = new()
+            ["Meteorological"] = new(),
+            ["Archive"] = new(),
         };
         public static Dictionary<string, Grid<Order>> AllUpdateDataGrid { get; set; } =
         new Dictionary<string, Grid<Order>>
         {
             ["Archive"] = new()
         };
+        public static async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request) => await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
     }
+
 }

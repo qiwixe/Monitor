@@ -392,13 +392,14 @@ namespace hybr.Shared.Services
         public static LineChart MeteorologicalChartPressure { get; set; } = default!;
         public static LineChart MeteorologicalChartSolarRadiation { get; set; } = default!;
 
-        public static LineChart MeteorologicalChartTemperatureArchive { get; set; } = default!;
+        public static LineChart ChartArchive { get; set; } = default!;
 
         public static Dictionary<string, Dictionary<LineChart, Chart>> AllCharts { get; set; } = new();
         public static Dictionary<string, Dictionary<LineChart, ArchiveChart>> AllChartsArchive { get; set; } = new();
 
-        public static void PageProperty(string _PageName)
+        public static async Task PageProperty(string _PageName)
         {
+            
             switch (_PageName)
             {
                 case ("Home"):
@@ -476,7 +477,7 @@ namespace hybr.Shared.Services
                 case ("Archive"):
                     AllChartsArchive["Archive"] = new Dictionary<LineChart, ArchiveChart>()
                     {
-                        [MeteorologicalChartTemperatureArchive] = new ArchiveChart
+                        [ChartArchive] = new ArchiveChart
                         {
                             DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.ChartDataSetArchive },
                             DChartDataset = ChartDataSet.ChartDataSetArchive
@@ -489,15 +490,16 @@ namespace hybr.Shared.Services
                 if (_key == _PageName)
                 {
                     foreach (var (_lineChart, _chart) in AllCharts[_key])
-                    _lineChart.InitializeAsync(_chart.DChartData,_chart.DChartOptions);
+                    await _lineChart.InitializeAsync(_chart.DChartData,_chart.DChartOptions);
                 }
             }
             foreach (var (_key, _a) in AllChartsArchive)
             {
                 if (_key == _PageName)
                 {
-                    foreach (var (_lineChart, _chart) in AllChartsArchive[_key])
-                        _lineChart.InitializeAsync(_chart.DChartData, _chart.DChartOptions);
+                    foreach (var (_lineChart, _chart) in AllChartsArchive[_key]) {
+                        await _lineChart.InitializeAsync(_chart.DChartData, _chart.DChartOptions);
+                    }
                 }
             }
         }

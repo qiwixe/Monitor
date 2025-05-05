@@ -2,7 +2,7 @@
 
 @using hybr.Shared.Services
 <PageTitle>Meteorological</PageTitle>
-<Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="DataProvider">
+<Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="UpdateGrid.DataProvider">
     <Preload />
     <div id="parent">
         <div id="grid11" class="gridContent compassDiv">
@@ -48,20 +48,16 @@
             </div>
         </div>
         <div id="grid32" class="gridContent">
-            <Alert Color="@SensorData.AllSensors[103].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[103].Icon" class="me-2"></Icon>Датчик температуры воздуха @SensorData.AllSensors[103].Value_of_m, °C</Alert>
-            <Alert Color="@SensorData.AllSensors[104].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[104].Icon" class="me-2"></Icon>Датчик влажности воздуха @SensorData.AllSensors[104].Value_of_m, %</Alert>
-            <Alert Color="@SensorData.AllSensors[105].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[105].Icon" class="me-2"></Icon>Датчик давления @SensorData.AllSensors[105].Value_of_m, мм.рт.ст.</Alert>
-            <Alert Color="@SensorData.AllSensors[106].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[106].Icon" class="me-2"></Icon>Датчик направления ветра @SensorData.AllSensors[106].Value_of_m, °</Alert>
-            <Alert Color="@SensorData.AllSensors[107].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[107].Icon" class="me-2"></Icon>Датчик скорости ветра @SensorData.AllSensors[107].Value_of_m, м/с</Alert>
-            <Alert Color="@SensorData.AllSensors[108].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[108].Icon" class="me-2"></Icon>Датчик солнечной радиации @SensorData.AllSensors[108].Value_of_m, Вт/м2</Alert>
+            @foreach (var _key in ValueSettings.Stations[7].SensorsId)
+            {
+                <Alert Color="@SensorData.AllSensors[_key].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[_key].Icon" class="me-2"></Icon>@SensorData.AllSensors[_key].Title @SensorData.AllSensors[_key].Value_of_m, @SensorData.AllSensors[_key].Unit_of_m</Alert>
+            }
         </div>
     </div>
 </Grid>
 
 @code {
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
-    private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request) => await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

@@ -16,7 +16,7 @@
                         <div class="form-group row mb-3">
                             <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
                             <div class="col-md-10">
-                                <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите IP адресс станции" />
+                                <TextInput @bind-Value="@ValueSettings.Stations[_key].Station_Ip" Rows="3" Placeholder="Введите IP адресс станции" />
                                 <ValidationMessage For="@(() => product.Name)" />
                             </div>
                         </div>
@@ -33,21 +33,21 @@
                                         <div class="form-group row mb-3">
                                             <label class="col-md-2 col-form-label">Градуировочное уравнение: <span class="text-danger">*</span></label>
                                             <div class="col-md-10">
-                                                <TextAreaInput @bind-Value="@product.Description" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                                                <TextAreaInput @bind-Value="@SensorData.AllSensors[id].GraduationString" Rows="3" Placeholder="Введите градуировочное уравнение" />
                                                 <ValidationMessage For="@(() => product.Description)" />
                                             </div>
                                         </div>
                                         <div class="form-group row mb-3">
                                             <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
                                             <div class="col-md-10">
-                                                <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                                                <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_min" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
                                                 <ValidationMessage For="@(() => product.Name)" />
                                             </div>
                                         </div>
                                         <div class="form-group row mb-3">
                                             <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
                                             <div class="col-md-10">
-                                                <TextInput @bind-Value="@product.Name" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                                                <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_max" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
                                                 <ValidationMessage For="@(() => product.Name)" />
                                             </div>
                                         </div>

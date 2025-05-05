@@ -292,15 +292,6 @@ namespace hybr.Shared.Services
                 Value_max = 600,
             }),
         };
-        public static Dictionary<int, Station> AllStations { get; } = new Dictionary<int, Station> { 
-            [1] = new(),
-            [2] = new(),
-            [3] = new(),
-            [4] = new(),
-            [5] = new(),
-            [6] = new(),
-            [7] = new(),
-        };
         public static Dictionary<int, Order> Graduation(Dictionary<int, Order> _lastData)
         {
             foreach (var (_key, _value) in _lastData)
@@ -340,8 +331,8 @@ namespace hybr.Shared.Services
                     _value.Value_of_m = 0;
                     _value.Disconnected = true;
                 }
-                    AllStations[AllSensors[_key].Station_Id].Alert = (IconColor)_value.Alert;
-                    AllStations[AllSensors[_key].Station_Id].Icon = _value.Icon;
+                ValueSettings.Stations[AllSensors[_key].Station_Id].Alert = (IconColor)_value.Alert;
+                ValueSettings.Stations[AllSensors[_key].Station_Id].Icon = _value.Icon;
             }
         }
     }

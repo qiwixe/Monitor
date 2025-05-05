@@ -2,13 +2,13 @@
 
 @using hybr.Shared.Services
 <PageTitle>Home</PageTitle>
-<Grid @ref=@UpdateGrid.AllUpdateGrid["Home"] TItem="Sensor" DataProvider="DataProvider">
+<Grid @ref=@UpdateGrid.AllUpdateGrid["Home"] TItem="Sensor" DataProvider="UpdateGrid.DataProvider">
     <Accordion>
         @foreach (var (_key,_value) in ValueSettings.Stations)
         {
             <AccordionItem>
                 <TitleTemplate>
-                    <Icon Color=@SensorData.AllStations[_key].Alert Name=@SensorData.AllStations[_key].Icon Class="me-1" /> @_value.FullTitle
+                    <Icon Color=@ValueSettings.Stations[_key].Alert Name=@ValueSettings.Stations[_key].Icon Class="me-1" /> @_value.FullTitle
                 </TitleTemplate>
                 <Content>
                     @foreach (var id in _value.SensorsId)
@@ -20,41 +20,7 @@
         }
     </Accordion>
 </Grid>
-<Grid   TItem="Order"
-Class="table table-hover table-bordered table-striped"
-DataProvider="DataProviderSQL"
-AllowPaging="true"
-PageSize="10">
-
-    <GridColumns>
-        <GridColumn TItem="Order" HeaderText="Id">
-            @context.Id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="sensor_id">
-            @context.Sensor_id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="station_id">
-            @context.Station_id
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="date_of_m">
-            @context.Date_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="time_of_m">
-            @context.Time_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="value_of_m">
-            @context.Value_of_m
-        </GridColumn>
-        <GridColumn TItem="Order" HeaderText="unit_of_m">
-            @context.Unit_of_m
-        </GridColumn>
-    </GridColumns>
-
-</Grid>
 @code {
-    [Inject] protected PreloadService PreloadService { get; set; } = default!;
-    private async Task<GridDataProviderResult<Order>> DataProviderSQL(GridDataProviderRequest<Order> request) => await Task.FromResult(request.ApplyTo(DataBase.DataAll));
-    private async Task<GridDataProviderResult<Sensor>> DataProvider(GridDataProviderRequest<Sensor> request) => await Task.FromResult(request.ApplyTo(new List<Sensor>(new Sensor[1])));
     //peredelat
     protected override void OnInitialized() => TimerUpdate.StartTimer();
 }

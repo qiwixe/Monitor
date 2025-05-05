@@ -1,18 +1,23 @@
-﻿namespace hybr.Shared.Services
+﻿using BlazorBootstrap;
+
+namespace hybr.Shared.Services
 {
-        public class MainClass()
+        public class Station()
         {
             public required string Title { get; set; }
             public required string ShortTitle { get; set; }
             public required string FullTitle { get; set; }
             public required string Href { get; set; }
             public required List<int> SensorsId { get; set; }
-        }
-        public class ValueSettings()
+            public IconColor Alert { get; set; } = IconColor.Info;
+            public IconName Icon { get; set; } = IconName.InfoCircleFill;
+            public string Station_Ip { get; set; } = "192.168.0.0";
+    }
+    public class ValueSettings()
         {
-            public static readonly Dictionary<int, MainClass> Stations = new Dictionary<int, MainClass>
+            public static readonly Dictionary<int, Station> Stations = new Dictionary<int, Station>
             {
-                [1] = new MainClass
+                [1] = new Station
                 {
                     Title = "Ветроэнергетическая установка",
                     ShortTitle = "ВУЭ",
@@ -20,7 +25,7 @@
                     Href = "WindPower",
                     SensorsId = [1,2,3,4,5,6,7,8,9,10,11,12]
                 },
-                [2] = new MainClass
+                [2] = new Station
                 {
                     Title = "Фотоэнергетическая установка",
                     ShortTitle = "ФУЭ",
@@ -28,7 +33,7 @@
                     Href = "Photovoltaic",
                     SensorsId = [21,22,23,24,25,26,27,28,29,30,31,32,33]
                 },
-                [3] = new MainClass
+                [3] = new Station
                 {
                     Title = "Солнечный коллектор",
                     ShortTitle = "Коллектор",
@@ -36,7 +41,7 @@
                     Href = "SolarCollector",
                     SensorsId = [21,22,23,24,25,26,27,28,29,30,31,32,33]
                 },
-                [4] = new MainClass
+                [4] = new Station
                 {
                     Title = "Солнечный концентратор",
                     ShortTitle = "Концентратор",
@@ -44,7 +49,7 @@
                     Href = "SolarСoncentrator",
                     SensorsId = [41,42,43,44,45,46,47]
                 },
-                [5] = new MainClass
+                [5] = new Station
                 {
                     Title = "Тепловой насос",
                     ShortTitle = "Тепловой насос",
@@ -52,7 +57,7 @@
                     Href = "HeatPump",
                     SensorsId = []
                 },
-                [6] = new MainClass
+                [6] = new Station
                 {
                     Title = "Биоустановка",
                     ShortTitle = "Биоустановка",
@@ -60,7 +65,7 @@
                     Href = "Bioplant",
                     SensorsId = []
                 },
-                [7] = new MainClass
+                [7] = new Station
                 {
                     Title = "Метеостанция",
                     ShortTitle = "Метеостанция",
