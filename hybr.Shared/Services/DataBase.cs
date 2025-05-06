@@ -1,8 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using Npgsql;
-using Parlot.Fluent;
-using Parlot;
-using DocumentFormat.OpenXml.ExtendedProperties;
+﻿using Npgsql;
 
 namespace hybr.Shared.Services
 {
@@ -80,7 +76,6 @@ namespace hybr.Shared.Services
                 await using var _reader = await cmd.ExecuteReaderAsync();
                 while (await _reader.ReadAsync())
                 {
-                    
                     _dbData.Add(new Order
                     {
                         Id = _reader.GetInt32(0),
@@ -92,7 +87,6 @@ namespace hybr.Shared.Services
                         Unit_of_m = _reader.GetString(6),
                     });
                 }
-
                 _conn.CloseAsync();
             }
             catch
@@ -124,5 +118,13 @@ namespace hybr.Shared.Services
         //    "Station_Ip" character varying NOT NULL DEFAULT http://192.168.0.0/,
         //    PRIMARY KEY("Id")
         //);
+
+        //CREATE TABLE IF NOT EXISTS public."Authentication"
+        //(
+        //    "Id" integer NOT NULL,
+        //    "Password" character varying NOT NULL,
+        //    PRIMARY KEY("Id")
+        //);
+
     }
 }

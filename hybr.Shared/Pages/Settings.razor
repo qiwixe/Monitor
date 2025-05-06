@@ -1,77 +1,82 @@
 ﻿@page "/Settings"
 @using System.ComponentModel.DataAnnotations
 @using hybr.Shared.Services
-
-<Accordion>
-    @foreach (var (_key, _value) in ValueSettings.Stations)
-    {
-        <AccordionItem>
-            <TitleTemplate>
-                @_value.FullTitle
-            </TitleTemplate>
-            <Content>
-                <div class="mb-3">
-                    <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
-                        <DataAnnotationsValidator />
-                        <div class="form-group row mb-3">
-                            <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
-                            <div class="col-md-10">
-                                <TextInput @bind-Value="@ValueSettings.Stations[_key].Station_Ip" Rows="3" Placeholder="Введите IP адресс станции" />
-                                <ValidationMessage For="@(() => product.Name)" />
+@inject NavigationManager Navigation
+@if (_conf)
+{
+    <Accordion>
+        @foreach (var (_key, _value) in ValueSettings.Stations)
+        {
+            <AccordionItem>
+                <TitleTemplate>
+                    @_value.FullTitle
+                </TitleTemplate>
+                <Content>
+                    <div class="mb-3">
+                        <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                            <DataAnnotationsValidator />
+                            <div class="form-group row mb-3">
+                                <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                                <div class="col-md-10">
+                                    <TextInput @bind-Value="@ValueSettings.Stations[_key].Station_Ip" Rows="3" Placeholder="Введите IP адресс станции" />
+                                    <ValidationMessage For="@(() => product.Name)" />
+                                </div>
                             </div>
-                        </div>
-                        @foreach (var id in _value.SensorsId){
-                            <Accordion>
-                                <AccordionItem>
-                                    <TitleTemplate>
-                                        @SensorData.AllSensors[id].Title
-                                    </TitleTemplate>
-                                    <Content>
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-2 col-form-label">Номер датчика:</label> @id
-                                        </div>
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-2 col-form-label">Градуировочное уравнение: <span class="text-danger">*</span></label>
-                                            <div class="col-md-10">
-                                                <TextAreaInput @bind-Value="@SensorData.AllSensors[id].GraduationString" Rows="3" Placeholder="Введите градуировочное уравнение" />
-                                                <ValidationMessage For="@(() => product.Description)" />
+                            @foreach (var id in _value.SensorsId){
+                                <Accordion>
+                                    <AccordionItem>
+                                        <TitleTemplate>
+                                            @SensorData.AllSensors[id].Title
+                                        </TitleTemplate>
+                                        <Content>
+                                            <div class="form-group row mb-3">
+                                                <label class="col-md-2 col-form-label">Номер датчика:</label><div class="col-md-10">@id</div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
-                                            <div class="col-md-10">
-                                                <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_min" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
-                                                <ValidationMessage For="@(() => product.Name)" />
+                                            <div class="form-group row mb-3">
+                                                <label class="col-md-2 col-form-label">Градуировочное уравнение: <span class="text-danger">*</span></label>
+                                                <div class="col-md-10">
+                                                    <TextAreaInput @bind-Value="@SensorData.AllSensors[id].GraduationString" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                                                    <ValidationMessage For="@(() => product.Description)" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row mb-3">
-                                            <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
-                                            <div class="col-md-10">
-                                                <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_max" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
-                                                <ValidationMessage For="@(() => product.Name)" />
+                                            <div class="form-group row mb-3">
+                                                <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                                                <div class="col-md-10">
+                                                    <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_min" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                                                    <ValidationMessage For="@(() => product.Name)" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Content>
-                                </AccordionItem>
-                            </Accordion>
-                        }
-                    </EditForm>
-                </div>
-            </Content>
-        </AccordionItem>
-    }
-</Accordion>
-
+                                            <div class="form-group row mb-3">
+                                                <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                                                <div class="col-md-10">
+                                                    <NumberInput @bind-Value="@SensorData.AllSensors[id].Value_max" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                                                    <ValidationMessage For="@(() => product.Name)" />
+                                                </div>
+                                            </div>
+                                        </Content>
+                                    </AccordionItem>
+                                </Accordion>
+                            }
+                        </EditForm>
+                    </div>
+                </Content>
+            </AccordionItem>
+        }
+    </Accordion>
+} else {
+    <Button Color="ButtonColor.Primary" @onclick="() => SharedFunction.GoToURL(Navigation,_url)">Вернуться</Button>
+    <h3>Неверный пароль</h3>
+}
 @code {
+    public bool _conf = false;
+    public string _url = "";
     private Product product = new();
     private EditContext? editContext;
-
     protected override void OnInitialized()
     {
         editContext = new EditContext(product);
         base.OnInitialized();
     }
-
     public void HandleOnValidSubmit()
     {
         // additional check
@@ -82,13 +87,6 @@
             Console.WriteLine("Form submitted successfully");
         }
     }
-
-    private void ResetForm()
-    {
-        product = new();
-        editContext = new EditContext(product);
-    }
-
     public class Product
     {
         [Required(ErrorMessage = "Product name required.")]

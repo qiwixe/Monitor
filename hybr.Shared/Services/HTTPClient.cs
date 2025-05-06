@@ -6,7 +6,6 @@ namespace hybr.Shared.Services
 {
     internal class HTTPClientSensor
     {
-        //создать меню с настройками
         // что то сделать с исключением TaskCanceledException?
         static string _meteoServer = "http://192.168.0.18/";
         static HttpMessageHandler handler = new HttpClientHandler();
@@ -38,5 +37,6 @@ namespace hybr.Shared.Services
                 return null;
             }
         }
+
     }
 }

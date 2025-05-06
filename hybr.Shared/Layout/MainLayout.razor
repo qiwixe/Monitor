@@ -1,5 +1,6 @@
-﻿
+﻿@using hybr.Shared.Services
 @inherits LayoutComponentBase
+@inject NavigationManager Navigation
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -7,16 +8,34 @@
 
     <main>
         <div class="top-row px-4">
-            <NavLink class="nav-link" href="settings">Настройки</NavLink>
+            <NavLink class="nav-link" @onclick="() => modal.ShowAsync()">Настройки</NavLink>
         </div>
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
-
+<Modal @ref="modal" title="Введите пароль для доступа к настройкам" IsVerticallyCentered="true">
+    <BodyTemplate>
+        <PasswordInput @bind-Value="@enteredPassword" />
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => modal.HideAsync()">Выйти</Button>
+        <Button Color="ButtonColor.Primary" @onclick="CloseAndGo">Войти</Button>
+    </FooterTemplate>
+</Modal>
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+@code{
+    private string? enteredPassword = null;
+    private string _url = "settings";
+    private Modal modal = default!;
+    private async Task OnHideModalClick() => await modal.HideAsync();
+    private async Task CloseAndGo(){
+        SharedFunction.GoToURL(Navigation, _url);
+        await modal.HideAsync();
+    }
+}

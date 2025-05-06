@@ -69,9 +69,14 @@ namespace hybr.Shared.Services
                 _lineChartDataset.Data.Clear();
                     var lastValue = 0.0;
                     var maxPickValue = 0.5;
+                    var _f = true;
                     foreach (var _data in _lastData)
                         //if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)< maxPickValue)
-                            {
+                            { if (_f)
+                                {
+                                    _lineChartDataset.Label = $"{SensorData.AllSensors[_data.Sensor_id].Title}, {SensorData.AllSensors[_data.Sensor_id].Unit_of_m}";
+                                    _f = false;
+                                }
                             _lineChartDataset.Data.Add(_data.Value_of_m);
                             _renderValue.Add(_data);
                             lastValue = _data.Value_of_m;
@@ -80,9 +85,8 @@ namespace hybr.Shared.Services
                 foreach (var _data in _renderValue) {
                      _chart.DChartData.Labels.Add(_data.Date_of_m + " " + _data.Time_of_m);                               
                 }
-                _PageChart.UpdateValuesAsync(_chart.DChartData);
+                _PageChart.UpdateAsync(_chart.DChartData, _chart.DChartOptions);
             }
-            
         }
     }
     public class GlobalData()
