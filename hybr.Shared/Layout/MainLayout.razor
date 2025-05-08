@@ -30,11 +30,12 @@
     <span class="dismiss">🗙</span>
 </div>
 @code{
-    private string? enteredPassword = null;
+    private string enteredPassword;
     private string _url = "settings";
     private Modal modal = default!;
     private async Task OnHideModalClick() => await modal.HideAsync();
-    private async Task CloseAndGo(){
+    private async void CloseAndGo(){
+        await DataBase.Auth(enteredPassword);
         SharedFunction.GoToURL(Navigation, _url);
         await modal.HideAsync();
     }

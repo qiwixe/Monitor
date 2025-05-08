@@ -7,7 +7,7 @@
     <div id="parent">
         <div id="grid11" class="gridContent compassDiv">
             <div id="compass" class="textDiv">
-                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
             </div>
             <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartTemperature Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
@@ -15,7 +15,7 @@
         </div>
         <div id="grid21" class="gridContent compassDiv">
             <div id="compass" class="textDiv">
-                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
             </div>
             <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
@@ -23,7 +23,7 @@
         </div>
         <div id="grid31" class="gridContent compassDiv">
             <div id="compass" class="textDiv">
-                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@SensorData.AllSensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
             </div>
             <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartPressure Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
@@ -33,14 +33,14 @@
             <LineChart @ref=LiveChartElement.MeteorologicalChartSolarRadiation Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
         </div>
         <div id="grid22" class="gridContent compassDiv">
-            <div id="compass" class="textDiv">@SensorData.AllSensors[107].Value_of_m</div>
+            <div id="compass" class="textDiv">@ValueSettings.Sensors[107].Value_of_m</div>
             <div id="compass">
                 <Compass />
             </div>
             <div style="justify-self:center;
                     width:20%;
                     height:80%;
-                    transform: rotate(@(SensorData.AllSensors[106].Value_of_m)deg);
+                    transform: rotate(@(ValueSettings.Sensors[106].Value_of_m)deg);
                     transition: transform 0.5s ease-in-out;
                     grid-column: 1;
                     grid-row: 1;">
@@ -50,7 +50,7 @@
         <div id="grid32" class="gridContent">
             @foreach (var _key in ValueSettings.Stations[7].SensorsId)
             {
-                <Alert Color="@SensorData.AllSensors[_key].Alert" Dismissable="false"> <Icon Name="@SensorData.AllSensors[_key].Icon" class="me-2"></Icon>@SensorData.AllSensors[_key].Title @SensorData.AllSensors[_key].Value_of_m, @SensorData.AllSensors[_key].Unit_of_m</Alert>
+                <Alert Color="@ValueSettings.Sensors[_key].Alert" Dismissable="false"> <Icon Name="@ValueSettings.Sensors[_key].Icon" class="me-2"></Icon>@ValueSettings.Sensors[_key].Title @ValueSettings.Sensors[_key].Value_of_m, @ValueSettings.Units[ValueSettings.Sensors[_key].Unit_of_m].UnitShort </Alert>
             }
         </div>
     </div>

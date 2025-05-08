@@ -1,4 +1,7 @@
-﻿using Npgsql;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Npgsql;
+using Parlot.Fluent;
 
 namespace hybr.Shared.Services
 {
@@ -65,6 +68,14 @@ namespace hybr.Shared.Services
         {
             return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_of_m >= '{range_start_date}' and date_of_m <= '{range_stop_date}' order by id";
         }
+        public static string CreateSQLstring(int station_id, Dictionary<int,bool> sensor_id, string range_start_date, string range_stop_date)
+        {
+            string _formated_string_sensor_id = "sensor_id = 0";
+            foreach (var (_key,_value) in sensor_id)
+                if(_value)
+                _formated_string_sensor_id = _formated_string_sensor_id + $" OR sensor_id = {_key}";
+            return $"SELECT * FROM backup_201311_3 WHERE ({_formated_string_sensor_id}) and date_of_m >= '{range_start_date}' and date_of_m <= '{range_stop_date}' order by id";
+        }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
             List<Order> _dbData = new();
@@ -84,7 +95,6 @@ namespace hybr.Shared.Services
                         Date_of_m = _reader.GetString(3),
                         Time_of_m = _reader.GetString(4),
                         Value_of_m = _reader.GetDouble(5),
-                        Unit_of_m = _reader.GetString(6),
                     });
                 }
                 _conn.CloseAsync();
@@ -94,37 +104,215 @@ namespace hybr.Shared.Services
                 Console.WriteLine("Нет связи с базой данных");
             }
             return _dbData;
-
+        }
+        public static async Task Auth(string _pass)
+        {
+            string _queryGetData = $"Select count(*) FROM Settings.Authentication WHERE password = '{_pass}'";
+            try
+            {
+                await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+                await _conn.OpenAsync();
+                await using var cmd = new NpgsqlCommand(_queryGetData, _conn);
+                await using var _reader = await cmd.ExecuteReaderAsync();
+                await _reader.ReadAsync();
+                if (_reader.GetInt32(0) == 0) {
+                    GlobalData.auth = false; 
+                } else { 
+                    GlobalData.auth = true; }
+                    await _conn.CloseAsync();
+            }
+            catch
+            {
+                Console.WriteLine("Нет связи с базой данных");
+            }
+        }
+        public static async Task Init()
+        {
+            string _queryGetDataStations = "SELECT * FROM settings.stations";
+            string _queryGetDataUnits = "SELECT * FROM Settings.units";
+            string _queryGetDataSensors = "SELECT * FROM settings.sensors";
+            try
+            {
+                await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+                await _conn.OpenAsync();
+                await using var cmd = new NpgsqlCommand(_queryGetDataStations, _conn);
+                await using var _reader = await cmd.ExecuteReaderAsync();
+                while (await _reader.ReadAsync())
+                {
+                    ValueSettings.Stations[_reader.GetInt32(0)] = new Station
+                    {
+                        Title = _reader.GetString(1),
+                        ShortTitle = _reader.GetString(2),
+                        FullTitle = _reader.GetString(3),
+                        Href = _reader.GetString(4),
+                        Station_Ip = _reader.GetString(5),
+                        SensorsId = _reader.GetFieldValue<int[]>(6).ToList(),
+                    };
+                }
+                await _conn.CloseAsync();
+                await _conn.OpenAsync();
+                await using var cmd1 = new NpgsqlCommand(_queryGetDataUnits, _conn);
+                await using var _reader1 = await cmd1.ExecuteReaderAsync();
+                while (await _reader1.ReadAsync())
+                {
+                    ValueSettings.Units[_reader1.GetInt32(0)] = new SensorUnit
+                    {
+                        UnitFull = _reader1.GetString(1),
+                        UnitShort = _reader1.GetString(2)
+                    };
+                }
+                await _conn.CloseAsync();
+                await _conn.OpenAsync();
+                await using var cmd2 = new NpgsqlCommand(_queryGetDataSensors, _conn);
+                await using var _reader2 = await cmd2.ExecuteReaderAsync();
+                while (await _reader2.ReadAsync())
+                {
+                    ValueSettings.Sensors[_reader2.GetInt32(0)] = new Sensor
+                    {
+                        Title = _reader2.GetString(1),
+                        Station_Id = _reader2.GetInt32(2),
+                        Value_min = _reader2.GetDouble(3),
+                        Value_max = _reader2.GetDouble(4),
+                        GraduationString = _reader2.GetString(5),
+                        Unit_of_m = _reader2.GetInt32(6)
+                    };
+                }
+                await _conn.CloseAsync();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Нет связи с базой данных");
+                Console.WriteLine(e);
+            }
         }
 
-        //CREATE TABLE IF NOT EXISTS public."Sensors"
-        //(
-        //    "Id" integer NOT NULL,
-        //    "Title" character varying NOT NULL DEFAULT Датчик,
-        //    "Station_Id" integer NOT NULL DEFAULT 0,
-        //    "Value_min" double precision NOT NULL DEFAULT 0,
-        //    "Value_max" double precision NOT NULL DEFAULT 0,
-        //    "GraduationString" character varying NOT NULL DEFAULT x,
-        //    PRIMARY KEY("Id")
-        //);
 
-        //CREATE TABLE IF NOT EXISTS public."Stations"
+        //CREATE SCHEMA IF NOT EXISTS Settings;
+        //CREATE TABLE IF NOT EXISTS Settings.Units
         //(
-        //    "Id" integer NOT NULL,
-        //    "Title" character varying NOT NULL DEFAULT Станция,
-        //    "ShortTitle" character varying NOT NULL DEFAULT Стц,
-        //    "FullTitle" character varying NOT NULL DEFAULT Установка №0 Станция,
-        //    "Href" character varying NOT NULL DEFAULT Home,
-        //    "Station_Ip" character varying NOT NULL DEFAULT http://192.168.0.0/,
-        //    PRIMARY KEY("Id")
+        //    Id serial NOT NULL,
+        //    UnitFull character varying NOT NULL,
+        //    Unit character varying NOT NULL,
+        //    PRIMARY KEY(Id)
         //);
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Вольт','В');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ампер','А');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Герц','Гц');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Метры в секунду','м/с');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ускорение','м/с²');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Градус цельсия','°C');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Литры в час','м³/час');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Водородный показатель','pH');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Время','Час');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Процент','%');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('% Кислорода','% Кислорода');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Обороты','Об');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Градус','°');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ватт на метр квадратный','Вт/м²');
+        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Давление','мм.рт.ст.');
 
-        //CREATE TABLE IF NOT EXISTS public."Authentication"
+        //CREATE SCHEMA IF NOT EXISTS Settings;
+        //CREATE TABLE IF NOT EXISTS Settings.Stations
         //(
-        //    "Id" integer NOT NULL,
-        //    "Password" character varying NOT NULL,
-        //    PRIMARY KEY("Id")
+        //    Id serial NOT NULL,
+        //    Title character varying NOT NULL DEFAULT 'Станция',
+        //    ShortTitle character varying NOT NULL DEFAULT 'Стц',
+        //    FullTitle character varying NOT NULL DEFAULT 'Установка №0 Станция',
+        //    Href character varying NOT NULL DEFAULT 'Home',
+        //    Station_Ip character varying NOT NULL DEFAULT 'http://192.168.0.0/',
+        //    Sensors_Id integer[] NOT NULL,
+        //    PRIMARY KEY(Id)
         //);
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower','{1,2,3,4,5,6,7,8,9,10,11,12}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Фотоэнергетическая установка','ФУЭ','Установка №2, Фотоэнергетическая установка','Photovoltaic','{21,22,23,24,25,26,27,28,29,30,31,32,33}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Солнечный коллектор','Коллектор','Установка №3, Солнечный коллектор','SolarCollector','{41,42,43,44,45,46,47}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Солнечный концентратор','Концентратор','Установка №4, Солнечный концентратор','SolarСoncentrator','{56,57,58,59,60,61,62}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Тепловой насос','Тепловой насос','Установка №5, Тепловой насос','HeatPump','{71,72,73,74,75,76,77,78,79}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Биоустановка','Биоустановка','Установка №6, Биоустановка','Bioplant','{88,89,90,91,92,93,94}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Station_Ip, Sensors_Id) VALUES('Метеостанция','Метеостанция','Установка №7, Метеостанция','Meteorological','http://192.168.0.18/','{103,104,105,106,107,108}');
 
+        //CREATE SCHEMA IF NOT EXISTS Settings;
+        //CREATE TABLE IF NOT EXISTS Settings.Sensors
+        //(
+        //    Id serial NOT NULL,
+        //    Title character varying NOT NULL DEFAULT 'Датчик',
+        //    Station_id integer NOT NULL DEFAULT 0 REFERENCES Settings.Stations (Id),
+        //    Value_min double precision NOT NULL DEFAULT 0,
+        //    Value_max double precision NOT NULL DEFAULT 0,
+        //    GraduationString character varying NOT NULL DEFAULT 'x',
+        //    Unit_id integer REFERENCES Settings.Units (Id),
+        //    PRIMARY KEY(Id)
+        //);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(1, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(2, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(3, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(4, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(5, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(6, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(7, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(8, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(9, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(10, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(11, 1, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(12, 1, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(21, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(22, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(23, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(24, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(25, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(26, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(27, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(28, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(29, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(30, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(31, 2, 2);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(32, 2, 1);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(33, 2, 4);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(41, 'Температура горячей воды к баку', 3, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(42, 'Температура холодной воды к баку', 3, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(43, 'Температура бака', 3, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(44, 'Температура горячей воды из бака', 3, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(45, 'Температура холодной воды из бака', 3, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(46, 'Расход в бак', 3, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(47, 'Расход из бака', 3, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(56, 'Температура горячей воды к баку', 4, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(57, 'Температура холодной воды к баку', 4, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(58, 'Температура бака', 4, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(59, 'Температура горячей воды из бака', 4, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(60, 'Температура холодной воды из бака', 4, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(61, 'Расход в бак', 4, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(62, 'Расход из бака', 4, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(71, 'Температура горячей воды к баку', 5, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(72, 'Температура холодной воды к баку', 5, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(73, 'Температура бака', 5, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(74, 'Температура горячей воды из бака', 5, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(75, 'Температура холодной воды из бака', 5, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(76, 'Расход в бак', 5, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(77, 'Расход из бака', 5, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(78, 'Напряжение блока управления', 5, 2);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(79, 'Ток блока управления', 5, 1);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(88, 'Температура на выходе', 6, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(89, 'Показатель pH', 6, 8);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(90, 'Время работы насосов', 6, 9);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(91, 6, 10);
+        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(92, 6, 11);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(93, 'Число оборотов', 6, 12);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(94, 'Расход', 6, 7);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(103, 'Температура', 7, 6);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(104, 'Влажность', 7, 10);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(105, 'Давление', 7, 15);
+        //INSERT INTO settings.sensors(id, title, station_id, value_min, value_max, unit_id) VALUES(106, 'Направление ветра', 7, 0, 359, 13);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(107, 'Скорость ветра', 7, 4);
+        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(108, 'Солнечная радиация', 7, 14);
+        //SELECT setval('settings.sensors_id_seq', 108);
+
+        //CREATE SCHEMA IF NOT EXISTS Settings;
+        //CREATE TABLE IF NOT EXISTS Settings.Authentication
+        //(
+        //    Id serial NOT NULL,
+        //    Password character varying NOT NULL,
+        //    PRIMARY KEY(Id)
+        //);
+        //INSERT INTO Settings.Authentication (password) VALUES('qiwixe');
     }
 }

@@ -16,7 +16,7 @@
     }
 </script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"/>
-<script>
+    <script>
     function saveAsImage() {
     var element = document.getElementById("graph");
     html2canvas(element).then(function (canvas) {
@@ -38,7 +38,7 @@
                 <Content>
                     <Tabs @ref="sensors[_key]" @onclick="Select" NavStyle="NavStyle.Underline" OnShown="@(args => OnSensorTabShow(args))" >
                         @foreach (var _id in ValueSettings.Stations[_key].SensorsId){
-                            <Tab Name=@_id.ToString() Title=@SensorData.AllSensors[_id].Title Disabled=sensorsPageState[_key]/>
+                            <Tab Name=@_id.ToString() Title=@ValueSettings.Sensors[_id].Title Disabled=sensorsPageState[_key]/>
                         }
                     </Tabs>            
                 </Content>
@@ -92,28 +92,31 @@
                     <Tab Name=@_key.ToString() Title=@_value.Title>
                         <Content>
                             @foreach (var _id in ValueSettings.Stations[_key].SensorsId){
-                                <CheckboxInput Label=@SensorData.AllSensors[_id].Title @bind-Value="option1" />
+                                <CheckboxInput Label=@ValueSettings.Sensors[_id].Title @bind-Value="_selected_sensor_id[_id]" />
                             }         
                         </Content>
                     </Tab>
                 }
             </Tabs>
             С
-            <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => Select()" @bind-value:event="oninput"/>
+            <input type="@InputTypeCustom" @bind-value="@InputDataValuefilter1" max="@DateTime.Now.ToString("yyyy-MM-dd")"/>
             До
-            <input type="@InputType" @bind-value="@InputDataValue" @onchange="() => Select()" @bind-value:event="oninput"/>
+            <input type="@InputTypeCustom" @bind-value="@InputDataValuefilter2" max="@DateTime.Now.ToString("yyyy-MM-dd")"/>
         </BodyTemplate>
         <FooterTemplate>
             <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Выйти</Button>
-            <Button Color="ButtonColor.Primary">Поиск</Button>
+            <Button Color="ButtonColor.Primary" @onclick="SelectFilter">Поиск</Button>
         </FooterTemplate>
     </Modal>
     <LineChart id="graph" @ref=LiveChartElement.ChartArchive Width="100" WidthUnit="Unit.Percentage" Height="50" HeightUnit="Unit.Percentage" />
 </Grid>
 @code {
-    private bool option1;
+    private Dictionary<int,bool> _selected_sensor_id = ValueSettings.Sensors.ToDictionary(x => x.Key, x => false);
     private string InputType = "date";
+    private string InputTypeCustom = "date";
     private string InputDataValue = DateTime.Now.ToString("yyyy-MM-dd");
+    private string InputDataValuefilter1 = DateTime.Now.ToString("yyyy-MM-dd");
+    private string InputDataValuefilter2 = DateTime.Now.ToString("yyyy-MM-dd");
     private string fileName = "fileName";
     private Tabs data  = default!,stations = default!;
     private Dictionary<int, bool> sensorsPageState = new Dictionary<int, bool>
@@ -141,10 +144,12 @@
     private Offcanvas offcanvas = default!;
     private DateOnly date1 = DateOnly.FromDateTime(DateTime.Now);
     [Inject] protected PreloadService PreloadService { get; set; } = default!;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            DataBase.Init();
             LiveChartElement.PageProperty("Archive");
         }
         await base.OnAfterRenderAsync(firstRender);
@@ -161,7 +166,7 @@
         var ws = workbook.Worksheet("Страница1");
         ws.Cell("A1").Value = "Дата";
         ws.Cell("B1").Value = "Время";
-        ws.Cell("C1").Value = SensorData.AllSensors[_lastData[0].Sensor_id].Title;
+        ws.Cell("C1").Value = ValueSettings.Sensors[_lastData[0].Sensor_id].Title;
         for (var i = 0; i < _lastData.Count; i++)
         {
             ws.Cell("A" + (i + 2).ToString()).Value = _lastData[i].Date_of_m;
@@ -234,21 +239,26 @@
         if(activeStationTabId != 0 && activeSensorTabId != 0)
             switch(activeDataTabTitle){
                 case("Сутки"):{
-                Console.WriteLine(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
-                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
-                break;
+                        Console.WriteLine(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
+                        break;
+                    }
+                case("Месяц"):{
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31"));
+                        break;
+                    }
+                case("Год"):{
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31"));
+                        break;
+                    }
             }
-            case("Месяц"):{
-                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31"));
-                break;
-            }
-            case("Год"):{
-                ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31"));
-                break;
-            }
-        }
+    }
+    private async void SelectFilter(){
+        await modal.HideAsync();
+        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,_selected_sensor_id,InputDataValuefilter1,InputDataValuefilter2));
     }
     private async Task ChartUpdate(string _data){
+        Console.WriteLine(_data);
         PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
         DataBase.DataArchive = await DataBase.Data(_data);
         await UpdateGrid.AllUpdateDataGrid["Archive"].RefreshDataAsync();

@@ -1,4 +1,5 @@
 ﻿using BlazorBootstrap;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,21 +14,7 @@ namespace hybr.Shared.Services
         public string? Date_of_m { get; set; }
         public string? Time_of_m { get; set; }
         public double Value_of_m { get; set; }
-        public string? Unit_of_m { get; set; }
-    }
-    public class Sensor()
-    {
-        public int Id { get; set; }
-        public int Station_Id { get; set; }
-        public string? Title { get; set; } = "Датчик";
-        public string? Unit_of_m { get; set; } = "штук?";
-        public string GraduationString { get; set; } = "x";
-        public int Value_min { get; set; }
-        public int Value_max { get; set; }
-        public double Value_of_m { get; set; } = 0;
-        public AlertColor Alert { get; set; } = AlertColor.Info;
-        public IconName Icon { get; set; } = IconName.InfoCircleFill;
-        public bool Disconnected { get; set; }
+        public int Unit_of_m { get; set; }
     }
 
     public class GlobalPageProperty()
@@ -71,10 +58,10 @@ namespace hybr.Shared.Services
                     var maxPickValue = 0.5;
                     var _f = true;
                     foreach (var _data in _lastData)
-                        //if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)< maxPickValue)
+                    //if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)< maxPickValue)
                             { if (_f)
                                 {
-                                    _lineChartDataset.Label = $"{SensorData.AllSensors[_data.Sensor_id].Title}, {SensorData.AllSensors[_data.Sensor_id].Unit_of_m}";
+                                    _lineChartDataset.Label = $"{ValueSettings.Sensors[_data.Sensor_id].Title}, {ValueSettings.Units[ValueSettings.Sensors[_data.Sensor_id].Unit_of_m].UnitShort}";
                                     _f = false;
                                 }
                             _lineChartDataset.Data.Add(_data.Value_of_m);
@@ -91,6 +78,7 @@ namespace hybr.Shared.Services
     }
     public class GlobalData()
     {
+        public static bool auth = false;
         public static async Task<Dictionary<int, Order>> FakeData()
         {
             List<Order> _listMeteoSensor = await HTTPClientSensor.Main();

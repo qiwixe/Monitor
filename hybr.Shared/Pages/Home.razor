@@ -13,15 +13,12 @@
                 <Content>
                     @foreach (var id in _value.SensorsId)
                     {
-                        <Alert Color="@SensorData.AllSensors[id].Alert"> <Icon Name="@SensorData.AllSensors[id].Icon" class="me-2"></Icon>@SensorData.AllSensors[id].Title @SensorData.AllSensors[id].Value_of_m, @SensorData.AllSensors[id].Unit_of_m</Alert>
+                        <Alert Color="@ValueSettings.Sensors[id].Alert"> <Icon Name="@ValueSettings.Sensors[id].Icon" class="me-2"></Icon>@ValueSettings.Sensors[id].Title @ValueSettings.Sensors[id].Value_of_m, @ValueSettings.Units[ValueSettings.Sensors[id].Unit_of_m].UnitShort</Alert>
                     }
                 </Content>
             </AccordionItem>
         }
     </Accordion>
 </Grid>
-@code {
-    //peredelat
-    protected override void OnInitialized() => TimerUpdate.StartTimer();
-}
+
 

@@ -2,8 +2,8 @@ using hybr.Shared.Services;
 using hybr.Web.Components;
 using hybr.Web.Services;
 
-DataBase.GetAllData();
-
+await DataBase.Init();
+TimerUpdate.StartTimer();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddBlazorBootstrap();
@@ -37,7 +37,7 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
-    //.AddInteractiveWebAssemblyRenderMode()
+    .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(
         typeof(hybr.Shared._Imports).Assembly,
         typeof(hybr.Web.Client._Imports).Assembly);
