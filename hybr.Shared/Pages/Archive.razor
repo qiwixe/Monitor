@@ -239,16 +239,15 @@
         if(activeStationTabId != 0 && activeSensorTabId != 0)
             switch(activeDataTabTitle){
                 case("Сутки"):{
-                        Console.WriteLine(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue));
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
                         break;
                     }
                 case("Месяц"):{
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31"));
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
                         break;
                     }
                 case("Год"):{
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31"));
+                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
                         break;
                     }
             }

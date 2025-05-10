@@ -1,7 +1,11 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Npgsql;
+using Parlot;
 using Parlot.Fluent;
+using System.Collections.Concurrent;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hybr.Shared.Services
 {
@@ -19,6 +23,8 @@ namespace hybr.Shared.Services
     }
     public class DataBase
     {
+        private static string schemaName = "data";
+        private static string tableName = "alldata";
         #region Переменные с данными ДБ
         public static List<Order> DataAll { get; set; } = new();
         public static List<Order> DataMeteorological { get; set; } = new();
@@ -43,30 +49,24 @@ namespace hybr.Shared.Services
             DataWindPower           = await Data(SQLstring.WindPower);
         }
 
-        const string querySetData = "INSERT INTO table_test VALUES (1, 103, 7, '2013-11-21', '00:00:01', 0.944444, '6');";
-
-        public static async void DBset()
+        public static async void DBset(string _querySetData)
         {
             await using var conn = new NpgsqlConnection(SQLstring.Connection);
             await conn.OpenAsync();
-            await using var cmd = new NpgsqlCommand(querySetData, conn);
+            await using var cmd = new NpgsqlCommand(_querySetData, conn);
             await cmd.ExecuteNonQueryAsync();
             await conn.CloseAsync();
         }
         public static string CreateSQLstring(int station_id){
-        return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} order by id";
+        return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} order by id";
         }
         public static string CreateSQLstring(int station_id, int sensor_id)
         {
-            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} order by id";
-        }
-        public static string CreateSQLstring(int station_id, int sensor_id, string date)
-        {
-            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_of_m = '{date}' order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} order by id";
         }
         public static string CreateSQLstring(int station_id, int sensor_id, string range_start_date, string range_stop_date)
         {
-            return $"SELECT * FROM backup_201311_3 WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_of_m >= '{range_start_date}' and date_of_m <= '{range_stop_date}' order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
         }
         public static string CreateSQLstring(int station_id, Dictionary<int,bool> sensor_id, string range_start_date, string range_stop_date)
         {
@@ -74,7 +74,7 @@ namespace hybr.Shared.Services
             foreach (var (_key,_value) in sensor_id)
                 if(_value)
                 _formated_string_sensor_id = _formated_string_sensor_id + $" OR sensor_id = {_key}";
-            return $"SELECT * FROM backup_201311_3 WHERE ({_formated_string_sensor_id}) and date_of_m >= '{range_start_date}' and date_of_m <= '{range_stop_date}' order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
         }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
@@ -92,16 +92,17 @@ namespace hybr.Shared.Services
                         Id = _reader.GetInt32(0),
                         Sensor_id = _reader.GetInt32(1),
                         Station_id = _reader.GetInt32(2),
-                        Date_of_m = _reader.GetString(3),
-                        Time_of_m = _reader.GetString(4),
-                        Value_of_m = _reader.GetDouble(5),
+                        Date_of_m = _reader.GetDateTime(3).ToString("yyyy-MM-dd"),
+                        Time_of_m = _reader.GetDateTime(3).ToString("HH-mm-ss"),
+                        Value_of_m = _reader.GetDouble(4),
                     });
                 }
                 _conn.CloseAsync();
             }
-            catch
+            catch(Exception e)
             {
                 Console.WriteLine("Нет связи с базой данных");
+                Console.WriteLine(e);
             }
             return _dbData;
         }
@@ -186,6 +187,14 @@ namespace hybr.Shared.Services
             }
         }
 
+        //CREATE SCHEMA IF NOT EXISTS Settings;
+        //CREATE TABLE IF NOT EXISTS Settings.Authentication
+        //(
+        //    Id serial NOT NULL,
+        //    Password character varying NOT NULL,
+        //    PRIMARY KEY(Id)
+        //);
+        //INSERT INTO Settings.Authentication (password) VALUES('qiwixe');
 
         //CREATE SCHEMA IF NOT EXISTS Settings;
         //CREATE TABLE IF NOT EXISTS Settings.Units
@@ -306,13 +315,45 @@ namespace hybr.Shared.Services
         //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(108, 'Солнечная радиация', 7, 14);
         //SELECT setval('settings.sensors_id_seq', 108);
 
-        //CREATE SCHEMA IF NOT EXISTS Settings;
-        //CREATE TABLE IF NOT EXISTS Settings.Authentication
+        //CREATE SCHEMA IF NOT EXISTS partman;
+        //CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
+
+        //CREATE SCHEMA IF NOT EXISTS data;
+        //CREATE TABLE IF NOT EXISTS data.alldata
         //(
-        //    Id serial NOT NULL,
-        //    Password character varying NOT NULL,
-        //    PRIMARY KEY(Id)
+        //Id serial NOT NULL,
+        //sensor_id integer NOT NULL REFERENCES settings.sensors (Id),
+        //station_id integer NOT NULL REFERENCES settings.stations (Id),
+        //date_time timestamp without time zone NOT NULL,
+        //value_data double precision NOT NULL
+        //) PARTITION BY RANGE(date_time);
+
+
+        //SELECT partman.create_parent(
+        //    p_parent_table := 'data.alldata',
+        //    p_control := 'date_time',
+        //    p_interval := '1 day',
+        //    p_premake := 4,
+        //    p_default_table := true,
+        //    p_automatic_maintenance := 'on'
         //);
-        //INSERT INTO Settings.Authentication (password) VALUES('qiwixe');
+
+        //CREATE TABLE data.insert
+        //(
+        //    id integer,
+        //    sensor_id integer,
+        //    station_id integer,
+        //    date_of_m date,
+        //    time_of_m time without time zone,
+        //    value_of_m double precision,
+        //    unit_of_m character varying,
+        //    PRIMARY KEY(id)
+        //);
+
+        //INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) SELECT sensor_id, station_id, date_of_m+time_of_m, value_of_m FROM data.insert;
+        //SELECT * FROM partman.show_partitions('data.alldata');
+        //SELECT partman.run_maintenance();
+        //SELECT * FROM partman.check_default();
+        //SELECT partman.partition_data_time('data.alldata');
     }
 }
