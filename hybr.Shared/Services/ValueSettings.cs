@@ -20,7 +20,7 @@ namespace hybr.Shared.Services
             }
         public override bool Equals(object? obj)
         {
-            if (obj is Station _station) return (Title == _station.Title && ShortTitle == _station.ShortTitle && FullTitle == _station.FullTitle && Href == _station.Href && SensorsId == _station.SensorsId);
+            if (obj is Station _station) return (Title == _station.Title && ShortTitle == _station.ShortTitle && FullTitle == _station.FullTitle && Href == _station.Href && Station_Ip == _station.Station_Ip);
             return false;
         }
 

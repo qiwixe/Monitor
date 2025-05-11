@@ -193,7 +193,7 @@ namespace hybr.Shared.Services
         }
         public static async Task UpdSettings()
         {
-
+            Console.WriteLine("ПОПЫТКА");
             foreach (var (_key,_value) in ValueSettings.SensorsSettings)
             {
                 if (!ValueSettings.Sensors[_key].Equals(_value))
@@ -205,7 +205,7 @@ namespace hybr.Shared.Services
             {
                 if (!ValueSettings.Stations[_key].Equals(_value))
                 {
-                    Console.WriteLine($"UPDATE settings.stations SET title = '{_value.Title}', shorttitle = {_value.ShortTitle}, fulltitle = {_value.FullTitle}, href = '{_value.Href}',station_ip = '{_value.Station_Ip}'  WHERE id = {_key}");
+                    Console.WriteLine($"UPDATE settings.stations SET title = '{_value.Title}', shorttitle = '{_value.ShortTitle}', fulltitle = '{_value.FullTitle}', href = '{_value.Href}',station_ip = '{_value.Station_Ip}'  WHERE id = {_key}");
                 }
             }
         }
