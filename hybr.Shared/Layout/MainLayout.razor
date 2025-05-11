@@ -15,13 +15,96 @@
         </article>
     </main>
 </div>
-<Modal @ref="modal" title="Введите пароль для доступа к настройкам" IsVerticallyCentered="true">
+<Modal @ref="modal" title="Настройки" UseStaticBackdrop="true" Fullscreen="ModalFullscreen.Always">
     <BodyTemplate>
-        <PasswordInput @bind-Value="@enteredPassword" />
+        <Modal @ref="modalPass" title="Введите пароль для сохранения" UseStaticBackdrop="true" IsVerticallyCentered="true">
+            <BodyTemplate>
+                <PasswordInput @bind-Value="@enteredPassword" />
+            </BodyTemplate>
+            <FooterTemplate>
+                <Button Color="ButtonColor.Secondary" @onclick="() => modalPass.HideAsync()">Выйти</Button>
+                <Button Color="ButtonColor.Primary" @onclick="() => CloseAndGo()">Сохранить</Button>
+            </FooterTemplate>
+        </Modal>
+        <Accordion>
+            @foreach (var (_key, _value) in ValueSettings.StationsSettings)
+            {
+                <AccordionItem>
+                    <TitleTemplate>
+                        @_value.FullTitle
+                    </TitleTemplate>
+                    <Content>
+                        <div class="mb-3">
+                            <EditForm EditContext="@editContext">
+                                <DataAnnotationsValidator />
+                                <div class="form-group row mb-3">
+                                    <label class="col-md-2 col-form-label">Название станции: <span class="text-danger">*</span></label>
+                                    <div class="col-md-10">
+                                        <TextInput @bind-Value="@ValueSettings.StationsSettings[_key].Title" Rows="3" Placeholder="Введите название станции" />
+                                    </div>
+                                    <label class="col-md-2 col-form-label">Короткое название станции: <span class="text-danger">*</span></label>
+                                    <div class="col-md-10">
+                                        <TextInput @bind-Value="@ValueSettings.StationsSettings[_key].ShortTitle" Rows="3" Placeholder="Введите короткое название станции" />
+                                    </div>
+                                    <label class="col-md-2 col-form-label">Полное название станции: <span class="text-danger">*</span></label>
+                                    <div class="col-md-10">
+                                        <TextInput @bind-Value="@ValueSettings.StationsSettings[_key].FullTitle" Rows="3" Placeholder="Введите полное название станции" />
+                                    </div>
+                                    <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
+                                    <div class="col-md-10">
+                                        <TextInput @bind-Value="@ValueSettings.StationsSettings[_key].Station_Ip" Rows="3" Placeholder="Введите IP адресс станции" />
+                                    </div>
+                                </div>
+                                @foreach (var id in _value.SensorsId)
+                                {
+                                    <Accordion>
+                                        <AccordionItem>
+                                            <TitleTemplate>
+                                                @ValueSettings.SensorsSettings[id].Title
+                                            </TitleTemplate>
+                                            <Content>
+                                                <div class="form-group row mb-3">
+                                                    <label class="col-md-2 col-form-label">Номер датчика:</label><div class="col-md-10">@id</div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label class="col-md-2 col-form-label">Название датчика: <span class="text-danger">*</span></label>
+                                                    <div class="col-md-10">
+                                                        <TextAreaInput @bind-Value="@ValueSettings.SensorsSettings[id].Title" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label class="col-md-2 col-form-label">Градуировочное уравнение: <span class="text-danger">*</span></label>
+                                                    <div class="col-md-10">
+                                                        <TextAreaInput @bind-Value="@ValueSettings.SensorsSettings[id].GraduationString" Rows="3" Placeholder="Введите градуировочное уравнение" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
+                                                    <div class="col-md-10">
+                                                        <NumberInput @bind-Value="ValueSettings.SensorsSettings[id].Value_min" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mb-3">
+                                                    <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
+                                                    <div class="col-md-10">
+                                                        <NumberInput @bind-Value="ValueSettings.SensorsSettings[id].Value_max" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
+                                                    </div>
+                                                </div>
+                                            </Content>
+                                        </AccordionItem>
+                                    </Accordion>
+                                }
+                            </EditForm>
+                        </div>
+                    </Content>
+                </AccordionItem>
+            }
+        </Accordion>
     </BodyTemplate>
     <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="() => Reset()">Сброс</Button>
         <Button Color="ButtonColor.Secondary" @onclick="() => modal.HideAsync()">Выйти</Button>
-        <Button Color="ButtonColor.Primary" @onclick="CloseAndGo">Войти</Button>
+        <Button Color="ButtonColor.Primary" @onclick="() => modalPass.ShowAsync()">Сохранить</Button>
     </FooterTemplate>
 </Modal>
 <div id="blazor-error-ui" data-nosnippet>
@@ -29,14 +112,33 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+<Toasts class="p-3" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
 @code{
-    private string enteredPassword;
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+    private string enteredPassword = "";
     private string _url = "settings";
     private Modal modal = default!;
+    private Modal modalPass = default!;
     private async Task OnHideModalClick() => await modal.HideAsync();
     private async void CloseAndGo(){
-        await DataBase.Auth(enteredPassword);
-        SharedFunction.GoToURL(Navigation, _url);
-        await modal.HideAsync();
+        if(await DataBase.Auth(enteredPassword)){
+            await DataBase.UpdSettings();
+            await modal.HideAsync();
+            await modalPass.HideAsync();
+        } else{
+            ToastService.Notify(new(ToastType.Danger, $"Введён неверный пароль! Изменения не применены!"));
+        }
+    }
+    private void Reset()
+    {
+        ValueSettings.StationsSettings = ValueSettings.Stations;
+        ValueSettings.SensorsSettings = ValueSettings.Sensors;
+    }
+    private Sensor product = new();
+    private EditContext? editContext;
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(product);
+        base.OnInitialized();
     }
 }

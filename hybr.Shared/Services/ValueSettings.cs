@@ -1,9 +1,11 @@
 ﻿using BlazorBootstrap;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace hybr.Shared.Services
 {
-        public class Station()
-        {
+        public class Station() : ICloneable
+    {
             public required string Title { get; set; }
             public required string ShortTitle { get; set; }
             public required string FullTitle { get; set; }
@@ -12,9 +14,20 @@ namespace hybr.Shared.Services
             public IconColor Alert { get; set; } = IconColor.Info;
             public IconName Icon { get; set; } = IconName.InfoCircleFill;
             public string Station_Ip { get; set; } = "192.168.0.0";
-        }
-        public class Sensor()
+            public object Clone()
+            {
+                return MemberwiseClone();
+            }
+        public override bool Equals(object? obj)
         {
+            if (obj is Station _station) return (Title == _station.Title && ShortTitle == _station.ShortTitle && FullTitle == _station.FullTitle && Href == _station.Href && SensorsId == _station.SensorsId);
+            return false;
+        }
+
+        public override int GetHashCode() => throw new NotImplementedException();
+    }
+        public class Sensor() : ICloneable
+    {
             public int Id { get; set; }
             public int Station_Id { get; set; }
             public string? Title { get; set; } = "Датчик";
@@ -26,17 +39,35 @@ namespace hybr.Shared.Services
             public AlertColor Alert { get; set; } = AlertColor.Info;
             public IconName Icon { get; set; } = IconName.InfoCircleFill;
             public bool Disconnected { get; set; }
-        }
 
-    public class SensorUnit()
+            public object Clone()
+            {
+                return MemberwiseClone();
+            }
+            public override bool Equals(object? obj)
+            {
+                if (obj is Sensor _sensor) return (Station_Id == _sensor.Station_Id && Title == _sensor.Title && Unit_of_m == _sensor.Unit_of_m && GraduationString == _sensor.GraduationString && Value_min == _sensor.Value_min && Value_max == _sensor.Value_max);
+                return false;
+            }
+            public override int GetHashCode() => throw new NotImplementedException();
+    }
+
+    public class SensorUnit() : ICloneable
+    {
+        public required string UnitFull { get; set; }
+        public required string UnitShort { get; set; }
+        public object Clone()
         {
-            public required string UnitFull { get; set; }
-            public required string UnitShort { get; set; }
+            return MemberwiseClone();
         }
+    }
     public class ValueSettings()
         {
-            public static Dictionary<int, Station> Stations = new();
-            public static Dictionary<int, Sensor> Sensors = new();
-            public static Dictionary<int, SensorUnit> Units = new();
+            public static Dictionary<int, Station> Stations { get; set; } = new();
+            public static Dictionary<int, Sensor> Sensors { get; set; } = new();
+            public static Dictionary<int, SensorUnit> Units { get; set; } = new();
+            public static Dictionary<int, Station> StationsSettings { get; set; } = new();
+            public static Dictionary<int, Sensor> SensorsSettings { get; set; } = new();
+            public static Dictionary<int, SensorUnit> UnitsSettings { get; set; } = new();
     }
 }

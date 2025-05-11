@@ -85,7 +85,7 @@
             <Button Color="ButtonColor.Secondary" @onclick="SaveDataClick">Сохранить таблицу</Button>
         </FooterTemplate>
     </Offcanvas>
-    <Modal @ref="modal" title="Свой фильтр" IsVerticallyCentered="true">
+    <Modal @ref="modal" title="Свой фильтр" IsVerticallyCentered="true" Size="ModalSize.ExtraLarge">
         <BodyTemplate>
             <Tabs @ref="stations" @onclick="Select" NavStyle="NavStyle.Underline" OnShown="@(args => OnStationTabShow(args))">
                 @foreach (var (_key, _value) in ValueSettings.Stations){

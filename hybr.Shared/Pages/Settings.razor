@@ -1,4 +1,4 @@
-﻿@page "/Settings"
+﻿@*@page "/Settings"
 @using System.ComponentModel.DataAnnotations
 @using hybr.Shared.Services
 @inject NavigationManager Navigation
@@ -13,13 +13,15 @@
                 </TitleTemplate>
                 <Content>
                     <div class="mb-3">
-                        <EditForm EditContext="@editContext" OnValidSubmit="HandleOnValidSubmit">
+                        <EditForm EditContext="@editContext">
                             <DataAnnotationsValidator />
                             <div class="form-group row mb-3">
                                 <label class="col-md-2 col-form-label">Адресс станции: <span class="text-danger">*</span></label>
                                 <div class="col-md-10">
+                                    <TextInput @bind-Value="@ValueSettings.Stations[_key].Title" Rows="3" Placeholder="Введите название станции" />
+                                    <TextInput @bind-Value="@ValueSettings.Stations[_key].ShortTitle" Rows="3" Placeholder="Введите короткое название станции" />
+                                    <TextInput @bind-Value="@ValueSettings.Stations[_key].FullTitle" Rows="3" Placeholder="Введите полное название станции" />
                                     <TextInput @bind-Value="@ValueSettings.Stations[_key].Station_Ip" Rows="3" Placeholder="Введите IP адресс станции" />
-                                    <ValidationMessage For="@(() => product.Name)" />
                                 </div>
                             </div>
                             @foreach (var id in _value.SensorsId){
@@ -36,21 +38,18 @@
                                                 <label class="col-md-2 col-form-label">Градуировочное уравнение: <span class="text-danger">*</span></label>
                                                 <div class="col-md-10">
                                                     <TextAreaInput @bind-Value="@ValueSettings.Sensors[id].GraduationString" Rows="3" Placeholder="Введите градуировочное уравнение" />
-                                                    <ValidationMessage For="@(() => product.Description)" />
                                                 </div>
                                             </div>
                                             <div class="form-group row mb-3">
                                                 <label class="col-md-2 col-form-label">Минимальное значение: <span class="text-danger">*</span></label>
                                                 <div class="col-md-10">
                                                     <NumberInput @bind-Value="ValueSettings.Sensors[id].Value_min" Rows="3" Placeholder="Введите минимальное значение измерения датчика" />
-                                                    <ValidationMessage For="@(() => product.Name)" />
                                                 </div>
                                             </div>
                                             <div class="form-group row mb-3">
                                                 <label class="col-md-2 col-form-label">Максимальное значение: <span class="text-danger">*</span></label>
                                                 <div class="col-md-10">
                                                     <NumberInput @bind-Value="ValueSettings.Sensors[id].Value_max" Rows="3" Placeholder="Введите максимальное значение измерения датчика" />
-                                                    <ValidationMessage For="@(() => product.Name)" />
                                                 </div>
                                             </div>
                                         </Content>
@@ -69,26 +68,12 @@
 }
 @code {
     public string _url = "";
-    private Product product = new();
+    private Sensor product = new();
     private EditContext? editContext;
     protected override void OnInitialized()
     {
         editContext = new EditContext(product);
         base.OnInitialized();
     }
-    public void HandleOnValidSubmit()
-    {
-        if (editContext.Validate())
-        {
-            Console.WriteLine("Form submitted successfully");
-        }
-    }
-    public class Product
-    {
-        [Required(ErrorMessage = "Product name required.")]
-        public string? Name { get; set; }
-
-        [Required(ErrorMessage = "Product description required.")]
-        public string? Description { get; set; }
-    }
 }
+*@

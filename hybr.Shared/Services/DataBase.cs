@@ -106,7 +106,7 @@ namespace hybr.Shared.Services
             }
             return _dbData;
         }
-        public static async Task Auth(string _pass)
+        public static async Task<bool> Auth(string _pass)
         {
             string _queryGetData = $"Select count(*) FROM Settings.Authentication WHERE password = '{_pass}'";
             try
@@ -117,14 +117,16 @@ namespace hybr.Shared.Services
                 await using var _reader = await cmd.ExecuteReaderAsync();
                 await _reader.ReadAsync();
                 if (_reader.GetInt32(0) == 0) {
-                    GlobalData.auth = false; 
-                } else { 
-                    GlobalData.auth = true; }
                     await _conn.CloseAsync();
+                    return false; 
+                } else {
+                    await _conn.CloseAsync();
+                    return true; }
             }
             catch
             {
                 Console.WriteLine("Нет связи с базой данных");
+                return false;
             }
         }
         public static async Task Init()
@@ -149,6 +151,7 @@ namespace hybr.Shared.Services
                         Station_Ip = _reader.GetString(5),
                         SensorsId = _reader.GetFieldValue<int[]>(6).ToList(),
                     };
+                    ValueSettings.StationsSettings[_reader.GetInt32(0)] = (Station)ValueSettings.Stations[_reader.GetInt32(0)].Clone();
                 }
                 await _conn.CloseAsync();
                 await _conn.OpenAsync();
@@ -161,6 +164,7 @@ namespace hybr.Shared.Services
                         UnitFull = _reader1.GetString(1),
                         UnitShort = _reader1.GetString(2)
                     };
+                    ValueSettings.UnitsSettings[_reader1.GetInt32(0)] = (SensorUnit)ValueSettings.Units[_reader1.GetInt32(0)].Clone();
                 }
                 await _conn.CloseAsync();
                 await _conn.OpenAsync();
@@ -177,6 +181,7 @@ namespace hybr.Shared.Services
                         GraduationString = _reader2.GetString(5),
                         Unit_of_m = _reader2.GetInt32(6)
                     };
+                    ValueSettings.SensorsSettings[_reader2.GetInt32(0)] = (Sensor)ValueSettings.Sensors[_reader2.GetInt32(0)].Clone();
                 }
                 await _conn.CloseAsync();
             }
@@ -184,6 +189,24 @@ namespace hybr.Shared.Services
             {
                 Console.WriteLine("Нет связи с базой данных");
                 Console.WriteLine(e);
+            }
+        }
+        public static async Task UpdSettings()
+        {
+
+            foreach (var (_key,_value) in ValueSettings.SensorsSettings)
+            {
+                if (!ValueSettings.Sensors[_key].Equals(_value))
+                {
+                    Console.WriteLine($"UPDATE settings.sensors SET title = '{_value.Title}', value_min = {_value.Value_min}, value_max = {_value.Value_max}, graduationstring = '{_value.GraduationString}'  WHERE id = {_key}");
+                }
+            }
+            foreach (var (_key,_value) in ValueSettings.StationsSettings)
+            {
+                if (!ValueSettings.Stations[_key].Equals(_value))
+                {
+                    Console.WriteLine($"UPDATE settings.stations SET title = '{_value.Title}', shorttitle = {_value.ShortTitle}, fulltitle = {_value.FullTitle}, href = '{_value.Href}',station_ip = '{_value.Station_Ip}'  WHERE id = {_key}");
+                }
             }
         }
 
