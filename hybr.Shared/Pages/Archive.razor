@@ -149,8 +149,7 @@
     {
         if (firstRender)
         {
-            DataBase.Init();
-            LiveChartElement.PageProperty("Archive");
+            await LiveChartElement.PageProperty("Archive");
         }
         await base.OnAfterRenderAsync(firstRender);
     }
@@ -239,22 +238,22 @@
         if(activeStationTabId != 0 && activeSensorTabId != 0)
             switch(activeDataTabTitle){
                 case("Сутки"):{
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
+                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
                         break;
                     }
                 case("Месяц"):{
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
+                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
                         break;
                     }
                 case("Год"):{
-                        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
+                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
                         break;
                     }
             }
     }
     private async void SelectFilter(){
         await modal.HideAsync();
-        ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,_selected_sensor_id,InputDataValuefilter1,InputDataValuefilter2));
+        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,_selected_sensor_id,InputDataValuefilter1,InputDataValuefilter2));
     }
     private async Task ChartUpdate(string _data){
         Console.WriteLine(_data);

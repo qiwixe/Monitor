@@ -33,6 +33,11 @@ namespace hybr.Shared.Services
                         _value.Alert = AlertColor.Warning;
                         _value.Icon = IconName.ExclamationCircleFill;
                     }
+                    else
+                    {
+                        _value.Alert = AlertColor.Dark;
+                        _value.Icon = IconName.ExclamationCircleFill;
+                    }
                     _value.Value_of_m = _valueOrder.Value_of_m;
                     _value.Disconnected = false;
                 }

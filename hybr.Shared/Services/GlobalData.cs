@@ -42,8 +42,7 @@ namespace hybr.Shared.Services
                     _chart.DChartData.Labels.Add(DateTime.Now.ToLongTimeString());
                     _PageChart.UpdateValuesAsync(_chart.DChartData);
                 }
-            foreach (var (_key,_a) in UpdateGrid.AllUpdateGrid)
-                UpdateGrid.AllUpdateGrid[_key].RefreshDataAsync();
+
         }
         public static void UpdateDataArchive(List<Order> _lastData)
         {
@@ -78,7 +77,6 @@ namespace hybr.Shared.Services
     }
     public class GlobalData()
     {
-        public static bool auth = false;
         public static async Task<Dictionary<int, Order>> FakeData()
         {
             List<Order> _listMeteoSensor = await HTTPClientSensor.Main();
@@ -381,6 +379,25 @@ namespace hybr.Shared.Services
             SensorData.PreparationSensorData(_GData);
             return _fakeData;
         }
+        public static async Task Data()
+        {
+            List<Order> _httpData = await HTTPClientSensor.Main();
+            Dictionary<int, Order> _dictData = new();
+            if (_httpData != null)
+            {
+                foreach (var _value in _httpData)
+                {
+                    _dictData[_value.Sensor_id] = _value;
+                }
+            var _gradData = SensorData.Graduation(_dictData);
+            GlobalPageProperty.UpdateData(_gradData);
+            SensorData.PreparationSensorData(_gradData);
+            DataBase.InsertData(_gradData);
+            }
+            foreach (var (_key, _a) in UpdateGrid.AllUpdateGrid)
+                UpdateGrid.AllUpdateGrid[_key].RefreshDataAsync();
+
+        }
     }
     public class TimerUpdate()
     {
@@ -393,7 +410,8 @@ namespace hybr.Shared.Services
                 while (true)
                 {
                     await Task.Delay(1000);
-                    GlobalData.FakeData();
+                    //GlobalData.FakeData();
+                    GlobalData.Data();
                 }
             }
         }

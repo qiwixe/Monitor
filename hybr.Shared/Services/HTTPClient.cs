@@ -6,10 +6,8 @@ namespace hybr.Shared.Services
 {
     internal class HTTPClientSensor
     {
-        // что то сделать с исключением TaskCanceledException?
         static HttpMessageHandler handler = new HttpClientHandler();
         static readonly HttpClient client = new HttpClient(handler){Timeout = TimeSpan.FromSeconds(1)};
-
         public static async Task<List<Order>> Main()
         {
             List<Order> _httpData = new();

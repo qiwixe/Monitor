@@ -97,7 +97,7 @@ namespace hybr.Shared.Services
                         Value_of_m = _reader.GetDouble(4),
                     });
                 }
-                _conn.CloseAsync();
+                await _conn.CloseAsync();
             }
             catch(Exception e)
             {
@@ -131,61 +131,108 @@ namespace hybr.Shared.Services
         }
         public static async Task Init()
         {
-            string _queryGetDataStations = "SELECT * FROM settings.stations";
-            string _queryGetDataUnits = "SELECT * FROM Settings.units";
-            string _queryGetDataSensors = "SELECT * FROM settings.sensors";
             try
             {
                 await using var _conn = new NpgsqlConnection(SQLstring.Connection);
                 await _conn.OpenAsync();
-                await using var cmd = new NpgsqlCommand(_queryGetDataStations, _conn);
-                await using var _reader = await cmd.ExecuteReaderAsync();
-                while (await _reader.ReadAsync())
+                var batch = new NpgsqlBatch(_conn)
                 {
-                    ValueSettings.Stations[_reader.GetInt32(0)] = new Station
+                    BatchCommands = { new("SELECT * FROM settings.stations order by id"), new("SELECT * FROM Settings.units order by id"), new("SELECT * FROM settings.sensors order by id") }
+                };
+                await using (var _reader = await batch.ExecuteReaderAsync())
+                {
+                    while (await _reader.ReadAsync())
                     {
-                        Title = _reader.GetString(1),
-                        ShortTitle = _reader.GetString(2),
-                        FullTitle = _reader.GetString(3),
-                        Href = _reader.GetString(4),
-                        Station_Ip = _reader.GetString(5),
-                        SensorsId = _reader.GetFieldValue<int[]>(6).ToList(),
-                    };
-                    ValueSettings.StationsSettings[_reader.GetInt32(0)] = (Station)ValueSettings.Stations[_reader.GetInt32(0)].Clone();
+                        ValueSettings.Stations[_reader.GetInt32(0)] = new Station
+                        {
+                            Title = _reader.GetString(1),
+                            ShortTitle = _reader.GetString(2),
+                            FullTitle = _reader.GetString(3),
+                            Href = _reader.GetString(4),
+                            Station_Ip = _reader.GetString(5),
+                            SensorsId = _reader.GetFieldValue<int[]>(6).ToList(),
+                        };
+                        ValueSettings.StationsSettings[_reader.GetInt32(0)] = (Station)ValueSettings.Stations[_reader.GetInt32(0)].Clone();
+                    }
+                    await _reader.NextResultAsync();
+                    while (await _reader.ReadAsync())
+                    {
+                        ValueSettings.Units[_reader.GetInt32(0)] = new SensorUnit
+                        {
+                            UnitFull = _reader.GetString(1),
+                            UnitShort = _reader.GetString(2)
+                        };
+                        ValueSettings.UnitsSettings[_reader.GetInt32(0)] = (SensorUnit)ValueSettings.Units[_reader.GetInt32(0)].Clone();
+                    }
+                    await _reader.NextResultAsync();
+                    while (await _reader.ReadAsync())
+                    {
+                        ValueSettings.Sensors[_reader.GetInt32(0)] = new Sensor
+                        {
+                            Title = _reader.GetString(1),
+                            Station_Id = _reader.GetInt32(2),
+                            Value_min = _reader.GetDouble(3),
+                            Value_max = _reader.GetDouble(4),
+                            GraduationString = _reader.GetString(5),
+                            Unit_of_m = _reader.GetInt32(6)
+                        };
+                        ValueSettings.SensorsSettings[_reader.GetInt32(0)] = (Sensor)ValueSettings.Sensors[_reader.GetInt32(0)].Clone();
+                    }
                 }
                 await _conn.CloseAsync();
-                await _conn.OpenAsync();
-                await using var cmd1 = new NpgsqlCommand(_queryGetDataUnits, _conn);
-                await using var _reader1 = await cmd1.ExecuteReaderAsync();
-                while (await _reader1.ReadAsync())
-                {
-                    ValueSettings.Units[_reader1.GetInt32(0)] = new SensorUnit
-                    {
-                        UnitFull = _reader1.GetString(1),
-                        UnitShort = _reader1.GetString(2)
-                    };
-                    ValueSettings.UnitsSettings[_reader1.GetInt32(0)] = (SensorUnit)ValueSettings.Units[_reader1.GetInt32(0)].Clone();
-                }
-                await _conn.CloseAsync();
-                await _conn.OpenAsync();
-                await using var cmd2 = new NpgsqlCommand(_queryGetDataSensors, _conn);
-                await using var _reader2 = await cmd2.ExecuteReaderAsync();
-                while (await _reader2.ReadAsync())
-                {
-                    ValueSettings.Sensors[_reader2.GetInt32(0)] = new Sensor
-                    {
-                        Title = _reader2.GetString(1),
-                        Station_Id = _reader2.GetInt32(2),
-                        Value_min = _reader2.GetDouble(3),
-                        Value_max = _reader2.GetDouble(4),
-                        GraduationString = _reader2.GetString(5),
-                        Unit_of_m = _reader2.GetInt32(6)
-                    };
-                    ValueSettings.SensorsSettings[_reader2.GetInt32(0)] = (Sensor)ValueSettings.Sensors[_reader2.GetInt32(0)].Clone();
-                }
-                await _conn.CloseAsync();
+                #region Старое
+                //string _queryGetDataStations = "SELECT * FROM settings.stations";
+                //string _queryGetDataUnits = "SELECT * FROM Settings.units";
+                //string _queryGetDataSensors = "SELECT * FROM settings.sensors";
+                //await using var cmd = new NpgsqlCommand(_queryGetDataStations, _conn);
+                //await using var _reader = await cmd.ExecuteReaderAsync();
+                //while (await _reader.ReadAsync())
+                //{
+                //    ValueSettings.Stations[_reader.GetInt32(0)] = new Station
+                //    {
+                //        Title = _reader.GetString(1),
+                //        ShortTitle = _reader.GetString(2),
+                //        FullTitle = _reader.GetString(3),
+                //        Href = _reader.GetString(4),
+                //        Station_Ip = _reader.GetString(5),
+                //        SensorsId = _reader.GetFieldValue<int[]>(6).ToList(),
+                //    };
+                //    ValueSettings.StationsSettings[_reader.GetInt32(0)] = (Station)ValueSettings.Stations[_reader.GetInt32(0)].Clone();
+                //}
+                //await _conn.CloseAsync();
+                //await _conn.OpenAsync();
+                //await using var cmd1 = new NpgsqlCommand(_queryGetDataUnits, _conn);
+                //await using var _reader1 = await cmd1.ExecuteReaderAsync();
+                //while (await _reader1.ReadAsync())
+                //{
+                //    ValueSettings.Units[_reader1.GetInt32(0)] = new SensorUnit
+                //    {
+                //        UnitFull = _reader1.GetString(1),
+                //        UnitShort = _reader1.GetString(2)
+                //    };
+                //    ValueSettings.UnitsSettings[_reader1.GetInt32(0)] = (SensorUnit)ValueSettings.Units[_reader1.GetInt32(0)].Clone();
+                //}
+                //await _conn.CloseAsync();
+                //await _conn.OpenAsync();
+                //await using var cmd2 = new NpgsqlCommand(_queryGetDataSensors, _conn);
+                //await using var _reader2 = await cmd2.ExecuteReaderAsync();
+                //while (await _reader2.ReadAsync())
+                //{
+                //    ValueSettings.Sensors[_reader2.GetInt32(0)] = new Sensor
+                //    {
+                //        Title = _reader2.GetString(1),
+                //        Station_Id = _reader2.GetInt32(2),
+                //        Value_min = _reader2.GetDouble(3),
+                //        Value_max = _reader2.GetDouble(4),
+                //        GraduationString = _reader2.GetString(5),
+                //        Unit_of_m = _reader2.GetInt32(6)
+                //    };
+                //    ValueSettings.SensorsSettings[_reader2.GetInt32(0)] = (Sensor)ValueSettings.Sensors[_reader2.GetInt32(0)].Clone();
+                //}
+                //await _conn.CloseAsync();
+                #endregion Старое
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Нет связи с базой данных");
                 Console.WriteLine(e);
@@ -193,11 +240,12 @@ namespace hybr.Shared.Services
         }
         public static async Task UpdSettings()
         {
-            Console.WriteLine("ПОПЫТКА");
+            string _updstr = "";
             foreach (var (_key,_value) in ValueSettings.SensorsSettings)
             {
                 if (!ValueSettings.Sensors[_key].Equals(_value))
                 {
+                    _updstr += $"UPDATE settings.sensors SET title = '{_value.Title}', value_min = {_value.Value_min}, value_max = {_value.Value_max}, graduationstring = '{_value.GraduationString}'  WHERE id = {_key};";
                     Console.WriteLine($"UPDATE settings.sensors SET title = '{_value.Title}', value_min = {_value.Value_min}, value_max = {_value.Value_max}, graduationstring = '{_value.GraduationString}'  WHERE id = {_key}");
                 }
             }
@@ -205,11 +253,32 @@ namespace hybr.Shared.Services
             {
                 if (!ValueSettings.Stations[_key].Equals(_value))
                 {
+                    _updstr += $"UPDATE settings.stations SET title = '{_value.Title}', shorttitle = '{_value.ShortTitle}', fulltitle = '{_value.FullTitle}', href = '{_value.Href}',station_ip = '{_value.Station_Ip}'  WHERE id = {_key};";
                     Console.WriteLine($"UPDATE settings.stations SET title = '{_value.Title}', shorttitle = '{_value.ShortTitle}', fulltitle = '{_value.FullTitle}', href = '{_value.Href}',station_ip = '{_value.Station_Ip}'  WHERE id = {_key}");
                 }
             }
+            await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+            await _conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(_updstr, _conn);
+            await cmd.ExecuteNonQueryAsync();
+            await _conn.CloseAsync();
+            await Init();
         }
-
+        public static async Task InsertData(Dictionary<int, Order> _dictData)
+        {
+            string _insstr = "";
+            foreach (var (_key, _value) in _dictData)
+            {
+                //_insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});";
+                Console.WriteLine($"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});");
+            }
+            //await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+            //await _conn.OpenAsync();
+            //await using var cmd = new NpgsqlCommand(_insstr, _conn);
+            //await cmd.ExecuteNonQueryAsync();
+            //await _conn.CloseAsync();
+        }
+        #region Создание базы
         //CREATE SCHEMA IF NOT EXISTS Settings;
         //CREATE TABLE IF NOT EXISTS Settings.Authentication
         //(
@@ -378,5 +447,7 @@ namespace hybr.Shared.Services
         //SELECT partman.run_maintenance();
         //SELECT * FROM partman.check_default();
         //SELECT partman.partition_data_time('data.alldata');
+        #endregion Создание базы
+
     }
 }
