@@ -46,29 +46,19 @@ namespace hybr.Shared.Services
         }
         public static void UpdateDataArchive(List<Order> _lastData)
         {
-            List<Order> _renderValue = new();
             foreach (var (_PageChart, _chart) in LiveChartElement.AllChartsArchive["Archive"])
             {
                 _chart.DChartData.Labels.Clear();
                 foreach (DefaultChartOption _lineChartDataset in _chart.DChartDataset)
                 {
                 _lineChartDataset.Data.Clear();
-                    var lastValue = 0.0;
-                    var maxPickValue = 0.5;
-                    var _f = true;
                     foreach (var _data in _lastData)
-                    //if (lastValue != _data.Value_of_m && Math.Abs(_data.Value_of_m - lastValue)< maxPickValue)
-                            { if (_f)
-                                {
-                                    _lineChartDataset.Label = $"{ValueSettings.Sensors[_data.Sensor_id].Title}, {ValueSettings.Units[ValueSettings.Sensors[_data.Sensor_id].Unit_of_m].UnitShort}";
-                                    _f = false;
-                                }
+                        if (_lineChartDataset.SensorId == _data.Sensor_id) {
                             _lineChartDataset.Data.Add(_data.Value_of_m);
-                            _renderValue.Add(_data);
-                            lastValue = _data.Value_of_m;
                         }
                 }
-                foreach (var _data in _renderValue) {
+                foreach (var _data in _lastData) {
+                    if(_chart.DChartData.Labels.Count == 0 || _chart.DChartData.Labels.Last() != _data.Date_of_m + " " + _data.Time_of_m)
                      _chart.DChartData.Labels.Add(_data.Date_of_m + " " + _data.Time_of_m);                               
                 }
                 _PageChart.UpdateAsync(_chart.DChartData, _chart.DChartOptions);

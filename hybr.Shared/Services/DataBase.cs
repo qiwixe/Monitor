@@ -1,9 +1,11 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Npgsql;
 using Parlot;
 using Parlot.Fluent;
+using System;
 using System.Collections.Concurrent;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -70,11 +72,11 @@ namespace hybr.Shared.Services
         }
         public static string CreateSQLstring(int station_id, Dictionary<int,bool> sensor_id, string range_start_date, string range_stop_date)
         {
-            string _formated_string_sensor_id = "sensor_id = 0";
+            string _formated_string_sensor_id = "0";
             foreach (var (_key,_value) in sensor_id)
                 if(_value)
-                _formated_string_sensor_id = _formated_string_sensor_id + $" OR sensor_id = {_key}";
-            return $"SELECT * FROM {schemaName}.{tableName} WHERE ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
+                _formated_string_sensor_id += $",{_key}";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE sensor_id in ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
         }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
@@ -114,7 +116,7 @@ namespace hybr.Shared.Services
                 await using var _conn = new NpgsqlConnection(SQLstring.Connection);
                 await _conn.OpenAsync();
                 await using var cmd = new NpgsqlCommand(_queryGetData, _conn);
-                await using var _reader = await cmd.ExecuteReaderAsync();
+                await using NpgsqlDataReader _reader = await cmd.ExecuteReaderAsync();
                 await _reader.ReadAsync();
                 if (_reader.GetInt32(0) == 0) {
                     await _conn.CloseAsync();
@@ -137,7 +139,10 @@ namespace hybr.Shared.Services
                 await _conn.OpenAsync();
                 var batch = new NpgsqlBatch(_conn)
                 {
-                    BatchCommands = { new("SELECT * FROM settings.stations order by id"), new("SELECT * FROM Settings.units order by id"), new("SELECT * FROM settings.sensors order by id") }
+                    BatchCommands = { 
+                        new("SELECT s.id,s.title,s.shorttitle,s.fulltitle,s.href,s.station_ip, array_agg(s_x_s.sensor_id) FROM settings.stations s left join settings.stations_x_sensors s_x_s on s.id = s_x_s.station_id group by s.id,s.title,s.shorttitle,s.fulltitle,s.href,s.station_ip order by id"), 
+                        new("SELECT * FROM Settings.units order by id"), 
+                        new("SELECT * FROM settings.sensors order by id") }
                 };
                 await using (var _reader = await batch.ExecuteReaderAsync())
                 {
@@ -269,7 +274,7 @@ namespace hybr.Shared.Services
             string _insstr = "";
             foreach (var (_key, _value) in _dictData)
             {
-                //_insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});";
+                _insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});";
                 Console.WriteLine($"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});");
             }
             //await using var _conn = new NpgsqlConnection(SQLstring.Connection);
@@ -321,7 +326,6 @@ namespace hybr.Shared.Services
         //    FullTitle character varying NOT NULL DEFAULT 'Установка №0 Станция',
         //    Href character varying NOT NULL DEFAULT 'Home',
         //    Station_Ip character varying NOT NULL DEFAULT 'http://192.168.0.0/',
-        //    Sensors_Id integer[] NOT NULL,
         //    PRIMARY KEY(Id)
         //);
         //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower','{1,2,3,4,5,6,7,8,9,10,11,12}');
@@ -447,7 +451,29 @@ namespace hybr.Shared.Services
         //SELECT partman.run_maintenance();
         //SELECT * FROM partman.check_default();
         //SELECT partman.partition_data_time('data.alldata');
+
+        //CREATE TABLE IF NOT EXISTS settings.stations_x_sensors
+        //(
+        //    station_id integer NOT NULL,
+        //    sensor_id integer NOT NULL,
+        //    CONSTRAINT stations_x_sensors_pkey PRIMARY KEY (station_id, sensor_id),
+        //    CONSTRAINT "Sensor_id_frg" FOREIGN KEY (sensor_id)
+        //        REFERENCES settings.sensors (id) MATCH SIMPLE
+        //        ON UPDATE NO ACTION
+        //        ON DELETE NO ACTION
+        //        NOT VALID,
+        //    CONSTRAINT station_id_frg FOREIGN KEY (station_id)
+        //        REFERENCES settings.stations (id) MATCH SIMPLE
+        //        ON UPDATE NO ACTION
+        //        ON DELETE NO ACTION
+        //        NOT VALID
+        //)
         #endregion Создание базы
 
+        //SELECT s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip, array_agg(s_x_s.sensor_id)
+        //FROM settings.stations s
+        //left join settings.stations_x_sensors s_x_s on s.id = s_x_s.statation_id
+        //group by s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip
+        //order by id
     }
 }

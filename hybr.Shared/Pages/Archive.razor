@@ -15,8 +15,8 @@
     URL.revokeObjectURL(url);
     }
 </script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"/>
-    <script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
     function saveAsImage() {
     var element = document.getElementById("graph");
     html2canvas(element).then(function (canvas) {
@@ -110,7 +110,9 @@
     </Modal>
     <LineChart id="graph" @ref=LiveChartElement.ChartArchive Width="100" WidthUnit="Unit.Percentage" Height="50" HeightUnit="Unit.Percentage" />
 </Grid>
+<Toasts class="p-3" AutoHide="true" Delay="2000" Placement="ToastsPlacement.TopRight" />
 @code {
+    [Inject] protected ToastService ToastService { get; set; } = default!;
     private Dictionary<int,bool> _selected_sensor_id = ValueSettings.Sensors.ToDictionary(x => x.Key, x => false);
     private string InputType = "date";
     private string InputTypeCustom = "date";
@@ -155,7 +157,10 @@
     }
     private async Task<GridDataProviderResult<Order>> DataArchive(GridDataProviderRequest<Order> request) => await Task.FromResult(request.ApplyTo(DataBase.DataArchive));
     private async Task OnShowOffcanvasClick() => await offcanvas.ShowAsync();
-    private async Task SaveDataClick() => await DownloadFileFromStream(DataBase.DataArchive);
+    private async Task SaveDataClick(){
+        ToastService.Notify(new(ToastType.Success, $"Выполняется сохранение"));
+        await DownloadFileFromStream(DataBase.DataArchive);
+    }
     private async Task OnShowModalClick() => await modal.ShowAsync();
     private async Task OnHideModalClick() => await modal.HideAsync();
     private async Task DownloadFileFromStream(List<Order> _lastData)
@@ -163,14 +168,25 @@
         var workbook = new XLWorkbook();
         workbook.AddWorksheet("Страница1");
         var ws = workbook.Worksheet("Страница1");
-        ws.Cell("A1").Value = "Дата";
-        ws.Cell("B1").Value = "Время";
-        ws.Cell("C1").Value = ValueSettings.Sensors[_lastData[0].Sensor_id].Title;
-        for (var i = 0; i < _lastData.Count; i++)
+        ws.Cell(1,1).Value = "Дата";
+        ws.Cell(1,2).Value = "Время";
+        var gcol = 2;
+        foreach(var (_key,_value) in ChartSettings.DictChartSettingsArchive){
+            gcol++;
+            ws.Cell(1,gcol).Value = $"{ValueSettings.SensorsSettings[_key].Title},{ValueSettings.Units[ValueSettings.Sensors[_key].Unit_of_m].UnitShort}";
+        }
+        int row = 1;
+        int _col = gcol;
+        foreach(var _data in _lastData)
         {
-            ws.Cell("A" + (i + 2).ToString()).Value = _lastData[i].Date_of_m;
-            ws.Cell("B" + (i + 2).ToString()).Value = _lastData[i].Time_of_m;
-            ws.Cell("C" + (i + 2).ToString()).Value = _lastData[i].Value_of_m;
+            if(_col>=gcol){
+                row++;
+                ws.Cell(row,1).Value = _data.Date_of_m;
+                ws.Cell(row,2).Value = _data.Time_of_m;
+                _col = 2;
+            }
+            _col++;
+            ws.Cell(row,_col).Value = _data.Value_of_m;
         }
         Stream fs = new MemoryStream();
         workbook.SaveAs(fs);
@@ -182,7 +198,10 @@
     private int activeStationTabId;
     private int activeSensorTabId;
     private string? activeDataTabTitle;
-    private async void OnStationTabShow(TabsEventArgs args) {
+    private void OnStationTabShow(TabsEventArgs args) {
+        foreach(var (_key, _value) in _selected_sensor_id){
+            _selected_sensor_id[_key] = false;
+        }
         activeStationTabId = Int32.Parse(args.ActiveTabName);
         foreach(var (_key,_value) in sensorsPageState){
             if (activeStationTabId == _key) sensorsPageState[activeStationTabId] = false; 
@@ -193,12 +212,15 @@
         }
         sensorsPageState[0] = true; 
         activeDataTabTitle = null;
-        await UpdateGrid.AllUpdateGrid["Archive"].RefreshDataAsync();
     }
-    private async void OnSensorTabShow(TabsEventArgs args){
+    private void OnSensorTabShow(TabsEventArgs args){
+        foreach(var (_key, _value) in _selected_sensor_id){
+            _selected_sensor_id[_key] = false;
+        }
+        _selected_sensor_id[Int32.Parse(args.ActiveTabName)] = true;
         activeSensorTabId = Int32.Parse(args.ActiveTabName);
         sensorsPageState[0] = false;
-        await UpdateGrid.AllUpdateGrid["Archive"].RefreshDataAsync();
+        SelectFilter();
     } 
     private void OnDataTabShow(TabsEventArgs args)
     {
@@ -235,24 +257,59 @@
     }
     private async void Select(){
         await Task.Delay(10);
-        if(activeStationTabId != 0 && activeSensorTabId != 0)
-            switch(activeDataTabTitle){
-                case("Сутки"):{
-                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
+        if (activeStationTabId != 0 && activeSensorTabId != 0) {
+            switch (activeDataTabTitle) {
+                case ("Сутки"): {
+                        InputDataValuefilter1 = InputDataValue;
+                        InputDataValuefilter2 = InputDataValue + " 23:59:59";
+                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
                         break;
                     }
-                case("Месяц"):{
-                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
+                case ("Месяц"): {
+                        InputDataValuefilter1 = InputDataValue + "-01";
+                        InputDataValuefilter2 = InputDataValue + "-31  23:59:59";
+                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
                         break;
                     }
-                case("Год"):{
-                        await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
+                case ("Год"): {
+                        InputDataValuefilter1 = InputDataValue + "-01-01";
+                        InputDataValuefilter2 = InputDataValue + "-12-31 23:59:59";
+                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
                         break;
                     }
             }
+            SelectFilter();
+        }
     }
     private async void SelectFilter(){
         await modal.HideAsync();
+        ChartSettings.DictChartSettingsArchive.Clear();
+        foreach (var (_key, _value) in _selected_sensor_id)
+        {
+            if (_value)
+                ChartSettings.DictChartSettingsArchive[_key] = new DefaultChartOption()
+                    {
+                        SensorId = _key,
+                        Label = $"{ValueSettings.SensorsSettings[_key].Title},{ValueSettings.Units[ValueSettings.Sensors[_key].Unit_of_m].UnitShort}",
+                        Data = new(),
+                        BackgroundColor = "rgba(0, 0, 255, 0.7)",
+                        BorderColor = "rgba(0, 0, 255, 0.7)",
+                        BorderWidth = 1,
+                        HoverBorderWidth = 4,
+                        PointRadius = [0],
+                        PointStyle = ["triangle"],
+                        PointHoverRadius = [0.2],
+                    };
+        }
+            ChartDataSet.DictChartDataSetArchive = new List<IChartDataset> (ChartSettings.DictChartSettingsArchive.Values.ToList());
+            LiveChartElement.AllChartsArchive["Archive"] = new Dictionary<LineChart, ArchiveChart>()
+            {
+                [LiveChartElement.ChartArchive] = new ArchiveChart
+                {
+                    DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.DictChartDataSetArchive },
+                    DChartDataset = ChartDataSet.DictChartDataSetArchive
+                }
+            };
         await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,_selected_sensor_id,InputDataValuefilter1,InputDataValuefilter2));
     }
     private async Task ChartUpdate(string _data){

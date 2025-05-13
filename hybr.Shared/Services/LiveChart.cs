@@ -1,4 +1,7 @@
 ﻿using BlazorBootstrap;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using SixLabors.Fonts;
+using System.Reflection.Emit;
 
 namespace hybr.Shared.Services
 {
@@ -8,7 +11,7 @@ namespace hybr.Shared.Services
         public required int maxLabelXasixCount = 1;
         public required ChartData DChartData { get; set; }
         public required List<IChartDataset> DChartDataset { get; set; }
-        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions ();
+        public IChartOptions DChartOptions { get; set; } = new LiveChartOptions();
     }
     public class ArchiveChart()
     {
@@ -350,17 +353,16 @@ namespace hybr.Shared.Services
         public static IChartDataset ChartDataSetArchive { get; } =
         new DefaultChartOption()
         {
-            SensorId = 108,
-            Label = $"ТЕСТЫ",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
-            BorderWidth = 1 ,
+            BorderWidth = 1,
             HoverBorderWidth = 4,
             PointRadius = [0],
             PointStyle = ["triangle"],
             PointHoverRadius = [0.2],
         };
+        public static Dictionary<int, IChartDataset> DictChartSettingsArchive { get; set; } = new Dictionary<int, IChartDataset>{};
     }
     public class ChartDataSet()
     {
@@ -377,6 +379,7 @@ namespace hybr.Shared.Services
         public static List<IChartDataset> MeteorologicalChartDataSetSolarRadiation { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor108 };
 
         public static List<IChartDataset> ChartDataSetArchive { get; } = new List<IChartDataset> { ChartSettings.ChartDataSetArchive };
+        public static List<IChartDataset> DictChartDataSetArchive { get; set; }
     }
     public class LiveChartElement()
     {
