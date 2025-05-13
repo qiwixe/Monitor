@@ -81,7 +81,7 @@ void getData() {
   add_json_object(107, s3221c40b2v);
   add_json_object(108, s3221c40b3a);
   serializeJson(jsonDocument, buffer);
-  Serial.println((String) "Отправлено: 103:"+temperature+" 104:"+humidity+" 105:"+pressure+" 106:"+s3221c40b1v+" 107:"+s3221c40b2v+" 108:"+s3221c40b3v);
+  Serial.println((String) "Отправлено: 103:"+temperature+" 104:"+humidity+" 105:"+pressure+" 106:"+s3221c40b1v+" 107:"+s3221c40b2v+" 108:"+s3221c40b3a);
   server.send(200, "application/json", buffer);
 }
 void handleNotFound() {
