@@ -2,11 +2,15 @@
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Npgsql;
 using Parlot;
 using Parlot.Fluent;
 using System;
 using System.Collections.Concurrent;
+using System.Formats.Asn1;
+using System.Text.RegularExpressions;
+using static ClosedXML.Excel.XLPredefinedFormat;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace hybr.Shared.Services
@@ -242,6 +246,7 @@ namespace hybr.Shared.Services
                 Console.WriteLine("Нет связи с базой данных");
                 Console.WriteLine(e);
             }
+            await CheckPart();
         }
         public static async Task UpdSettings()
         {
@@ -277,11 +282,21 @@ namespace hybr.Shared.Services
                 _insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});";
                 Console.WriteLine($"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});");
             }
-            //await using var _conn = new NpgsqlConnection(SQLstring.Connection);
-            //await _conn.OpenAsync();
-            //await using var cmd = new NpgsqlCommand(_insstr, _conn);
-            //await cmd.ExecuteNonQueryAsync();
-            //await _conn.CloseAsync();
+            await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+            await _conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(_insstr, _conn);
+            await cmd.ExecuteNonQueryAsync();
+            await _conn.CloseAsync();
+        }
+        public static async Task CheckPart()
+        {
+            string _checkstr = "SELECT partman.run_maintenance();";
+            await using var _conn = new NpgsqlConnection(SQLstring.Connection);
+            await _conn.OpenAsync();
+            await using var cmd = new NpgsqlCommand(_checkstr, _conn);
+            await cmd.ExecuteNonQueryAsync();
+            await _conn.CloseAsync();
+            //SELECT partman.partition_data_time('data.alldata');
         }
         #region Создание базы
         //CREATE SCHEMA IF NOT EXISTS Settings;
@@ -328,13 +343,13 @@ namespace hybr.Shared.Services
         //    Station_Ip character varying NOT NULL DEFAULT 'http://192.168.0.0/',
         //    PRIMARY KEY(Id)
         //);
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower','{1,2,3,4,5,6,7,8,9,10,11,12}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Фотоэнергетическая установка','ФУЭ','Установка №2, Фотоэнергетическая установка','Photovoltaic','{21,22,23,24,25,26,27,28,29,30,31,32,33}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Солнечный коллектор','Коллектор','Установка №3, Солнечный коллектор','SolarCollector','{41,42,43,44,45,46,47}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Солнечный концентратор','Концентратор','Установка №4, Солнечный концентратор','SolarСoncentrator','{56,57,58,59,60,61,62}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Тепловой насос','Тепловой насос','Установка №5, Тепловой насос','HeatPump','{71,72,73,74,75,76,77,78,79}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Sensors_Id) VALUES('Биоустановка','Биоустановка','Установка №6, Биоустановка','Bioplant','{88,89,90,91,92,93,94}');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Station_Ip, Sensors_Id) VALUES('Метеостанция','Метеостанция','Установка №7, Метеостанция','Meteorological','http://192.168.0.18/','{103,104,105,106,107,108}');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Фотоэнергетическая установка','ФУЭ','Установка №2, Фотоэнергетическая установка','Photovoltaic');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Солнечный коллектор','Коллектор','Установка №3, Солнечный коллектор','SolarCollector');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Солнечный концентратор','Концентратор','Установка №4, Солнечный концентратор','SolarСoncentrator');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Тепловой насос','Тепловой насос','Установка №5, Тепловой насос','HeatPump');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Биоустановка','Биоустановка','Установка №6, Биоустановка','Bioplant');
+        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Station_Ip) VALUES('Метеостанция','Метеостанция','Установка №7, Метеостанция','Meteorological','http://192.168.0.18/');
 
         //CREATE SCHEMA IF NOT EXISTS Settings;
         //CREATE TABLE IF NOT EXISTS Settings.Sensors
@@ -414,14 +429,22 @@ namespace hybr.Shared.Services
         //CREATE SCHEMA IF NOT EXISTS partman;
         //CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
 
-        //CREATE SCHEMA IF NOT EXISTS data;
-        //CREATE TABLE IF NOT EXISTS data.alldata
-        //(
-        //Id serial NOT NULL,
-        //sensor_id integer NOT NULL REFERENCES settings.sensors (Id),
-        //station_id integer NOT NULL REFERENCES settings.stations (Id),
-        //date_time timestamp without time zone NOT NULL,
-        //value_data double precision NOT NULL
+        //        CREATE TABLE IF NOT EXISTS data.alldata
+        //        (
+        //            id serial NOT NULL,
+        //    sensor_id integer NOT NULL,
+        //    station_id integer NOT NULL,
+        //    date_time timestamp without time zone NOT NULL,
+        //    value_data double precision NOT NULL,
+        //    CONSTRAINT alldata_pkey PRIMARY KEY(date_time, id),
+        //    CONSTRAINT alldata_sensor_id_fkey FOREIGN KEY(sensor_id)
+        //        REFERENCES settings.sensors(id) MATCH SIMPLE
+        //        ON UPDATE NO ACTION
+        //        ON DELETE NO ACTION,
+        //    CONSTRAINT alldata_station_id_fkey FOREIGN KEY(station_id)
+        //        REFERENCES settings.stations(id) MATCH SIMPLE
+        //        ON UPDATE NO ACTION
+        //        ON DELETE NO ACTION
         //) PARTITION BY RANGE(date_time);
 
 
@@ -476,4 +499,7 @@ namespace hybr.Shared.Services
         //group by s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip
         //order by id
     }
+        //INSERT INTO data.alldata(
+        //    sensor_id, station_id, date_time, value_data)
+        //    VALUES(1, 1, '2013-12-01 00:00:00', 0.15625);
 }

@@ -397,11 +397,18 @@ namespace hybr.Shared.Services
             if (!RepeatRender.TryGetValue("Timer",out var _bool))
             {
                 RepeatRender["Timer"] = true;
+                int i = 0;
                 while (true)
                 {
+                    i++;
                     await Task.Delay(1000);
                     //GlobalData.FakeData();
                     GlobalData.Data();
+                    if (i >= 60)
+                    {
+                        i = 0;
+                    DataBase.CheckPart();
+                    }
                 }
             }
         }
