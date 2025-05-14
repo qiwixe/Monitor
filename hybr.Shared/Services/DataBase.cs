@@ -64,15 +64,15 @@ namespace hybr.Shared.Services
             await conn.CloseAsync();
         }
         public static string CreateSQLstring(int station_id){
-        return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} order by id";
+        return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} order by date_time";
         }
         public static string CreateSQLstring(int station_id, int sensor_id)
         {
-            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} order by date_time";
         }
         public static string CreateSQLstring(int station_id, int sensor_id, string range_start_date, string range_stop_date)
         {
-            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE station_id = {station_id} and sensor_id = {sensor_id} and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by date_time";
         }
         public static string CreateSQLstring(int station_id, Dictionary<int,bool> sensor_id, string range_start_date, string range_stop_date)
         {
@@ -80,7 +80,7 @@ namespace hybr.Shared.Services
             foreach (var (_key,_value) in sensor_id)
                 if(_value)
                 _formated_string_sensor_id += $",{_key}";
-            return $"SELECT * FROM {schemaName}.{tableName} WHERE sensor_id in ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by id";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE sensor_id in ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by date_time";
         }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
