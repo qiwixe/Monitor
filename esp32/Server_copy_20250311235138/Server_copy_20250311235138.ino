@@ -18,7 +18,10 @@ String dayStamp;
 String timeStamp;
 
 Adafruit_BME280 bme;
-Adafruit_INA3221 ina3221;
+Adafruit_INA3221 ina3221с40;
+Adafruit_INA3221 ina3221с41;
+Adafruit_INA3221 ina3221с42;
+Adafruit_INA3221 ina3221с43;
 String JSON;
 const char *ssid = "RT-GPON-3C30";
 const char *password = "1q2w3e4r5t";
@@ -31,6 +34,27 @@ double s3221c40b3v;
 double s3221c40b1a;
 double s3221c40b2a;
 double s3221c40b3a;
+
+double s3221c41b1v;
+double s3221c41b2v;
+double s3221c41b3v;
+double s3221c41b1a;
+double s3221c41b2a;
+double s3221c41b3a;
+
+double s3221c42b1v;
+double s3221c42b2v;
+double s3221c42b3v;
+double s3221c42b1a;
+double s3221c42b2a;
+double s3221c42b3a;
+
+double s3221c43b1v;
+double s3221c43b2v;
+double s3221c43b3v;
+double s3221c43b1a;
+double s3221c43b2a;
+double s3221c43b3a;
 
 StaticJsonDocument<1000> jsonDocument;
 char buffer[1000];
@@ -49,25 +73,93 @@ void read_sensor_data() {
      temperature = bme.readTemperature();
      humidity = bme.readHumidity();
      pressure = bme.readPressure() / 100 * 0.7500615;
-     s3221c40b1v = ina3221.getBusVoltage(0);
-     s3221c40b2v = ina3221.getBusVoltage(1);
-     s3221c40b3a = ina3221.getCurrentAmps(2);
 
-    for (uint8_t i = 0; i < 3; i++) {
-    float voltage = ina3221.getBusVoltage(i);
-    float current = ina3221.getCurrentAmps(i) * 1000; // Convert to mA
-    float current2 = ina3221.getCurrentAmps(i);
+     s3221c40b1v = ina3221с40.getBusVoltage(0);
+     s3221c40b1a = ina3221с40.getCurrentAmps(0);
+     s3221c40b2v = ina3221с40.getBusVoltage(1);
+     s3221c40b2a = ina3221с40.getCurrentAmps(1);
+     s3221c40b3v = ina3221с40.getBusVoltage(2);
+     s3221c40b3a = ina3221с40.getCurrentAmps(2);
 
-    Serial.print("Channel ");
-    Serial.print(i);
-    Serial.print(": Voltage = ");
-    Serial.print(voltage, 2);
-    Serial.print(" V, Current = ");
-    Serial.print(current, 2);
-    Serial.println(" mA");
-    Serial.print(current2, 2);
-    Serial.println(" A");
-  }
+     s3221c41b1v = ina3221с41.getBusVoltage(0);
+     s3221c41b1a = ina3221с41.getCurrentAmps(0);
+     s3221c41b2v = ina3221с41.getBusVoltage(1);
+     s3221c41b2a = ina3221с41.getCurrentAmps(1);
+     s3221c41b3v = ina3221с41.getBusVoltage(2);
+     s3221c41b3a = ina3221с41.getCurrentAmps(2);
+
+     s3221c42b1v = ina3221с42.getBusVoltage(0);
+     s3221c42b1a = ina3221с42.getCurrentAmps(0);
+     s3221c42b2v = ina3221с42.getBusVoltage(1);
+     s3221c42b2a = ina3221с42.getCurrentAmps(1);
+     s3221c42b3v = ina3221с42.getBusVoltage(2);
+     s3221c42b3a = ina3221с42.getCurrentAmps(2);
+
+     s3221c43b1v = ina3221с43.getBusVoltage(0);
+     s3221c43b1a = ina3221с43.getCurrentAmps(0);
+     s3221c43b2v = ina3221с43.getBusVoltage(1);
+     s3221c43b2a = ina3221с43.getCurrentAmps(1);
+     s3221c43b3v = ina3221с43.getBusVoltage(2);
+     s3221c43b3a = ina3221с43.getCurrentAmps(2);
+
+    Serial.print("s3221c40b1v ");
+    Serial.print(s3221c40b1v);
+    Serial.print(" s3221c40b2v ");
+    Serial.print(s3221c40b2v);
+    Serial.print(" s3221c40b3v ");
+    Serial.println(s3221c40b3v);
+    Serial.print(" s3221c40b1a");
+    Serial.print(s3221c40b1a);
+    Serial.print(" s3221c40b2a ");
+    Serial.print(s3221c40b2a);
+    Serial.print(" s3221c40b31a ");
+    Serial.println(s3221c40b3a);
+
+    Serial.print("s3221c41b1v ");
+    Serial.print(s3221c41b1v);
+    Serial.print(" s3221c41b2v ");
+    Serial.print(s3221c41b2v);
+    Serial.print(" s3221c41b3v ");
+    Serial.println(s3221c41b3v);
+    Serial.print(" s3221c41b1a");
+    Serial.print(s3221c41b1a);
+    Serial.print(" s3221c41b2a ");
+    Serial.print(s3221c41b2a);
+    Serial.print(" s3221c41b31a ");
+    Serial.println(s3221c41b3a);
+
+    Serial.print("s3221c42b1v ");
+    Serial.print(s3221c42b1v);
+    Serial.print(" s3221c42b2v ");
+    Serial.print(s3221c42b2v);
+    Serial.print(" s3221c42b3v ");
+    Serial.println(s3221c42b3v);
+    Serial.print(" s3221c42b1a");
+    Serial.print(s3221c42b1a);
+    Serial.print(" s3221c42b2a ");
+    Serial.print(s3221c42b2a);
+    Serial.print(" s3221c42b31a ");
+    Serial.println(s3221c42b3a);
+
+    Serial.print("s3221c43b1v ");
+    Serial.print(s3221c43b1v);
+    Serial.print(" s3221c43b2v ");
+    Serial.print(s3221c43b2v);
+    Serial.print(" s3221c43b3v ");
+    Serial.println(s3221c43b3v);
+    Serial.print(" s3221c43b1a");
+    Serial.print(s3221c43b1a);
+    Serial.print(" s3221c43b2a ");
+    Serial.print(s3221c43b2a);
+    Serial.print(" s3221c43b31a ");
+    Serial.println(s3221c43b3a);
+
+    Serial.print("temperature ");
+    Serial.print(temperature);
+    Serial.print(" humidity ");
+    Serial.print(humidity);
+    Serial.print(" pressure ");
+    Serial.println(pressure);
 }
 void getData() {
   Serial.println("Получен запрос");
@@ -118,19 +210,40 @@ void setup(void) {
   }
 
   // Initialize the INA3221
-    Serial.println("Инициализация INA3221");
-  if (!ina3221.begin(0x40, &Wire)) { // can use other I2C addresses or buses
-    Serial.println("Датчик INA3221 не обнаружен");
+    Serial.println("Инициализация INA3221 на линии I2C 0x40");
+  if (!ina3221с40.begin(0x40, &Wire)) { // can use other I2C addresses or buses
+    Serial.println("Датчик INA3221 на линии I2C 0x40 не обнаружен");
+  }
+      Serial.println("Инициализация INA3221 на линии I2C 0x41");
+  if (!ina3221с41.begin(0x41, &Wire)) { // can use other I2C addresses or buses
+    Serial.println("Датчик INA3221 на линии I2C 0x41 не обнаружен");
+  }
+        Serial.println("Инициализация INA3221 на линии I2C 0x42");
+  if (!ina3221с42.begin(0x42, &Wire)) { // can use other I2C addresses or buses
+    Serial.println("Датчик INA3221 на линии I2C 0x42 не обнаружен");
+  }
+        Serial.println("Инициализация INA3221 на линии I2C 0x43");
+  if (!ina3221с43.begin(0x43, &Wire)) { // can use other I2C addresses or buses
+    Serial.println("Датчик INA3221 на линии I2C 0x43 не обнаружен");
   }
 
-  ina3221.setAveragingMode(INA3221_AVG_16_SAMPLES);
+  ina3221с40.setAveragingMode(INA3221_AVG_16_SAMPLES);
+  ina3221с41.setAveragingMode(INA3221_AVG_16_SAMPLES);
+  ina3221с42.setAveragingMode(INA3221_AVG_16_SAMPLES);
+  ina3221с43.setAveragingMode(INA3221_AVG_16_SAMPLES);
     // Set shunt resistances for all channels to 0.05 ohms
   for (uint8_t i = 0; i < 3; i++) {
-    ina3221.setShuntResistance(i, 0.05);
+    ina3221с40.setShuntResistance(i, 0.05);
+    ina3221с41.setShuntResistance(i, 0.05);
+    ina3221с42.setShuntResistance(i, 0.05);
+    ina3221с43.setShuntResistance(i, 0.05);
   }
   // Set a power valid alert to tell us if ALL channels are between the two
   // limits:
-  ina3221.setPowerValidLimits(3.0 /* lower limit */, 15.0 /* upper limit */);
+  ina3221с40.setPowerValidLimits(3.0 /* lower limit */, 15.0 /* upper limit */);
+  ina3221с41.setPowerValidLimits(3.0 /* lower limit */, 15.0 /* upper limit */);
+  ina3221с42.setPowerValidLimits(3.0 /* lower limit */, 15.0 /* upper limit */);
+  ina3221с43.setPowerValidLimits(3.0 /* lower limit */, 15.0 /* upper limit */);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
