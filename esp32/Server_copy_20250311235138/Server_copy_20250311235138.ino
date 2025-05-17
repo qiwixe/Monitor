@@ -10,6 +10,24 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
+//settings
+const char *ssid = "RT-GPON-3C30";
+const char *password = "1q2w3e4r5t";
+
+const int s3221c40b1name = 1;
+const int s3221c40b2name = 2;
+const int s3221c40b3name = 3;
+const int s3221c41b1name = 4;
+const int s3221c41b2name = 5;
+const int s3221c41b3name = 6;
+const int s3221c42b1name = 7;
+const int s3221c42b2name = 8;
+const int s3221c42b3name = 9;
+const int s3221c43b1name = 10;
+const int s3221c43b2name = 11;
+const int s3221c43b3name = 12;
+//settings
+
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
@@ -23,8 +41,7 @@ Adafruit_INA3221 ina3221с41;
 Adafruit_INA3221 ina3221с42;
 Adafruit_INA3221 ina3221с43;
 String JSON;
-const char *ssid = "RT-GPON-3C30";
-const char *password = "1q2w3e4r5t";
+
 float temperature;
 float humidity;
 float pressure;
@@ -56,8 +73,8 @@ double s3221c43b1a;
 double s3221c43b2a;
 double s3221c43b3a;
 
-StaticJsonDocument<1000> jsonDocument;
-char buffer[1000];
+StaticJsonDocument<10000> jsonDocument;
+char buffer[10000];
 
 WebServer server(80);
 void add_json_object(int Sensor, float value) {
@@ -102,6 +119,9 @@ void read_sensor_data() {
      s3221c43b3v = ina3221с43.getBusVoltage(2);
      s3221c43b3a = ina3221с43.getCurrentAmps(2);
 
+    // log();
+}
+void log(){
     Serial.print("s3221c40b1v ");
     Serial.print(s3221c40b1v);
     Serial.print(" s3221c40b2v ");
@@ -166,14 +186,28 @@ void getData() {
   getDataTime();
   read_sensor_data();
   jsonDocument.clear();
+
   add_json_object(103, temperature);
   add_json_object(104, humidity);
   add_json_object(105, pressure);
-  add_json_object(106, s3221c40b1v);
-  add_json_object(107, s3221c40b2v);
-  add_json_object(108, s3221c40b3a);
+  
+  add_json_object(s3221c40b1name, s3221c40b1v);
+  add_json_object(s3221c40b2name, s3221c40b2v);
+  add_json_object(s3221c40b3name, s3221c40b3v);
+
+  add_json_object(s3221c41b1name, s3221c41b1v);
+  add_json_object(s3221c41b2name, s3221c41b2v);
+  add_json_object(s3221c41b3name, s3221c41b3v);
+
+  add_json_object(s3221c42b1name, s3221c42b1v);
+  add_json_object(s3221c42b2name, s3221c42b2v);
+  add_json_object(s3221c42b3name, s3221c42b3v);
+
+  add_json_object(s3221c43b1name, s3221c43b1v);
+  add_json_object(s3221c43b2name, s3221c43b2v);
+  add_json_object(s3221c43b3name, s3221c43b3v);
   serializeJson(jsonDocument, buffer);
-  Serial.println((String) "Отправлено: 103:"+temperature+" 104:"+humidity+" 105:"+pressure+" 106:"+s3221c40b1v+" 107:"+s3221c40b2v+" 108:"+s3221c40b3a);
+  // Serial.println((String) "Отправлено: 103:"+temperature+" 104:"+humidity+" 105:"+pressure+" 106:"+s3221c40b1v+" 107:"+s3221c40b2v+" 108:"+s3221c40b3a);
   server.send(200, "application/json", buffer);
 }
 void handleNotFound() {
@@ -191,9 +225,7 @@ void handleNotFound() {
   server.send(404, "text/plain", message);
 }
 void getDataTime() {
-  while(!timeClient.update()) {
-    timeClient.forceUpdate();
-  }
+  timeClient.forceUpdate();
   formattedDate = timeClient.getFormattedDate();
   int splitT = formattedDate.indexOf("T");
   dayStamp = formattedDate.substring(0, splitT);
