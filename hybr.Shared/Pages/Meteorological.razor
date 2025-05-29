@@ -15,7 +15,7 @@
         </div>
         <div id="grid21" class="gridContent compassDiv">
             <div id="compass" class="textDiv">
-                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[104].Disconnected" Size="SpinnerSize.ExtraLarge" />
             </div>
             <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartHumidity Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
@@ -23,17 +23,23 @@
         </div>
         <div id="grid31" class="gridContent compassDiv">
             <div id="compass" class="textDiv">
-                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[103].Disconnected" Size="SpinnerSize.ExtraLarge" />
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[105].Disconnected" Size="SpinnerSize.ExtraLarge" />
             </div>
             <div id="compass" class="gridContent">
                 <LineChart @ref=LiveChartElement.MeteorologicalChartPressure Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
             </div>
         </div>
-        <div id="grid12" class="gridContent">
+        <div id="grid12" class="gridContent compassDiv">
+            <div id="compass" class="textDiv">
+                <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[108].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            </div>
+            <div id="compass" class="gridContent">
             <LineChart @ref=LiveChartElement.MeteorologicalChartSolarRadiation Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+            </div>
         </div>
         <div id="grid22" class="gridContent compassDiv">
-            <div id="compass" class="textDiv">@ValueSettings.Sensors[107].Value_of_m</div>
+            <div id="compass" class="textDiv">
+                @ValueSettings.Sensors[107].Value_of_m</div>
             <div id="compass">
                 <Compass />
             </div>
