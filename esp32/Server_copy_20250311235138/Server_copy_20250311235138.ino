@@ -11,7 +11,11 @@
 #include <WiFiUdp.h>
 
 //settings
-const char *ssid = "RT-GPON-3C30";
+// const char *ssid = "RT-GPON-3C30";
+// const char *password = "1q2w3e4r5t";
+// const char *ssid = "Atom_209";
+// const char *password = "atomenergetik";
+const char *ssid = "qiwixe";
 const char *password = "1q2w3e4r5t";
 
 const int s3221c40b1name = 1;
@@ -119,7 +123,7 @@ void read_sensor_data() {
      s3221c43b3v = ina3221с43.getBusVoltage(2);
      s3221c43b3a = ina3221с43.getCurrentAmps(2);
 
-    // log();
+    log();
 }
 void log(){
     Serial.print("s3221c40b1v ");
