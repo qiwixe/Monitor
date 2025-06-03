@@ -120,7 +120,7 @@ align-self: center;
 text-align: center;
 font: bold 150px TimesNewRoman, sans-serif;
 }
-#parent1 {
+#parent {
     display: grid;
     grid-template-columns: 33% 33% 33%;
     grid-template-rows: 50% 50%;

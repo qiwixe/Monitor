@@ -416,7 +416,7 @@ namespace hybr.Shared.Services
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12);
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (2,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(2,28),(2,29),(2,30),(2,31),(2,32),(2,33);
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (3,41),(3,42),(3,43),(3,44),(3,45),(3,46),(3,47);
-                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (4,56),(3,57),(3,58),(3,59),(3,60),(3,61),(3,62);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (4,56),(4,57),(4,58),(4,59),(4,60),(4,61),(4,62);
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (5,71),(5,72),(5,73),(5,74),(5,75),(5,76),(5,77),(5,78),(5,79);
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (6,88),(6,89),(6,90),(6,91),(6,92),(6,93),(6,94);
                     INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (7,103),(7,104),(7,105),(7,106),(7,107),(7,108);
