@@ -2,8 +2,6 @@ using hybr.Shared.Services;
 using hybr.Web.Components;
 using hybr.Web.Services;
 
-await DataBase.Init();
-TimerUpdate.StartTimer();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddBlazorBootstrap();

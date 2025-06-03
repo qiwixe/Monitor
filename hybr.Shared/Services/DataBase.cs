@@ -298,176 +298,165 @@ namespace hybr.Shared.Services
             await _conn.CloseAsync();
             //SELECT partman.partition_data_time('data.alldata');
         }
+        public static async Task CreateDB()
+        {
+            string _createSQL =
+            @"  
+                CREATE SCHEMA IF NOT EXISTS settings;
+                CREATE TABLE IF NOT EXISTS settings.authentication
+                (
+                    id serial NOT NULL,
+                    password character varying NOT NULL,
+                    PRIMARY KEY(id)
+                );
+                INSERT INTO Settings.authentication(password) VALUES('qiwixe');
+
+                    CREATE SCHEMA IF NOT EXISTS Settings;
+                    CREATE TABLE IF NOT EXISTS Settings.units
+                    (
+                        id serial NOT NULL,
+                        unitFull character varying NOT NULL,
+                        unit character varying NOT NULL,
+                        PRIMARY KEY(id)
+                    );
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Вольт','В');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Ампер','А');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Герц','Гц');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Метры в секунду','м/с');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Ускорение','м/с²');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Градус цельсия','°C');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Литры в час','м³/час');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Водородный показатель','pH');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Время','Час');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Процент','%');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('% Кислорода','% Кислорода');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Обороты','Об');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Градус','°');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Ватт на метр квадратный','Вт/м²');
+                    INSERT INTO settings.units(unitFull, unit) VALUES('Давление','мм.рт.ст.');
+
+                    CREATE SCHEMA IF NOT EXISTS settings;
+                    CREATE TABLE IF NOT EXISTS settings.stations
+                    (
+                        id serial NOT NULL,
+                        title character varying NOT NULL DEFAULT 'Станция',
+                        shortTitle character varying NOT NULL DEFAULT 'Стц',
+                        fullTitle character varying NOT NULL DEFAULT 'Установка №0 Станция',
+                        href character varying NOT NULL DEFAULT 'Home',
+                        station_Ip character varying NOT NULL DEFAULT 'http://192.168.0.0/',
+                        PRIMARY KEY(id)
+                    );
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Фотоэнергетическая установка','ФУЭ','Установка №2, Фотоэнергетическая установка','Photovoltaic');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Солнечный коллектор','Коллектор','Установка №3, Солнечный коллектор','SolarCollector');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Солнечный концентратор','Концентратор','Установка №4, Солнечный концентратор','SolarСoncentrator');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Тепловой насос','Тепловой насос','Установка №5, Тепловой насос','HeatPump');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Биоустановка','Биоустановка','Установка №6, Биоустановка','Bioplant');
+                    INSERT INTO settings.stations(title, shortTitle, fullTitle, href) VALUES('Метеостанция','Метеостанция','Установка №7, Метеостанция','Meteorological');
+    
+                    CREATE SCHEMA IF NOT EXISTS settings;
+                    CREATE TABLE IF NOT EXISTS settings.sensors
+                    (
+                        id serial NOT NULL,
+                        title character varying NOT NULL DEFAULT 'Датчик',
+                        station_id integer NOT NULL DEFAULT 0 REFERENCES settings.Stations (Id),
+                        value_min double precision NOT NULL DEFAULT 0,
+                        value_max double precision NOT NULL DEFAULT 0,
+                        graduationString character varying NOT NULL DEFAULT 'x',
+                        unit_id integer REFERENCES settings.units (id),
+                        PRIMARY KEY(id)
+                    );
+                    INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(1, 1, 2),(2, 1, 1),(3, 1, 2),(4, 1, 1),(5, 1, 2),(6, 1, 1),(7, 1, 2),(8, 1, 1),(9, 1, 2),(10, 1, 1),(11, 1, 2),(12, 1, 1);
+                    INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(21, 2, 2),(22, 2, 1),(23, 2, 2),(24, 2, 1),(25, 2, 2),(26, 2, 1),(27, 2, 2),(28, 2, 1),(29, 2, 2),(30, 2, 1),(31, 2, 2),(32, 2, 1),(33, 2, 4);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(41, 'Температура горячей воды к баку', 3, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(42, 'Температура холодной воды к баку', 3, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(43, 'Температура бака', 3, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(44, 'Температура горячей воды из бака', 3, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(45, 'Температура холодной воды из бака', 3, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(46, 'Расход в бак', 3, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(47, 'Расход из бака', 3, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(56, 'Температура горячей воды к баку', 4, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(57, 'Температура холодной воды к баку', 4, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(58, 'Температура бака', 4, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(59, 'Температура горячей воды из бака', 4, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(60, 'Температура холодной воды из бака', 4, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(61, 'Расход в бак', 4, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(62, 'Расход из бака', 4, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(71, 'Температура горячей воды к баку', 5, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(72, 'Температура холодной воды к баку', 5, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(73, 'Температура бака', 5, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(74, 'Температура горячей воды из бака', 5, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(75, 'Температура холодной воды из бака', 5, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(76, 'Расход в бак', 5, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(77, 'Расход из бака', 5, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(78, 'Напряжение блока управления', 5, 2);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(79, 'Ток блока управления', 5, 1);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(88, 'Температура на выходе', 6, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(89, 'Показатель pH', 6, 8);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(90, 'Время работы насосов', 6, 9);
+                    INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(91, 6, 10);
+                    INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(92, 6, 11);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(93, 'Число оборотов', 6, 12);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(94, 'Расход', 6, 7);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(103, 'Температура', 7, 6);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(104, 'Влажность', 7, 10);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(105, 'Давление', 7, 15);
+                    INSERT INTO settings.sensors(id, title, station_id, value_min, value_max, unit_id) VALUES(106, 'Направление ветра', 7, 0, 359, 13);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(107, 'Скорость ветра', 7, 4);
+                    INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(108, 'Солнечная радиация', 7, 14);
+                    SELECT setval('settings.sensors_id_seq', 108);
+    
+                    CREATE SCHEMA IF NOT EXISTS settings;
+                    CREATE TABLE IF NOT EXISTS settings.stations_x_sensors
+                    (
+                        station_id integer NOT NULL REFERENCES settings.stations (id),
+                        sensor_id integer NOT NULL REFERENCES settings.sensors (id),
+                        PRIMARY KEY (station_id, sensor_id)
+                    );
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (2,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(2,28),(2,29),(2,30),(2,31),(2,32),(2,33);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (3,41),(3,42),(3,43),(3,44),(3,45),(3,46),(3,47);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (4,56),(3,57),(3,58),(3,59),(3,60),(3,61),(3,62);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (5,71),(5,72),(5,73),(5,74),(5,75),(5,76),(5,77),(5,78),(5,79);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (6,88),(6,89),(6,90),(6,91),(6,92),(6,93),(6,94);
+                    INSERT INTO settings.stations_x_sensors(station_id, sensor_id) values (7,103),(7,104),(7,105),(7,106),(7,107),(7,108);
+
+                    CREATE SCHEMA IF NOT EXISTS data;
+                    CREATE TABLE IF NOT EXISTS data.alldata
+                    (
+                        id serial NOT NULL,
+                        sensor_id integer NOT NULL REFERENCES settings.sensors (id),
+                        station_id integer NOT NULL REFERENCES settings.stations (id),
+                        date_time timestamp without time zone NOT NULL default now(),
+                        value_data double precision NOT NULL,
+                        PRIMARY KEY (date_time, id)
+                    ) PARTITION BY RANGE (date_time);
+
+                    CREATE TABLE data.insert
+                    (
+                        id integer,
+                        sensor_id integer,
+                        station_id integer,
+                        date_of_m date,
+                        time_of_m time without time zone,
+                        value_of_m double precision,
+                        unit_of_m character varying
+                    );
+
+                    CREATE SCHEMA IF NOT EXISTS partman;
+                    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
+
+                    SELECT partman.create_parent(
+                        p_parent_table := 'data.alldata',
+                        p_control := 'date_time',
+                        p_interval := '1 day',
+                        p_premake := 4,
+                        p_default_table := true,
+                        p_automatic_maintenance := 'on'
+                    );
+";
+        }
         #region Создание базы
-        //CREATE SCHEMA IF NOT EXISTS Settings;
-        //CREATE TABLE IF NOT EXISTS Settings.Authentication
-        //(
-        //    Id serial NOT NULL,
-        //    Password character varying NOT NULL,
-        //    PRIMARY KEY(Id)
-        //);
-        //INSERT INTO Settings.Authentication (password) VALUES('qiwixe');
-
-        //CREATE SCHEMA IF NOT EXISTS Settings;
-        //CREATE TABLE IF NOT EXISTS Settings.Units
-        //(
-        //    Id serial NOT NULL,
-        //    UnitFull character varying NOT NULL,
-        //    Unit character varying NOT NULL,
-        //    PRIMARY KEY(Id)
-        //);
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Вольт','В');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ампер','А');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Герц','Гц');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Метры в секунду','м/с');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ускорение','м/с²');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Градус цельсия','°C');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Литры в час','м³/час');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Водородный показатель','pH');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Время','Час');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Процент','%');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('% Кислорода','% Кислорода');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Обороты','Об');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Градус','°');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Ватт на метр квадратный','Вт/м²');
-        //INSERT INTO Settings.Units(UnitFull, Unit) VALUES('Давление','мм.рт.ст.');
-
-        //CREATE SCHEMA IF NOT EXISTS Settings;
-        //CREATE TABLE IF NOT EXISTS Settings.Stations
-        //(
-        //    Id serial NOT NULL,
-        //    Title character varying NOT NULL DEFAULT 'Станция',
-        //    ShortTitle character varying NOT NULL DEFAULT 'Стц',
-        //    FullTitle character varying NOT NULL DEFAULT 'Установка №0 Станция',
-        //    Href character varying NOT NULL DEFAULT 'Home',
-        //    Station_Ip character varying NOT NULL DEFAULT 'http://192.168.0.0/',
-        //    PRIMARY KEY(Id)
-        //);
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Ветроэнергетическая установка','ВУЭ','Установка №1, Ветроэнергетическая установка','WindPower');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Фотоэнергетическая установка','ФУЭ','Установка №2, Фотоэнергетическая установка','Photovoltaic');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Солнечный коллектор','Коллектор','Установка №3, Солнечный коллектор','SolarCollector');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Солнечный концентратор','Концентратор','Установка №4, Солнечный концентратор','SolarСoncentrator');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Тепловой насос','Тепловой насос','Установка №5, Тепловой насос','HeatPump');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href) VALUES('Биоустановка','Биоустановка','Установка №6, Биоустановка','Bioplant');
-        //INSERT INTO Settings.Stations(Title, ShortTitle, FullTitle, Href, Station_Ip) VALUES('Метеостанция','Метеостанция','Установка №7, Метеостанция','Meteorological','http://192.168.0.18/');
-
-        //CREATE SCHEMA IF NOT EXISTS Settings;
-        //CREATE TABLE IF NOT EXISTS Settings.Sensors
-        //(
-        //    Id serial NOT NULL,
-        //    Title character varying NOT NULL DEFAULT 'Датчик',
-        //    Station_id integer NOT NULL DEFAULT 0 REFERENCES Settings.Stations (Id),
-        //    Value_min double precision NOT NULL DEFAULT 0,
-        //    Value_max double precision NOT NULL DEFAULT 0,
-        //    GraduationString character varying NOT NULL DEFAULT 'x',
-        //    Unit_id integer REFERENCES Settings.Units (Id),
-        //    PRIMARY KEY(Id)
-        //);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(1, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(2, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(3, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(4, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(5, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(6, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(7, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(8, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(9, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(10, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(11, 1, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(12, 1, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(21, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(22, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(23, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(24, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(25, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(26, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(27, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(28, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(29, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(30, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(31, 2, 2);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(32, 2, 1);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(33, 2, 4);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(41, 'Температура горячей воды к баку', 3, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(42, 'Температура холодной воды к баку', 3, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(43, 'Температура бака', 3, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(44, 'Температура горячей воды из бака', 3, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(45, 'Температура холодной воды из бака', 3, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(46, 'Расход в бак', 3, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(47, 'Расход из бака', 3, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(56, 'Температура горячей воды к баку', 4, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(57, 'Температура холодной воды к баку', 4, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(58, 'Температура бака', 4, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(59, 'Температура горячей воды из бака', 4, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(60, 'Температура холодной воды из бака', 4, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(61, 'Расход в бак', 4, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(62, 'Расход из бака', 4, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(71, 'Температура горячей воды к баку', 5, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(72, 'Температура холодной воды к баку', 5, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(73, 'Температура бака', 5, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(74, 'Температура горячей воды из бака', 5, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(75, 'Температура холодной воды из бака', 5, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(76, 'Расход в бак', 5, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(77, 'Расход из бака', 5, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(78, 'Напряжение блока управления', 5, 2);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(79, 'Ток блока управления', 5, 1);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(88, 'Температура на выходе', 6, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(89, 'Показатель pH', 6, 8);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(90, 'Время работы насосов', 6, 9);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(91, 6, 10);
-        //INSERT INTO settings.sensors(id, station_id, unit_id) VALUES(92, 6, 11);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(93, 'Число оборотов', 6, 12);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(94, 'Расход', 6, 7);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(103, 'Температура', 7, 6);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(104, 'Влажность', 7, 10);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(105, 'Давление', 7, 15);
-        //INSERT INTO settings.sensors(id, title, station_id, value_min, value_max, unit_id) VALUES(106, 'Направление ветра', 7, 0, 359, 13);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(107, 'Скорость ветра', 7, 4);
-        //INSERT INTO settings.sensors(id, title, station_id, unit_id) VALUES(108, 'Солнечная радиация', 7, 14);
-        //SELECT setval('settings.sensors_id_seq', 108);
-
-        //CREATE SCHEMA IF NOT EXISTS partman;
-        //CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
-
-        //        CREATE TABLE IF NOT EXISTS data.alldata
-        //        (
-        //            id serial NOT NULL,
-        //    sensor_id integer NOT NULL,
-        //    station_id integer NOT NULL,
-        //    date_time timestamp without time zone NOT NULL,
-        //    value_data double precision NOT NULL,
-        //    CONSTRAINT alldata_pkey PRIMARY KEY(date_time, id),
-        //    CONSTRAINT alldata_sensor_id_fkey FOREIGN KEY(sensor_id)
-        //        REFERENCES settings.sensors(id) MATCH SIMPLE
-        //        ON UPDATE NO ACTION
-        //        ON DELETE NO ACTION,
-        //    CONSTRAINT alldata_station_id_fkey FOREIGN KEY(station_id)
-        //        REFERENCES settings.stations(id) MATCH SIMPLE
-        //        ON UPDATE NO ACTION
-        //        ON DELETE NO ACTION
-        //) PARTITION BY RANGE(date_time);
-
-
-        //SELECT partman.create_parent(
-        //    p_parent_table := 'data.alldata',
-        //    p_control := 'date_time',
-        //    p_interval := '1 day',
-        //    p_premake := 4,
-        //    p_default_table := true,
-        //    p_automatic_maintenance := 'on'
-        //);
-
-        //CREATE TABLE data.insert
-        //(
-        //    id integer,
-        //    sensor_id integer,
-        //    station_id integer,
-        //    date_of_m date,
-        //    time_of_m time without time zone,
-        //    value_of_m double precision,
-        //    unit_of_m character varying,
-        //    PRIMARY KEY(id)
-        //);
 
         //INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) SELECT sensor_id, station_id, date_of_m+time_of_m, value_of_m FROM data.insert;
         //SELECT * FROM partman.show_partitions('data.alldata');
@@ -475,22 +464,6 @@ namespace hybr.Shared.Services
         //SELECT * FROM partman.check_default();
         //SELECT partman.partition_data_time('data.alldata');
 
-        //CREATE TABLE IF NOT EXISTS settings.stations_x_sensors
-        //(
-        //    station_id integer NOT NULL,
-        //    sensor_id integer NOT NULL,
-        //    CONSTRAINT stations_x_sensors_pkey PRIMARY KEY (station_id, sensor_id),
-        //    CONSTRAINT "Sensor_id_frg" FOREIGN KEY (sensor_id)
-        //        REFERENCES settings.sensors (id) MATCH SIMPLE
-        //        ON UPDATE NO ACTION
-        //        ON DELETE NO ACTION
-        //        NOT VALID,
-        //    CONSTRAINT station_id_frg FOREIGN KEY (station_id)
-        //        REFERENCES settings.stations (id) MATCH SIMPLE
-        //        ON UPDATE NO ACTION
-        //        ON DELETE NO ACTION
-        //        NOT VALID
-        //)
         #endregion Создание базы
 
         //SELECT s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip, array_agg(s_x_s.sensor_id)

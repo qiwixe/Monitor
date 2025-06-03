@@ -128,7 +128,6 @@
         } else{
             ToastService.Notify(new(ToastType.Danger, $"Введён неверный пароль! Изменения не применены!"));
         }
-
         enteredPassword = "";
     }
     private void Reset()
@@ -140,6 +139,7 @@
     private EditContext? editContext;
     protected override void OnInitialized()
     {
+        TimerUpdate.StartTimer();
         editContext = new EditContext(product);
         base.OnInitialized();
     }

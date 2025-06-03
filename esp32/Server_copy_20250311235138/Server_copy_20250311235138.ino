@@ -77,8 +77,8 @@ double s3221c43b1a;
 double s3221c43b2a;
 double s3221c43b3a;
 
-StaticJsonDocument<10000> jsonDocument;
-char buffer[10000];
+StaticJsonDocument<1500> jsonDocument;
+char buffer[1500];
 
 WebServer server(80);
 void add_json_object(int Sensor, float value) {
@@ -88,7 +88,6 @@ void add_json_object(int Sensor, float value) {
   obj["Date_of_m"] = dayStamp; 
   obj["Time_of_m"] = timeStamp; 
   obj["Value_of_m"] = value; 
-  obj["Unit_of_m"] = "1"; 
 }
 void read_sensor_data() {
      temperature = bme.readTemperature();

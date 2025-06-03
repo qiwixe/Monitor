@@ -50,13 +50,6 @@ h1:focus {
     border-color: #929292;
 }
 
-#parent {
-    display: grid;
-    height: 100dvh;
-    grid-template-columns: 33% 33% 33%;
-    grid-template-rows: 50% 50%;
-}
-
 #grid11 {
     grid-column: 1;
     grid-row: 1;
@@ -126,4 +119,9 @@ h1:focus {
 align-self: center;
 text-align: center;
 font: bold 150px TimesNewRoman, sans-serif;
+}
+#parent1 {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 50% 50%;
 }

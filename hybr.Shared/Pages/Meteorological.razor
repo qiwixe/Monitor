@@ -2,7 +2,7 @@
 
 @using hybr.Shared.Services
 <PageTitle>Meteorological</PageTitle>
-<Grid Style="height:100%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="UpdateGrid.DataProvider">
+<Grid Style="height:70%" @ref=@UpdateGrid.AllUpdateGrid["Meteorological"] TItem="Sensor" DataProvider="UpdateGrid.DataProvider">
     <Preload />
     <div id="parent">
         <div id="grid11" class="gridContent compassDiv">
@@ -69,7 +69,7 @@
         if (firstRender)
         {
             LiveChartElement.PageProperty("Meteorological");
-            PreloadService.Show(SpinnerColor.Light, "Синхронизация...");
+            PreloadService.Show(SpinnerColor.Light, "Синхронизация....");
             await Task.Delay(1300);
             PreloadService.Hide();
         }

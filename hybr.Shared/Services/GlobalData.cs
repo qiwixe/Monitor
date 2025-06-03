@@ -394,6 +394,7 @@ namespace hybr.Shared.Services
         public static Dictionary<string, bool> RepeatRender { get; set; } = new();
         public static async void StartTimer()
         {
+            await DataBase.Init();
             if (!RepeatRender.TryGetValue("Timer",out var _bool))
             {
                 RepeatRender["Timer"] = true;
