@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 
-
 namespace hybr.Shared.Services
 {
     internal class HTTPClientSensor

@@ -279,8 +279,15 @@ namespace hybr.Shared.Services
             string _insstr = "";
             foreach (var (_key, _value) in _dictData)
             {
-                _insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});";
-                Console.WriteLine($"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',','.')});");
+                if (_value.Date_of_m == "" || _value.Date_of_m == null || _value.Time_of_m == "" || _value.Time_of_m == null)
+                {
+                    _insstr += $"INSERT INTO data.alldata(sensor_id, station_id, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},{_value.Value_of_m.ToString().Replace(',', '.')});";
+                    Console.WriteLine($"Номер датчика: {_value.Sensor_id} значение: {_value.Value_of_m.ToString().Replace(',', '.')}");
+                }
+                else {
+                    _insstr += $"INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) VALUES ({_value.Sensor_id},{_value.Station_id},'{_value.Date_of_m} {_value.Time_of_m}',{_value.Value_of_m.ToString().Replace(',', '.')});";
+                    Console.WriteLine($"Номер датчика: {_value.Sensor_id} значение: {_value.Value_of_m.ToString().Replace(',', '.')}");
+                }
             }
             await using var _conn = new NpgsqlConnection(SQLstring.Connection);
             await _conn.OpenAsync();

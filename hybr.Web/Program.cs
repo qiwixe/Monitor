@@ -3,7 +3,7 @@ using hybr.Web.Components;
 using hybr.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+TimerUpdate.StartTimer();
 builder.Services.AddBlazorBootstrap();
 
 // Add services to the container.

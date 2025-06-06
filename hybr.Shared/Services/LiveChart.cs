@@ -366,12 +366,12 @@ namespace hybr.Shared.Services
     }
     public class ChartDataSet()
     {
-        public static List<IChartDataset> WindPowerChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor21, ChartSettings.WindPowerChartDataSetSensor23, ChartSettings.WindPowerChartDataSetSensor25 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage1 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor22, ChartSettings.WindPowerChartDataSetSensor24, ChartSettings.WindPowerChartDataSetSensor26 };
-        public static List<IChartDataset> WindPowerChartDataSetVoltage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor27, ChartSettings.WindPowerChartDataSetSensor29 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage2 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor28, ChartSettings.WindPowerChartDataSetSensor30 };
-        public static List<IChartDataset> WindPowerChartDataSetVoltage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor31 };
-        public static List<IChartDataset> WindPowerChartDataSetAmperage3 { get; } = new List<IChartDataset> { ChartSettings.WindPowerChartDataSetSensor32 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetVoltage1 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor1, ChartSettings.PhotovoltaicChartDataSetSensor3, ChartSettings.PhotovoltaicChartDataSetSensor5 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetAmperage1 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor2, ChartSettings.PhotovoltaicChartDataSetSensor4, ChartSettings.PhotovoltaicChartDataSetSensor6 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetVoltage2 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor7, ChartSettings.PhotovoltaicChartDataSetSensor9 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetAmperage2 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor8, ChartSettings.PhotovoltaicChartDataSetSensor10 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetVoltage3 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor11 };
+        public static List<IChartDataset> PhotovoltaicChartDataSetAmperage3 { get; } = new List<IChartDataset> { ChartSettings.PhotovoltaicChartDataSetSensor12 };
 
         public static List<IChartDataset> MeteorologicalChartDataSetTemperature { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor103 };
         public static List<IChartDataset> MeteorologicalChartDataSetHumidity { get; } = new List<IChartDataset> { ChartSettings.MeteorologicalChartDataSetSensor104 };
@@ -383,12 +383,12 @@ namespace hybr.Shared.Services
     }
     public class LiveChartElement()
     {
-        public static LineChart WindPowerChartVoltage1 { get; set; } = default!;
-        public static LineChart WindPowerChartAmperage1 { get; set; } = default!;
-        public static LineChart WindPowerChartVoltage2 { get; set; } = default!;
-        public static LineChart WindPowerChartAmperage2 { get; set; } = default!;
-        public static LineChart WindPowerChartVoltage3 { get; set; } = default!;
-        public static LineChart WindPowerChartAmperage3 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartVoltage1 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartAmperage1 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartVoltage2 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartAmperage2 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartVoltage3 { get; set; } = default!;
+        public static LineChart PhotovoltaicChartAmperage3 { get; set; } = default!;
 
         public static LineChart MeteorologicalChartTemperature { get; set; } = default!;
         public static LineChart MeteorologicalChartHumidity { get; set; } = default!;
@@ -407,44 +407,44 @@ namespace hybr.Shared.Services
             {
                 case ("Home"):
                     break;
-                case ("WindPower"):
-                    AllCharts["WindPower"] = new Dictionary<LineChart, Chart>()
+                case ("Photovoltaic"):
+                    AllCharts["Photovoltaic"] = new Dictionary<LineChart, Chart>()
                     {
-                        [WindPowerChartVoltage1] = new Chart
+                        [PhotovoltaicChartVoltage1] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage1 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage1
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetVoltage1 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetVoltage1
                         },
-                        [WindPowerChartAmperage1] = new Chart
+                        [PhotovoltaicChartAmperage1] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage1 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage1
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetAmperage1 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetAmperage1
                         },
-                        [WindPowerChartVoltage2] = new Chart
+                        [PhotovoltaicChartVoltage2] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage2 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage2
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetVoltage2 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetVoltage2
                         },
-                        [WindPowerChartAmperage2] = new Chart
+                        [PhotovoltaicChartAmperage2] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage2 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage2
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetAmperage2 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetAmperage2
                         },
-                        [WindPowerChartVoltage3] = new Chart
+                        [PhotovoltaicChartVoltage3] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetVoltage3 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetVoltage3
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetVoltage3 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetVoltage3
                         },
-                        [WindPowerChartAmperage3] = new Chart
+                        [PhotovoltaicChartAmperage3] = new Chart
                         {
                             maxLabelXasixCount = 5,
-                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.WindPowerChartDataSetAmperage3 },
-                            DChartDataset = ChartDataSet.WindPowerChartDataSetAmperage3
+                            DChartData = new ChartData { Labels = new List<string>(), Datasets = ChartDataSet.PhotovoltaicChartDataSetAmperage3 },
+                            DChartDataset = ChartDataSet.PhotovoltaicChartDataSetAmperage3
                         },
                     };
                     break;
