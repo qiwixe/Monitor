@@ -46,8 +46,8 @@ namespace hybr.Shared.Services
             SensorId = 3,
             Label = $"Напряжение 3, В",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 255, 0, 0.7)",
+            BorderColor = "rgba(0, 255, 0, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor4 { get; } =
         new DefaultChartOption
@@ -55,8 +55,8 @@ namespace hybr.Shared.Services
             SensorId = 4,
             Label = $"Ток 4, A",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 255, 0, 0.7)",
+            BorderColor = "rgba(0, 255, 0, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor5 { get; } =
         new DefaultChartOption
@@ -64,8 +64,8 @@ namespace hybr.Shared.Services
             SensorId = 5,
             Label = $"Напряжение 5, В",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 0, 255, 0.7)",
+            BorderColor = "rgba(0, 0, 255, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor6 { get; } =
         new DefaultChartOption
@@ -73,8 +73,8 @@ namespace hybr.Shared.Services
             SensorId = 6,
             Label = $"Ток 6, В",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 0, 255, 0.7)",
+            BorderColor = "rgba(0, 0, 255, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor7 { get; } =
         new DefaultChartOption

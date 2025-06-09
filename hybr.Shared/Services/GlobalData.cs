@@ -33,6 +33,9 @@ namespace hybr.Shared.Services
                         if (_lastData.TryGetValue(_lineChartDataset.SensorId, out var _bool)) 
                         { 
                             _lineChartDataset.Data.Add(_lastData[_lineChartDataset.SensorId].Value_of_m);
+                        } else
+                        {
+                            _lineChartDataset.Data.RemoveAt(0);
                         }
                     }
                     if (_chart.DChartData.Labels.Count > _chart.maxLabelXasixCount)
@@ -42,7 +45,6 @@ namespace hybr.Shared.Services
                     _chart.DChartData.Labels.Add(DateTime.Now.ToLongTimeString());
                     _PageChart.UpdateValuesAsync(_chart.DChartData);
                 }
-
         }
         public static void UpdateDataArchive(List<Order> _lastData)
         {
