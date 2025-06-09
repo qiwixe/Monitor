@@ -6,11 +6,12 @@ namespace hybr.Shared.Services
     internal class HTTPClientSensor
     {
         static HttpMessageHandler handler = new HttpClientHandler();
+        static List<Order> _httpData = new();
+        Dictionary<int, Order> _data = new();
         static readonly HttpClient client = new HttpClient(handler){Timeout = TimeSpan.FromSeconds(1)};
         public static async Task<List<Order>> Main()
         {
-            List<Order> _httpData = new();
-            Dictionary<int, Order> _data = new();
+            _httpData.Clear();
                 foreach (var (_key, _value) in ValueSettings.Stations)
                     try
                     {

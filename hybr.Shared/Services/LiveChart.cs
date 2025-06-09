@@ -26,7 +26,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 1,
-            Label = $"Напряжение 1, В",
+            Label = $"{ValueSettings.SensorsSettings[1].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[1].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)"
@@ -35,7 +35,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 2,
-            Label = $"Ток 2, A",
+            Label = $"{ValueSettings.SensorsSettings[2].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[2].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -44,7 +44,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 3,
-            Label = $"Напряжение 3, В",
+            Label = $"{ValueSettings.SensorsSettings[3].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[3].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
@@ -53,7 +53,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 4,
-            Label = $"Ток 4, A",
+            Label = $"{ValueSettings.SensorsSettings[4].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[4].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
@@ -62,7 +62,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 5,
-            Label = $"Напряжение 5, В",
+            Label = $"{ValueSettings.SensorsSettings[5].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[5].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
@@ -71,7 +71,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 6,
-            Label = $"Ток 6, В",
+            Label = $"{ValueSettings.SensorsSettings[6].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[6].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
@@ -80,7 +80,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 7,
-            Label = $"Напряжение 7, В",
+            Label = $"{ValueSettings.SensorsSettings[7].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[7].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -89,7 +89,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 8,
-            Label = $"Ток 8, В",
+            Label = $"{ValueSettings.SensorsSettings[8].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[8].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -98,7 +98,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 9,
-            Label = $"Напряжение 9, В",
+            Label = $"{ValueSettings.SensorsSettings[9].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[9].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -107,7 +107,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 10,
-            Label = $"Ток 10, В",
+            Label = $"{ValueSettings.SensorsSettings[10].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[10].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -116,7 +116,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 11,
-            Label = $"Напряжение 11, В",
+            Label = $"{ValueSettings.SensorsSettings[11].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[11].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -125,7 +125,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 12,
-            Label = $"Ток 12, В",
+            Label = $"{ValueSettings.SensorsSettings[12].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[12].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -135,7 +135,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 21,
-            Label = $"Напряжение 1, В",
+            Label = $"{ValueSettings.SensorsSettings[21].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[21].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)"
@@ -144,7 +144,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 22,
-            Label = $"Ток 2, A",
+            Label = $"{ValueSettings.SensorsSettings[22].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[22].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -153,7 +153,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 23,
-            Label = $"Напряжение 3, В",
+            Label = $"{ValueSettings.SensorsSettings[23].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[23].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -162,7 +162,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 24,
-            Label = $"Ток 4, A",
+            Label = $"{ValueSettings.SensorsSettings[24].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[24].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -171,7 +171,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 25,
-            Label = $"Напряжение 5, В",
+            Label = $"{ValueSettings.SensorsSettings[25].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[25].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -180,7 +180,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 26,
-            Label = $"Ток 6, В",
+            Label = $"{ValueSettings.SensorsSettings[26].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[26].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -189,7 +189,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 27,
-            Label = $"Напряжение 7, В",
+            Label = $"{ValueSettings.SensorsSettings[27].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[27].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -198,7 +198,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 28,
-            Label = $"Ток 8, В",
+            Label = $"{ValueSettings.SensorsSettings[28].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[28].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -207,7 +207,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 29,
-            Label = $"Напряжение 9, В",
+            Label = $"{ValueSettings.SensorsSettings[29].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[29].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -216,7 +216,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 30,
-            Label = $"Ток 10, В",
+            Label = $"{ValueSettings.SensorsSettings[30].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[30].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -225,7 +225,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 31,
-            Label = $"Напряжение 11, В",
+            Label = $"{ValueSettings.SensorsSettings[31].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[31].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -234,7 +234,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 32,
-            Label = $"Ток 12, В",
+            Label = $"{ValueSettings.SensorsSettings[32].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[32].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -243,7 +243,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 33,
-            Label = $"Ток 12, В",
+            Label = $"{ValueSettings.SensorsSettings[33].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[33].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -253,7 +253,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 41,
-            Label = $"Напряжение 1, В",
+            Label = $"{ValueSettings.SensorsSettings[41].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[41].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)"
@@ -262,7 +262,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 42,
-            Label = $"Ток 2, A",
+            Label = $"{ValueSettings.SensorsSettings[42].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[42].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -271,7 +271,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 43,
-            Label = $"Напряжение 3, В",
+            Label = $"{ValueSettings.SensorsSettings[43].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[43].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -280,7 +280,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 44,
-            Label = $"Ток 4, A",
+            Label = $"{ValueSettings.SensorsSettings[44].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[44].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -289,7 +289,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 45,
-            Label = $"Напряжение 5, В",
+            Label = $"{ValueSettings.SensorsSettings[45].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[45].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -298,7 +298,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 46,
-            Label = $"Ток 6, В",
+            Label = $"{ValueSettings.SensorsSettings[46].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[46].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -307,7 +307,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 47,
-            Label = $"Напряжение 7, В",
+            Label = $"{ValueSettings.SensorsSettings[47].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[47].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -317,7 +317,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 103,
-            Label = $"Температура, °C",
+            Label = $"{ValueSettings.SensorsSettings[103].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[103].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 0, 0, 0.7)",
             BorderColor = "rgba(255, 0, 0, 0.7)",
@@ -326,7 +326,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 104,
-            Label = $"Влажность, %",
+            Label = $"{ValueSettings.SensorsSettings[104].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[104].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(255, 255, 0, 0.7)",
             BorderColor = "rgba(255, 255, 0, 0.7)",
@@ -335,7 +335,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 105,
-            Label = $"Давление, мм.рт.ст.",
+            Label = $"{ValueSettings.SensorsSettings[105].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[105].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 255, 0, 0.7)",
             BorderColor = "rgba(0, 255, 0, 0.7)",
@@ -344,7 +344,7 @@ namespace hybr.Shared.Services
         new DefaultChartOption
         {
             SensorId = 108,
-            Label = $"Солнечная радиация, Вт/м2",
+            Label = $"{ValueSettings.SensorsSettings[108].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[108].Unit_of_m].UnitShort}",
             Data = new(),
             BackgroundColor = "rgba(0, 0, 255, 0.7)",
             BorderColor = "rgba(0, 0, 255, 0.7)",
