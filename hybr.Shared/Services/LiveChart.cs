@@ -1,7 +1,4 @@
 ﻿using BlazorBootstrap;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using SixLabors.Fonts;
-using System.Reflection.Emit;
 
 namespace hybr.Shared.Services
 {
@@ -100,8 +97,8 @@ namespace hybr.Shared.Services
             SensorId = 9,
             Label = $"{ValueSettings.SensorsSettings[9].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[9].Unit_of_m].UnitShort}",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 255, 0, 0.7)",
+            BorderColor = "rgba(0, 255, 0, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor10 { get; } =
         new DefaultChartOption
@@ -109,8 +106,8 @@ namespace hybr.Shared.Services
             SensorId = 10,
             Label = $"{ValueSettings.SensorsSettings[10].Title}, {ValueSettings.UnitsSettings[ValueSettings.SensorsSettings[10].Unit_of_m].UnitShort}",
             Data = new(),
-            BackgroundColor = "rgba(255, 0, 0, 0.7)",
-            BorderColor = "rgba(255, 0, 0, 0.7)",
+            BackgroundColor = "rgba(0, 255, 0, 0.7)",
+            BorderColor = "rgba(0, 255, 0, 0.7)",
         };
         public static IChartDataset PhotovoltaicChartDataSetSensor11 { get; } =
         new DefaultChartOption

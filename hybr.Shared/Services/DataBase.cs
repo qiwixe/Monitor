@@ -1,17 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Npgsql;
-using Parlot;
-using Parlot.Fluent;
-using System;
-using System.Collections.Concurrent;
-using System.Formats.Asn1;
-using System.Text.RegularExpressions;
-using static ClosedXML.Excel.XLPredefinedFormat;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Npgsql;
 
 namespace hybr.Shared.Services
 {
@@ -80,7 +67,7 @@ namespace hybr.Shared.Services
             foreach (var (_key,_value) in sensor_id)
                 if(_value)
                 _formated_string_sensor_id += $",{_key}";
-            return $"SELECT * FROM {schemaName}.{tableName} WHERE sensor_id in ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time <= '{range_stop_date}' order by date_time";
+            return $"SELECT * FROM {schemaName}.{tableName} WHERE sensor_id in ({_formated_string_sensor_id}) and date_time >= '{range_start_date}' and date_time < '{range_stop_date}' order by date_time";
         }
         public static async Task<List<Order>> Data(string _queryGetData)
         {
@@ -463,7 +450,6 @@ namespace hybr.Shared.Services
                     );
 ";
         }
-        #region Создание базы
 
         //INSERT INTO data.alldata(sensor_id, station_id, date_time, value_data) SELECT sensor_id, station_id, date_of_m+time_of_m, value_of_m FROM data.insert;
         //SELECT * FROM partman.show_partitions('data.alldata');
@@ -471,15 +457,13 @@ namespace hybr.Shared.Services
         //SELECT * FROM partman.check_default();
         //SELECT partman.partition_data_time('data.alldata');
 
-        #endregion Создание базы
-
         //SELECT s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip, array_agg(s_x_s.sensor_id)
         //FROM settings.stations s
         //left join settings.stations_x_sensors s_x_s on s.id = s_x_s.statation_id
         //group by s.id, s.title, s.shorttitle, s.fulltitle, s.href, s.station_ip
         //order by id
     }
-        //INSERT INTO data.alldata(
-        //    sensor_id, station_id, date_time, value_data)
-        //    VALUES(1, 1, '2013-12-01 00:00:00', 0.15625);
+    //INSERT INTO data.alldata(
+    //    sensor_id, station_id, date_time, value_data)
+    //    VALUES(1, 1, '2013-12-01 00:00:00', 0.15625);
 }

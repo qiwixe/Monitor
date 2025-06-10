@@ -1,7 +1,4 @@
-﻿using BlazorBootstrap;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace hybr.Shared.Services
 {
@@ -33,7 +30,7 @@ namespace hybr.Shared.Services
                         if (_lastData.TryGetValue(_lineChartDataset.SensorId, out var _bool)) 
                         { 
                             _lineChartDataset.Data.Add(_lastData[_lineChartDataset.SensorId].Value_of_m);
-                        } else
+                        } else if (_lineChartDataset.Data.Count > 0)
                         {
                             _lineChartDataset.Data.RemoveAt(0);
                         }
@@ -71,311 +68,92 @@ namespace hybr.Shared.Services
     {
         public static async Task<Dictionary<int, Order>> FakeData()
         {
-            List<Order> _listMeteoSensor = await HTTPClientSensor.Main();
             Dictionary<int, Order> _fakeData = new();
-            if (_listMeteoSensor != null) 
-            foreach (var _value in _listMeteoSensor)
-                {
-                    _fakeData[_value.Sensor_id] = _value;
-                }
             #region Фейк Данные для ФЭУ(1)
             _fakeData[1] = (new Order
             {
                 Sensor_id = 1,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             });
             _fakeData[2] = (new Order
             {
                 Sensor_id = 2,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[3] = (new Order
             {
                 Sensor_id = 3,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[4] = (new Order
             {
                 Sensor_id = 4,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[5] = (new Order
             {
                 Sensor_id = 5,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[6] = (new Order
             {
                 Sensor_id = 6,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[7] = (new Order
             {
                 Sensor_id = 7,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[8] = (new Order
             {
                 Sensor_id = 8,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[9] = (new Order
             {
                 Sensor_id = 9,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[10] = (new Order
             {
                 Sensor_id = 10,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             }); 
             _fakeData[11] = (new Order
             {
                 Sensor_id = 11,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             });
             _fakeData[12] = (new Order
             {
                 Sensor_id = 12,
                 Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
                 Value_of_m = new Random().Next(100) - 50,
             });
             #endregion Фейк Данные для ФЭУ(1)
-            #region Фейк Данные для ВЭУ(2)
-            _fakeData[21] = (new Order
-            {
-                Sensor_id = 21,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[22] = (new Order
-            {
-                Sensor_id = 22,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[23] = (new Order
-            {
-                Sensor_id = 23,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[24] = (new Order
-            {
-                Sensor_id = 24,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[25] = (new Order
-            {
-                Sensor_id = 25,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[26] = (new Order
-            {
-                Sensor_id = 26,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[27] = (new Order
-            {
-                Sensor_id = 27,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[28] = (new Order
-            {
-                Sensor_id = 28,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[29] = (new Order
-            {
-                Sensor_id = 29,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[30] = (new Order
-            {
-                Sensor_id = 30,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[31] = (new Order
-            {
-                Sensor_id = 31,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[32] = (new Order
-            {
-                Sensor_id = 32,
-                Station_id = 1,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[33] = (new Order
-            {
-                Sensor_id = 33,
-                Station_id = 2,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            #endregion Фейк Данные для ВЭУ(2)
-            #region Фейк Данные для Коллектора(3)
-            _fakeData[41] = (new Order
-            {
-                Sensor_id = 41,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[42] = (new Order
-            {
-                Sensor_id = 42,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[43] = (new Order
-            {
-                Sensor_id = 43,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[44] = (new Order
-            {
-                Sensor_id = 44,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[45] = (new Order
-            {
-                Sensor_id = 45,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[46] = (new Order
-            {
-                Sensor_id = 46,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            _fakeData[47] = (new Order
-            {
-                Sensor_id = 47,
-                Station_id = 3,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(100) - 50,
-            });
-            #endregion Фейк Данные для Коллектора(3)
-            #region Фейк Данные для метеостанции(7)
-            _fakeData[106] = (new Order
-            {
-                Sensor_id = 106,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(360),
-            });
-            _fakeData[107] = (new Order
-            {
-                Sensor_id = 107,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = new Random().Next(15),
-            });
-            _fakeData[108] = (new Order
-            {
-                Sensor_id = 108,
-                Station_id = 7,
-                Date_of_m = DateTime.Now.ToString("dd:MM:yy"),
-                Time_of_m = DateTime.Now.ToString("HH:mm:ss"),
-                Value_of_m = (double)new Random().Next(10) / 30,
-            });
-            #endregion Фейк Данные для метеостанции(7)
             var _GData = SensorData.Graduation(_fakeData);
             GlobalPageProperty.UpdateData(_GData);
             SensorData.PreparationSensorData(_GData);
+            DataBase.InsertData(_GData);
             return _fakeData;
         }
         public static async Task Data()
         {
             List<Order> _httpData = await HTTPClientSensor.Main();
             Dictionary<int, Order> _dictData = new();
-            if (_httpData != null)
+            if (_httpData.Count != 0)
             {
                 foreach (var _value in _httpData)
                 {
@@ -386,9 +164,13 @@ namespace hybr.Shared.Services
             SensorData.PreparationSensorData(_gradData);
             DataBase.InsertData(_gradData);
             }
+            else
+            {
+                GlobalPageProperty.UpdateData(new());
+                SensorData.PreparationSensorData(new());
+            }
             foreach (var (_key, _a) in UpdateGrid.AllUpdateGrid)
-                UpdateGrid.AllUpdateGrid[_key].RefreshDataAsync();
-
+            UpdateGrid.AllUpdateGrid[_key].RefreshDataAsync();
         }
     }
     public class TimerUpdate()
@@ -407,7 +189,7 @@ namespace hybr.Shared.Services
                     await Task.Delay(1000);
                     //GlobalData.FakeData();
                     GlobalData.Data();
-                    if (i >= 60)
+                    if (i >= 3600)
                     {
                         i = 0;
                     DataBase.CheckPart();

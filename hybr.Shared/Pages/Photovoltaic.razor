@@ -4,23 +4,59 @@
 <PageTitle>Photovoltaic</PageTitle>
 <Preload />
 <div id="parent">
-    <div id="grid11" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage1 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid11" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[2].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Visible="@ValueSettings.Sensors[4].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Visible="@ValueSettings.Sensors[6].Disconnected" Size="SpinnerSize.ExtraLarge" />          
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage1 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid21" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage1 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid21" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[1].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Visible="@ValueSettings.Sensors[3].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Visible="@ValueSettings.Sensors[5].Disconnected" Size="SpinnerSize.ExtraLarge" />          
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage1 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid31" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage2 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid31" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[7].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Visible="@ValueSettings.Sensors[9].Disconnected" Size="SpinnerSize.ExtraLarge" />          
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage2 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid12" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage2 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid12" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[8].Disconnected" Size="SpinnerSize.ExtraLarge" />
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Visible="@ValueSettings.Sensors[10].Disconnected" Size="SpinnerSize.ExtraLarge" />          
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage2 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid22" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage3 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid22" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[11].Disconnected" Size="SpinnerSize.ExtraLarge" />
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartVoltage3 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
-    <div id="grid32" class="gridContent">
-        <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage3 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+    <div id="grid32" class="gridContent compassDiv">
+        <div id="compass" class="textDiv">
+            <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Danger" Visible="@ValueSettings.Sensors[12].Disconnected" Size="SpinnerSize.ExtraLarge" />
+        </div>
+        <div id="compass" class="gridContent">
+            <LineChart @ref=LiveChartElement.PhotovoltaicChartAmperage3 Width="100" WidthUnit="Unit.Percentage" Height="100" HeightUnit="Unit.Percentage" />
+        </div>
     </div>
 </div>
 

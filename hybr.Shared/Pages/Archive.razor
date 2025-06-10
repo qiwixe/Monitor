@@ -261,20 +261,17 @@
             switch (activeDataTabTitle) {
                 case ("Сутки"): {
                         InputDataValuefilter1 = InputDataValue;
-                        InputDataValuefilter2 = InputDataValue + " 23:59:59";
-                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue,InputDataValue+" 23:59:59"));
+                        InputDataValuefilter2 = DateTime.ParseExact(InputDataValuefilter1, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddDays(+1).ToString("yyyy-MM-dd");
                         break;
                     }
                 case ("Месяц"): {
                         InputDataValuefilter1 = InputDataValue + "-01";
-                        InputDataValuefilter2 = InputDataValue + "-31  23:59:59";
-                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01",InputDataValue+"-31  23:59:59"));
+                        InputDataValuefilter2 = DateTime.ParseExact(InputDataValuefilter1, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddMonths(+1).ToString("yyyy-MM-dd");
                         break;
                     }
                 case ("Год"): {
                         InputDataValuefilter1 = InputDataValue + "-01-01";
-                        InputDataValuefilter2 = InputDataValue + "-12-31 23:59:59";
-                        // await ChartUpdate(DataBase.CreateSQLstring(activeStationTabId,activeSensorTabId,InputDataValue+"-01-01",InputDataValue+"-12-31 23:59:59"));
+                        InputDataValuefilter2 = DateTime.ParseExact(InputDataValuefilter1, "yyyy-MM-dd",System.Globalization.CultureInfo.InvariantCulture).AddYears(+1).ToString("yyyy-MM-dd");
                         break;
                     }
             }
