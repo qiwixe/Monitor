@@ -74,79 +74,116 @@ namespace hybr.Shared.Services
             {
                 Sensor_id = 1,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 6,
             });
             _fakeData[2] = (new Order
             {
                 Sensor_id = 2,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(4) + 110,
             }); 
             _fakeData[3] = (new Order
             {
                 Sensor_id = 3,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 8,
             }); 
             _fakeData[4] = (new Order
             {
                 Sensor_id = 4,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(4) + 270,
             }); 
             _fakeData[5] = (new Order
             {
                 Sensor_id = 5,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 10,
             }); 
             _fakeData[6] = (new Order
             {
                 Sensor_id = 6,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(4) + 330,
             }); 
             _fakeData[7] = (new Order
             {
                 Sensor_id = 7,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 1,
             }); 
             _fakeData[8] = (new Order
             {
                 Sensor_id = 8,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 24,
             }); 
             _fakeData[9] = (new Order
             {
                 Sensor_id = 9,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 1,
             }); 
             _fakeData[10] = (new Order
             {
                 Sensor_id = 10,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = new Random().Next(1) + 24,
             }); 
             _fakeData[11] = (new Order
             {
                 Sensor_id = 11,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = 10,
             });
             _fakeData[12] = (new Order
             {
                 Sensor_id = 12,
                 Station_id = 1,
-                Value_of_m = new Random().Next(100) - 50,
+                Value_of_m = 220,
             });
+            _fakeData[103] = (new Order
+            {
+                Sensor_id = 103,
+                Station_id = 7,
+                Value_of_m = 33,
+            });
+            _fakeData[104] = (new Order
+            {
+                Sensor_id = 104,
+                Station_id = 7,
+                Value_of_m = 47,
+            });
+            _fakeData[105] = (new Order
+            {
+                Sensor_id = 104,
+                Station_id = 7,
+                Value_of_m = 733.4,
+            });
+            _fakeData[106] = (new Order
+            {
+                Sensor_id = 104,
+                Station_id = 7,
+                Value_of_m = 167,
+            });
+            _fakeData[107] = (new Order
+            {
+                Sensor_id = 104,
+                Station_id = 7,
+                Value_of_m = 4.2,
+            });
+            _fakeData[108] = (new Order
+            {
+                Sensor_id = 104,
+                Station_id = 7,
+                Value_of_m = 657,
+            });
+
             #endregion Фейк Данные для ФЭУ(1)
             var _GData = SensorData.Graduation(_fakeData);
             GlobalPageProperty.UpdateData(_GData);
             SensorData.PreparationSensorData(_GData);
-            DataBase.InsertData(_GData);
+            //DataBase.InsertData(_GData);
             return _fakeData;
         }
         public static async Task Data()

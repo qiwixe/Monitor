@@ -16,8 +16,6 @@ namespace hybr
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
-
-
             // Add device-specific services used by the hybr.Shared project
             builder.Services.AddSingleton<IFormFactor, FormFactor>();
 
