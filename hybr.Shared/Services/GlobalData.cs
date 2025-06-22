@@ -66,6 +66,7 @@ namespace hybr.Shared.Services
     }
     public class GlobalData()
     {
+        #region Отладка страниц без установки
         public static async Task<Dictionary<int, Order>> FakeData()
         {
             Dictionary<int, Order> _fakeData = new();
@@ -186,6 +187,7 @@ namespace hybr.Shared.Services
             //DataBase.InsertData(_GData);
             return _fakeData;
         }
+        #endregion Отладка страниц без установки
         public static async Task Data()
         {
             List<Order> _httpData = await HTTPClientSensor.Main();
@@ -224,6 +226,7 @@ namespace hybr.Shared.Services
                 {
                     i++;
                     await Task.Delay(1000);
+                    // ОТЛАДКА
                     //GlobalData.FakeData();
                     GlobalData.Data();
                     if (i >= 3600)
