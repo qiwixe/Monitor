@@ -14,6 +14,7 @@ namespace hybr.Shared.Services
             foreach (var (_key, _value) in ValueSettings.Stations)
             try
             {
+                if (_value.Station_Ip != "192.168.0.0")
                 _httpData.AddRange(await client.GetFromJsonAsync<List<Order>>(_value.Station_Ip));
             }
             catch (OperationCanceledException ex) when (ex.InnerException is TimeoutException tex)
