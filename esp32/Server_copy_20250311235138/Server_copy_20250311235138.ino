@@ -15,8 +15,10 @@
 // const char *password = "1q2w3e4r5t";
 // const char *ssid = "Atom_209";
 // const char *password = "atomenergetik";
-const char *ssid = "qiwixe";
-const char *password = "1q2w3e4r5t";
+// const char *ssid = "qiwixe";
+// const char *password = "1q2w3e4r5t";
+const char *ssid = "Atom small ses";
+const char *password = "Atom2024";
 
 const int s3221c40b1name = 1;
 const int s3221c40b2name = 2;
@@ -84,9 +86,9 @@ WebServer server(80);
 void add_json_object(int Sensor, float value) {
   JsonObject obj = jsonDocument.createNestedObject();
   obj["Sensor_id"] = Sensor;
-  obj["Station_id"] = 7;
-  obj["Date_of_m"] = dayStamp; 
-  obj["Time_of_m"] = timeStamp; 
+  obj["Station_id"] = 1;
+  // obj["Date_of_m"] = dayStamp; 
+  // obj["Time_of_m"] = timeStamp; 
   obj["Value_of_m"] = value; 
 }
 void read_sensor_data() {
@@ -95,34 +97,34 @@ void read_sensor_data() {
      pressure = bme.readPressure() / 100 * 0.7500615;
 
      s3221c40b1v = ina3221с40.getBusVoltage(0);
-     s3221c40b1a = ina3221с40.getCurrentAmps(0);
+    //  s3221c40b1a = ina3221с40.getCurrentAmps(0);
      s3221c40b2v = ina3221с40.getBusVoltage(1);
-     s3221c40b2a = ina3221с40.getCurrentAmps(1);
+    //  s3221c40b2a = ina3221с40.getCurrentAmps(1);
      s3221c40b3v = ina3221с40.getBusVoltage(2);
-     s3221c40b3a = ina3221с40.getCurrentAmps(2);
+    //  s3221c40b3a = ina3221с40.getCurrentAmps(2);
 
      s3221c41b1v = ina3221с41.getBusVoltage(0);
-     s3221c41b1a = ina3221с41.getCurrentAmps(0);
+    //  s3221c41b1a = ina3221с41.getCurrentAmps(0);
      s3221c41b2v = ina3221с41.getBusVoltage(1);
-     s3221c41b2a = ina3221с41.getCurrentAmps(1);
+    //  s3221c41b2a = ina3221с41.getCurrentAmps(1);
      s3221c41b3v = ina3221с41.getBusVoltage(2);
-     s3221c41b3a = ina3221с41.getCurrentAmps(2);
+    //  s3221c41b3a = ina3221с41.getCurrentAmps(2);
 
      s3221c42b1v = ina3221с42.getBusVoltage(0);
-     s3221c42b1a = ina3221с42.getCurrentAmps(0);
+    //  s3221c42b1a = ina3221с42.getCurrentAmps(0);
      s3221c42b2v = ina3221с42.getBusVoltage(1);
-     s3221c42b2a = ina3221с42.getCurrentAmps(1);
+    //  s3221c42b2a = ina3221с42.getCurrentAmps(1);
      s3221c42b3v = ina3221с42.getBusVoltage(2);
-     s3221c42b3a = ina3221с42.getCurrentAmps(2);
+    //  s3221c42b3a = ina3221с42.getCurrentAmps(2);
 
      s3221c43b1v = ina3221с43.getBusVoltage(0);
-     s3221c43b1a = ina3221с43.getCurrentAmps(0);
+    //  s3221c43b1a = ina3221с43.getCurrentAmps(0);
      s3221c43b2v = ina3221с43.getBusVoltage(1);
-     s3221c43b2a = ina3221с43.getCurrentAmps(1);
+    //  s3221c43b2a = ina3221с43.getCurrentAmps(1);
      s3221c43b3v = ina3221с43.getBusVoltage(2);
-     s3221c43b3a = ina3221с43.getCurrentAmps(2);
+    //  s3221c43b3a = ina3221с43.getCurrentAmps(2);
 
-    log();
+    // log();
 }
 void log(){
     Serial.print("s3221c40b1v ");
@@ -186,7 +188,7 @@ void log(){
 }
 void getData() {
   Serial.println("Получен запрос");
-  getDataTime();
+  // getDataTime();
   read_sensor_data();
   jsonDocument.clear();
 
