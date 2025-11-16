@@ -7,14 +7,14 @@ namespace hybr.Shared.Services
     {
         static HttpMessageHandler handler = new HttpClientHandler();
         static List<Order> _httpData = new();
-        static readonly HttpClient client = new HttpClient(handler){Timeout = TimeSpan.FromSeconds(1)};
+        static readonly HttpClient client = new HttpClient(handler){Timeout = TimeSpan.FromSeconds(2)};
         public static async Task<List<Order>> Main()
         {
             _httpData.Clear();
             foreach (var (_key, _value) in ValueSettings.Stations)
             try
             {
-                if (_value.Station_Ip != "192.168.0.0")
+                if (_value.Station_Ip != "http://192.168.0.0/")
                 _httpData.AddRange(await client.GetFromJsonAsync<List<Order>>(_value.Station_Ip));
             }
             catch (OperationCanceledException ex) when (ex.InnerException is TimeoutException tex)
