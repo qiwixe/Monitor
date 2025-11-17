@@ -1,4 +1,9 @@
 # Система мониторинга 
+Стэк разработки: 
+  МК: упрощённый C/C++
+  БД: PgSQL
+  БЭК: C# 
+  ФРОНТ: .NET, BLAZOR
 Подробную информацию можно узнать по плакату проекта
 [Стенд_А1.pdf](https://github.com/user-attachments/files/23503186/_.1.pdf)
 <img width="1146" height="533" alt="Без имени3" src="https://github.com/user-attachments/assets/1ab53b16-06c0-488d-b31c-3a164386d05a" />
